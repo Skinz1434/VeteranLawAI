@@ -10,6 +10,7 @@ import AuthProvider, { useAuth } from './contexts/AuthContext'
 import Button from './components/ui/Button'
 import WelcomeModal from './components/modals/WelcomeModal'
 import LoginModal from './components/modals/LoginModal'
+import Layout from './components/layout/Layout'
 
 // Tools
 import CameraOCR from './components/tools/CameraOCR'
@@ -54,14 +55,56 @@ function AppContent() {
     <>
       <Routes>
         <Route path="/" element={
-          isAuthenticated ? <Dashboard /> : <LandingPage onLogin={() => setShowLoginModal(true)} />
+          isAuthenticated ? (
+            <Layout>
+              <Dashboard />
+            </Layout>
+          ) : (
+            <LandingPage onLogin={() => setShowLoginModal(true)} />
+          )
         } />
-        <Route path="/camera-ocr" element={<ProtectedRoute><CameraOCR /></ProtectedRoute>} />
-        <Route path="/legal-knowledge" element={<ProtectedRoute><LegalKnowledgeBase /></ProtectedRoute>} />
-        <Route path="/claim-guidance" element={<ProtectedRoute><ClaimGuidance /></ProtectedRoute>} />
-        <Route path="/audio-transcription" element={<ProtectedRoute><AudioTranscription /></ProtectedRoute>} />
-        <Route path="/case-research" element={<ProtectedRoute><CaseResearch /></ProtectedRoute>} />
-        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+        <Route path="/camera-ocr" element={
+          <ProtectedRoute>
+            <Layout>
+              <CameraOCR />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/legal-knowledge" element={
+          <ProtectedRoute>
+            <Layout>
+              <LegalKnowledgeBase />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/claim-guidance" element={
+          <ProtectedRoute>
+            <Layout>
+              <ClaimGuidance />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/audio-transcription" element={
+          <ProtectedRoute>
+            <Layout>
+              <AudioTranscription />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/case-research" element={
+          <ProtectedRoute>
+            <Layout>
+              <CaseResearch />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/analytics" element={
+          <ProtectedRoute>
+            <Layout>
+              <Analytics />
+            </Layout>
+          </ProtectedRoute>
+        } />
         <Route path="/health" element={<HealthPage />} />
       </Routes>
 
