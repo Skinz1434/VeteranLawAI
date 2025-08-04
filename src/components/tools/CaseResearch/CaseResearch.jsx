@@ -373,19 +373,67 @@ const CaseResearch = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-4xl font-bold text-white mb-2">Case Precedent Research</h1>
-          <p className="text-slate-300">
-            AI-powered legal research through 10,000+ VA case precedents with similarity matching and outcome analysis
-          </p>
-        </motion.div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Ultra-modern background with animated elements */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      <div className="fixed inset-0 opacity-30" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }} />
+      
+      {/* Floating gradient orbs */}
+      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-full blur-3xl animate-pulse" />
+      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+      
+      <div className="relative p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Premium Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/25">
+                    <Scale className="h-8 w-8 text-white drop-shadow-lg" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                    <Gavel className="h-3 w-3 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent mb-2">
+                    Legal Intelligence
+                  </h1>
+                  <p className="text-slate-300 text-lg flex items-center space-x-2">
+                    <Target className="h-5 w-5 text-indigo-400" />
+                    <span>AI-Powered Case Research & Precedent Analysis Platform</span>
+                    <div className="flex items-center space-x-1 ml-4">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <span className="text-green-400 text-sm font-medium">15,000+ Cases</span>
+                    </div>
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  <span>Research Trends</span>
+                </motion.button>
+                
+                <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Legal Library
+                </Button>
+              </div>
+            </div>
+          </motion.div>
 
         {/* Search Interface */}
         <motion.div
@@ -923,6 +971,7 @@ const CaseResearch = () => {
             )}
           </div>
         </Modal>
+        </div>
       </div>
     </div>
   )
