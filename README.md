@@ -39,8 +39,8 @@ A professional-grade AI-powered legal platform designed specifically for VA-accr
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/veteranlawai-platform.git
-cd veteranlawai-platform
+git clone https://github.com/Skinz1434/VeteranLawAI.git
+cd VeteranLawAI
 
 # Install dependencies
 npm install
