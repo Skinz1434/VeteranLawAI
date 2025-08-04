@@ -341,12 +341,15 @@ Covered Conditions:
 
         {/* Content Area */}
         <div className="flex-1 p-6 overflow-auto">
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Knowledge base content will go here */}
+          <div className="text-center py-12">
+            <BookOpen className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-white mb-2">Legal Knowledge Base</h3>
+            <p className="text-slate-400">Access comprehensive VA regulations and case law</p>
+          </div>
+        </div>
 
-            {/* Google Drive Integration */}
+        {/* Google Drive Integration */}
             <div className="p-4 border-t border-slate-700">
               <div className="bg-slate-700 rounded-lg p-3">
                 <div className="flex items-center space-x-2 mb-2">
