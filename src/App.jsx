@@ -11,6 +11,11 @@ import Button from './components/ui/Button'
 import WelcomeModal from './components/modals/WelcomeModal'
 import LoginModal from './components/modals/LoginModal'
 
+// Tools
+import CameraOCR from './components/tools/CameraOCR'
+import LegalKnowledgeBase from './components/tools/LegalKnowledgeBase'
+import ClaimGuidance from './components/tools/ClaimGuidance'
+
 function App() {
   return (
     <AuthProvider>
@@ -48,9 +53,9 @@ function AppContent() {
         <Route path="/" element={
           isAuthenticated ? <Dashboard /> : <LandingPage onLogin={() => setShowLoginModal(true)} />
         } />
-        <Route path="/camera-ocr" element={<ProtectedRoute><ToolPage title="Camera OCR Processing" /></ProtectedRoute>} />
-        <Route path="/legal-knowledge" element={<ProtectedRoute><ToolPage title="VA Legal Knowledge Base" /></ProtectedRoute>} />
-        <Route path="/claim-guidance" element={<ProtectedRoute><ToolPage title="Step-by-Step Claim Guidance" /></ProtectedRoute>} />
+        <Route path="/camera-ocr" element={<ProtectedRoute><CameraOCR /></ProtectedRoute>} />
+        <Route path="/legal-knowledge" element={<ProtectedRoute><LegalKnowledgeBase /></ProtectedRoute>} />
+        <Route path="/claim-guidance" element={<ProtectedRoute><ClaimGuidance /></ProtectedRoute>} />
         <Route path="/audio-transcription" element={<ProtectedRoute><ToolPage title="Legal Audio Transcription" /></ProtectedRoute>} />
         <Route path="/case-research" element={<ProtectedRoute><ToolPage title="Case Precedent Research" /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><ToolPage title="Claim Success Analytics" /></ProtectedRoute>} />

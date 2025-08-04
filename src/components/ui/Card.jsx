@@ -72,3 +72,5 @@ export const CardFooter = ({ children, className = '' }) => (
 )
 
 Card.displayName = 'Card'
+
+export default Card
