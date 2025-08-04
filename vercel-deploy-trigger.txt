@@ -1,3 +1,0 @@
-Trigger: Force Vercel to use latest commit with index.html fix
-Timestamp: 2025-08-04
-Latest commit: 49e75da
