@@ -59,6 +59,13 @@ import {
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
 import Modal from '../../ui/Modal'
+import { 
+  ocrService, 
+  initializeOCR, 
+  processDocumentOCR,
+  getOCRServiceInfo 
+} from '../../../services/ocrService'
+import { announceToScreenReader } from '../../../utils/accessibility'
 
 /**
  * Premium Document Intelligence Component
@@ -99,73 +106,121 @@ const CameraOCR = () => {
   const [confidenceThreshold, setConfidenceThreshold] = useState(0.95)
   const [hoveredDoc, setHoveredDoc] = useState(null)
   const [showAnalytics, setShowAnalytics] = useState(false)
+  const [serviceInfo, setServiceInfo] = useState(null)
+  const [ocrQuality, setOcrQuality] = useState('high')
+  const [currentProcessingStatus, setCurrentProcessingStatus] = useState('')
   
   // Refs
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const fileInputRef = useRef(null)
 
-  /**
-   * Simulates OCR processing with VA form recognition
-   * In production, this would connect to actual OCR service
-   * 
-   * @param {File|string} input - File object or base64 image
-   * @returns {Promise<Object>} Processed document data
-   */
-  const processDocument = useCallback(async (input) => {
-    setIsProcessing(true)
-    
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    
-    const mockResult = {
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      filename: input instanceof File ? input.name : 'camera_capture.jpg',
-      type: 'VA Form 21-526EZ', // Mock VA form detection
-      confidence: 0.98,
-      extractedText: `DEPARTMENT OF VETERANS AFFAIRS
-APPLICATION FOR DISABILITY COMPENSATION AND RELATED COMPENSATION BENEFITS
-
-VETERAN'S INFORMATION:
-Name: John A. Veteran
-Social Security Number: XXX-XX-1234
-Date of Birth: 01/15/1980
-Military Service: US Army, 2000-2008
-
-CLAIMED CONDITIONS:
-1. Chronic back pain (lumbar spine)
-2. PTSD (Post-traumatic stress disorder)
-3. Hearing loss (bilateral)
-4. Sleep apnea
-
-SUPPORTING EVIDENCE:
-Medical records from VA Medical Center
-Private physician statements
-Service connection documentation
-
-DATE SIGNED: 03/15/2024
-VETERAN SIGNATURE: [Signature Present]`,
-      sections: [
-        { name: 'Personal Information', confidence: 0.99, extracted: true },
-        { name: 'Medical Conditions', confidence: 0.97, extracted: true },
-        { name: 'Service History', confidence: 0.98, extracted: true },
-        { name: 'Signatures', confidence: 0.95, extracted: true }
-      ],
-      metadata: {
-        pages: 1,
-        language: 'en',
-        formType: 'disability_claim',
-        priority: 'high'
+  // Initialize OCR service on component mount
+  React.useEffect(() => {
+    const initializeService = async () => {
+      try {
+        const result = await initializeOCR()
+        const info = getOCRServiceInfo()
+        setServiceInfo(info)
+        
+        if (result.success) {
+          announceToScreenReader(`OCR service initialized using ${result.engine}`)
+        } else {
+          console.error('OCR initialization failed:', result.error)
+          announceToScreenReader('OCR service initialization failed')
+        }
+      } catch (error) {
+        console.error('Failed to initialize OCR service:', error)
+        announceToScreenReader('OCR service initialization failed')
       }
     }
     
-    setProcessedDocuments(prev => [mockResult, ...prev])
-    setIsProcessing(false)
-    setActiveTab('results')
-    
-    return mockResult
+    initializeService()
   }, [])
+
+  /**
+   * Process document using real OCR service with VA form recognition
+   * 
+   * @param {File|string} input - File object or base64 image
+   * @param {string} filename - Optional filename override
+   * @returns {Promise<Object>} Processed document data
+   */
+  const processDocument = useCallback(async (input, filename = null) => {
+    if (!serviceInfo?.initialized) {
+      alert('OCR service is not ready. Please wait for initialization to complete.')
+      return
+    }
+
+    setIsProcessing(true)
+    setProcessingProgress(0)
+    setCurrentProcessingStatus('Initializing OCR processing...')
+    
+    try {
+      announceToScreenReader('Starting document OCR processing')
+      
+      // Process with real OCR service
+      const result = await processDocumentOCR(input, {
+        quality: ocrQuality,
+        language: 'eng',
+        enableVAFormRecognition: true,
+        confidenceThreshold: confidenceThreshold,
+        onProgress: (progress, status) => {
+          setProcessingProgress(progress)
+          setCurrentProcessingStatus(status)
+        }
+      })
+      
+      if (result.success) {
+        // Create document object for UI
+        const processedDoc = {
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+          filename: filename || (input instanceof File ? input.name : 'camera_capture.jpg'),
+          type: result.formType ? `${result.formType.name} (${result.formType.id})` : 'Document',
+          confidence: result.confidence,
+          extractedText: result.extractedText,
+          originalText: result.originalText,
+          sections: result.sections || [],
+          metadata: {
+            ...result.metadata,
+            formType: result.formType?.id || 'unknown',
+            priority: result.formType?.priority || 'medium',
+            vaTermsFound: result.vaTermsFound?.length || 0
+          },
+          structuredData: result.structuredData,
+          keywords: result.keywords || [],
+          vaTermsFound: result.vaTermsFound || []
+        }
+        
+        setProcessedDocuments(prev => [processedDoc, ...prev])
+        
+        const successMessage = `OCR completed with ${Math.round(result.confidence * 100)}% confidence. ${result.formType ? `Detected: ${result.formType.name}` : 'Document processed successfully'}.`
+        announceToScreenReader(successMessage)
+        
+        // Switch to results tab
+        setTimeout(() => {
+          setActiveTab('results')
+        }, 1000)
+        
+        return processedDoc
+        
+      } else {
+        throw new Error('OCR processing failed')
+      }
+      
+    } catch (error) {
+      console.error('Document processing failed:', error)
+      const errorMessage = `OCR processing failed: ${error.message}`
+      alert(errorMessage)
+      announceToScreenReader(errorMessage)
+    } finally {
+      setTimeout(() => {
+        setIsProcessing(false)
+        setProcessingProgress(0)
+        setCurrentProcessingStatus('')
+      }, 1000)
+    }
+  }, [serviceInfo, ocrQuality, confidenceThreshold])
 
   /**
    * Handles camera capture
@@ -195,21 +250,42 @@ VETERAN SIGNATURE: [Signature Present]`,
   }, [processDocument])
 
   /**
-   * Handles file upload
+   * Handles file upload with enhanced validation
    */
   const handleFileUpload = useCallback(async (event) => {
     const file = event.target.files?.[0]
     if (!file) return
     
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf']
-    if (!allowedTypes.includes(file.type)) {
-      alert('Please upload a JPG, PNG, or PDF file')
-      return
+    try {
+      // Validate file type
+      const allowedTypes = serviceInfo?.supportedFormats || ['image/jpeg', 'image/png', 'application/pdf']
+      if (!allowedTypes.includes(file.type)) {
+        const supportedFormats = allowedTypes.map(type => type.split('/')[1].toUpperCase()).join(', ')
+        alert(`Please upload a supported file format: ${supportedFormats}`)
+        return
+      }
+      
+      // Check file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024 // 10MB
+      if (file.size > maxSize) {
+        alert(`File size must be less than ${maxSize / (1024 * 1024)}MB. Your file is ${Math.round(file.size / (1024 * 1024) * 10) / 10}MB.`)
+        return
+      }
+      
+      announceToScreenReader(`Processing uploaded file: ${file.name}`)
+      await processDocument(file, file.name)
+      
+    } catch (error) {
+      console.error('File upload error:', error)
+      alert(`Failed to process file: ${error.message}`)
+      announceToScreenReader(`File upload failed: ${error.message}`)
+    } finally {
+      // Reset file input
+      if (event.target) {
+        event.target.value = ''
+      }
     }
-    
-    await processDocument(file)
-  }, [processDocument])
+  }, [processDocument, serviceInfo])
 
   /**
    * Starts camera stream
@@ -437,26 +513,98 @@ VETERAN SIGNATURE: [Signature Present]`,
                   </div>
                 </Card>
 
-                {/* Instructions */}
-                <Card className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-4">Capture Tips</h3>
-                  <div className="space-y-4">
-                    {[
-                      { icon: '📄', title: 'Position Document', desc: 'Place the entire document within the camera frame' },
-                      { icon: '💡', title: 'Good Lighting', desc: 'Ensure adequate lighting without shadows or glare' },
-                      { icon: '📐', title: 'Keep Steady', desc: 'Hold the camera steady for clear, sharp images' },
-                      { icon: '🎯', title: 'Focus', desc: 'Wait for the camera to focus before capturing' }
-                    ].map((tip, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <div className="text-2xl">{tip.icon}</div>
-                        <div>
-                          <h4 className="font-medium text-white">{tip.title}</h4>
-                          <p className="text-slate-400 text-sm">{tip.desc}</p>
+                {/* Settings and Tips */}
+                <div className="space-y-6">
+                  {/* OCR Settings */}
+                  <Card className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+                      <Settings className="h-5 w-5 text-blue-400" />
+                      <span>OCR Settings</span>
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      {/* Quality Settings */}
+                      <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">Processing Quality</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {['standard', 'high', 'ultra'].map((quality) => (
+                            <button
+                              key={quality}
+                              onClick={() => setOcrQuality(quality)}
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                                ocrQuality === quality
+                                  ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-lg'
+                                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50'
+                              }`}
+                            >
+                              {quality.charAt(0).toUpperCase() + quality.slice(1)}
+                            </button>
+                          ))}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </Card>
+
+                      {/* Confidence Threshold */}
+                      <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                          Confidence Threshold: {Math.round(confidenceThreshold * 100)}%
+                        </label>
+                        <input
+                          type="range"
+                          min="0.5"
+                          max="0.99"
+                          step="0.01"
+                          value={confidenceThreshold}
+                          onChange={(e) => setConfidenceThreshold(parseFloat(e.target.value))}
+                          className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+
+                      {/* Service Status */}
+                      {serviceInfo && (
+                        <div className="bg-gradient-to-r from-slate-700/30 to-slate-800/30 rounded-lg p-3">
+                          <h4 className="font-semibold text-white mb-2 flex items-center space-x-2">
+                            <Shield className="h-4 w-4 text-green-400" />
+                            <span>Service Status</span>
+                          </h4>
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className={`flex items-center space-x-2 ${serviceInfo.initialized ? 'text-green-400' : 'text-red-400'}`}>
+                              <div className={`w-2 h-2 rounded-full ${serviceInfo.initialized ? 'bg-green-400' : 'bg-red-400'}`} />
+                              <span>OCR Engine</span>
+                            </div>
+                            <div className={`flex items-center space-x-2 ${serviceInfo.capabilities.vaFormRecognition ? 'text-green-400' : 'text-red-400'}`}>
+                              <div className={`w-2 h-2 rounded-full ${serviceInfo.capabilities.vaFormRecognition ? 'bg-green-400' : 'bg-red-400'}`} />
+                              <span>VA Form Detection</span>
+                            </div>
+                          </div>
+                          <p className="text-slate-400 text-xs mt-2">
+                            {serviceInfo.vaFormsSupported} VA forms supported • Max: {serviceInfo.maxFileSize}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+
+                  {/* Capture Tips */}
+                  <Card className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-4">Capture Tips</h3>
+                    <div className="space-y-4">
+                      {[
+                        { icon: '📄', title: 'Position Document', desc: 'Place the entire document within the camera frame' },
+                        { icon: '💡', title: 'Good Lighting', desc: 'Ensure adequate lighting without shadows or glare' },
+                        { icon: '📐', title: 'Keep Steady', desc: 'Hold the camera steady for clear, sharp images' },
+                        { icon: '🎯', title: 'Focus', desc: 'Wait for the camera to focus before capturing' }
+                      ].map((tip, index) => (
+                        <div key={index} className="flex items-start space-x-3">
+                          <div className="text-2xl">{tip.icon}</div>
+                          <div>
+                            <h4 className="font-medium text-white">{tip.title}</h4>
+                            <p className="text-slate-400 text-sm">{tip.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
               </motion.div>
             )}
 
@@ -674,21 +822,54 @@ VETERAN SIGNATURE: [Signature Present]`,
             )}
           </Modal>
 
-          {/* Processing Overlay */}
+          {/* Enhanced Processing Overlay */}
           <AnimatePresence>
             {isProcessing && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50"
+                className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-50"
               >
-                <Card className="p-8 text-center">
-                  <Loader className="h-12 w-12 text-cyan-500 animate-spin mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-white mb-2">Processing Document</h3>
-                  <p className="text-slate-300">
-                    AI is analyzing your document with advanced OCR technology...
-                  </p>
+                <Card className="p-8 text-center max-w-md mx-4">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Brain className="h-8 w-8 text-white animate-pulse" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">Processing Document</h3>
+                    <p className="text-slate-300 mb-4">
+                      AI is analyzing your document with advanced OCR and VA form recognition...
+                    </p>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="mb-4">
+                    <div className="w-full bg-slate-700 rounded-full h-2 mb-2">
+                      <motion.div 
+                        className="bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full"
+                        animate={{ width: `${processingProgress}%` }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-sm text-slate-400">
+                      <span>{Math.round(processingProgress)}% complete</span>
+                      <span>{ocrQuality} quality</span>
+                    </div>
+                  </div>
+
+                  {/* Current Status */}
+                  {currentProcessingStatus && (
+                    <div className="text-sm text-cyan-400 animate-pulse">
+                      {currentProcessingStatus}
+                    </div>
+                  )}
+
+                  {/* Service Info */}
+                  {serviceInfo && (
+                    <div className="mt-4 text-xs text-slate-500">
+                      OCR Engine Ready • {serviceInfo.vaFormsSupported} VA Forms Supported
+                    </div>
+                  )}
                 </Card>
               </motion.div>
             )}

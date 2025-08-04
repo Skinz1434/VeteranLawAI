@@ -53,6 +53,8 @@ import {
 } from 'lucide-react'
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
+import { analyticsDataEngine } from './AnalyticsDataEngine'
+import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
 /**
  * Premium Analytics Dashboard Component
@@ -64,144 +66,45 @@ const Analytics = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedView, setSelectedView] = useState('dashboard')
   const [hoveredCard, setHoveredCard] = useState(null)
+  const [metrics, setMetrics] = useState(null)
 
-  // Enhanced analytics data with extensive VA legal insights
-  const metrics = {
-    overview: {
-      totalCases: 1247,
-      successRate: 94.7,
-      avgProcessingTime: 3.8,
-      totalAwarded: 24700000,
-      activeClaims: 156,
-      pendingAppeals: 23,
-      cAndPExams: 47,
-      nexusLetters: 89,
-      trends: {
-        cases: 15.3,
-        success: 4.2,
-        time: -12.5,
-        awarded: 23.8,
-        active: 8.7,
-        appeals: -5.2
-      }
-    },
-    performance: {
-      avgCaseValue: 142500,
-      clientSatisfaction: 98.2,
-      referralRate: 67.3,
-      retainerConversion: 89.4,
-      appealWinRate: 91.2,
-      ratingIncrease: 34.8
-    },
-    cases: [
-      { month: 'Jan', filed: 98, won: 92, pending: 67, appeals: 12, ratings: [10, 30, 50, 70, 100] },
-      { month: 'Feb', filed: 112, won: 106, pending: 73, appeals: 8, ratings: [20, 30, 40, 70, 100] },
-      { month: 'Mar', filed: 125, won: 119, pending: 79, appeals: 15, ratings: [10, 20, 50, 70, 100] },
-      { month: 'Apr', filed: 134, won: 127, pending: 86, appeals: 11, ratings: [30, 40, 50, 70, 100] },
-      { month: 'May', filed: 148, won: 142, pending: 94, appeals: 9, ratings: [10, 30, 50, 70, 100] },
-      { month: 'Jun', filed: 156, won: 149, pending: 103, appeals: 7, ratings: [20, 30, 40, 70, 100] }
-    ],
-    conditions: [
-      { 
-        name: 'PTSD', 
-        cases: 389, 
-        success: 96.7, 
-        avgRating: 74.2, 
-        avgValue: 267000, 
-        commonEvidence: ['Combat exposure', 'MST', 'Stressor events'],
-        keyPrecedents: ['Cartwright v. Derwinski', 'Cohen v. Brown'],
-        trendDirection: 'up',
-        difficulty: 'moderate'
-      },
-      { 
-        name: 'Back/Spine Conditions', 
-        cases: 267, 
-        success: 89.3, 
-        avgRating: 42.8, 
-        avgValue: 185000,
-        commonEvidence: ['MRI results', 'Range of motion', 'Pain medication'],
-        keyPrecedents: ['DeLuca v. Brown', 'Bover v. Brown'],
-        trendDirection: 'up',
-        difficulty: 'easy'
-      },
-      { 
-        name: 'Hearing Loss/Tinnitus', 
-        cases: 198, 
-        success: 97.1, 
-        avgRating: 18.6, 
-        avgValue: 95000,
-        commonEvidence: ['Audiogram', 'Noise exposure', 'MOS records'],
-        keyPrecedents: ['Stefl v. Nicholson', 'Sacks v. West'],
-        trendDirection: 'stable',
-        difficulty: 'easy'
-      },
-      { 
-        name: 'Sleep Apnea', 
-        cases: 156, 
-        success: 92.8, 
-        avgRating: 52.3, 
-        avgValue: 198000,
-        commonEvidence: ['Sleep study', 'CPAP usage', 'Weight gain'],
-        keyPrecedents: ['Clemons v. Shinseki', 'Colvin v. Derwinski'],
-        trendDirection: 'up',
-        difficulty: 'moderate'
-      },
-      { 
-        name: 'Knee/Joint Injuries', 
-        cases: 134, 
-        success: 85.2, 
-        avgRating: 38.4, 
-        avgValue: 156000,
-        commonEvidence: ['X-rays', 'Orthopedic evaluation', 'Functional loss'],
-        keyPrecedents: ['Mittleider v. West', 'Floyd v. Brown'],
-        trendDirection: 'down',
-        difficulty: 'moderate'
-      },
-      {
-        name: 'Hypertension',
-        cases: 89,
-        success: 78.4,
-        avgRating: 12.3,
-        avgValue: 67000,
-        commonEvidence: ['Blood pressure readings', 'Family history', 'Lifestyle factors'],
-        keyPrecedents: ['Kowalski v. Nicholson', 'Dalton v. Nicholson'],
-        trendDirection: 'stable',
-        difficulty: 'hard'
-      }
-    ],
-    vaRegions: [
-      { region: 'Atlanta', cases: 145, success: 92.4, avgTime: 3.2 },
-      { region: 'Phoenix', cases: 123, success: 89.7, avgTime: 4.1 },
-      { region: 'St. Louis', cases: 167, success: 95.2, avgTime: 2.9 },
-      { region: 'Oakland', cases: 198, success: 91.8, avgTime: 3.7 },
-      { region: 'Philadelphia', cases: 134, success: 88.9, avgTime: 4.5 }
-    ],
-    insights: [
-      {
-        type: 'trend',
-        title: 'PTSD Claims Success Rate Increasing',
-        description: 'Recent favorable precedents and improved evidence gathering techniques have increased PTSD claim success rates by 8.3% this quarter.',
-        impact: 'high',
-        actionable: true,
-        recommendation: 'Consider specializing further in PTSD claims and expanding marketing to combat veterans.'
-      },
-      {
-        type: 'alert',
-        title: 'Sleep Apnea Nexus Requirements Changing',
-        description: 'New VA guidance on sleep apnea secondary conditions requires updated medical evidence standards.',
-        impact: 'medium',
-        actionable: true,
-        recommendation: 'Update templates and train staff on new sleep apnea claim requirements.'
-      },
-      {
-        type: 'opportunity',
-        title: 'Oakland VARO Processing Faster',
-        description: 'Oakland Regional Office showing 23% faster processing times - consider geographic client targeting.',
-        impact: 'medium',
-        actionable: true,
-        recommendation: 'Increase marketing efforts in Oakland VARO jurisdiction.'
-      }
-    ]
+  // Load real analytics data on component mount and when timeRange changes
+  useEffect(() => {
+    const loadAnalyticsData = () => {
+      setIsLoading(true)
+      
+      // Simulate realistic data loading time
+      setTimeout(() => {
+        const data = {
+          overview: analyticsDataEngine.getOverviewMetrics(),
+          performance: analyticsDataEngine.getPerformanceMetrics(),
+          cases: analyticsDataEngine.getCasesData(),
+          conditions: analyticsDataEngine.getConditionsData(),
+          vaRegions: analyticsDataEngine.getVARegionsData(),
+          insights: analyticsDataEngine.getInsights()
+        }
+        
+        setMetrics(data)
+        setIsLoading(false)
+      }, 800)
+    }
+    
+    loadAnalyticsData()
+  }, [timeRange])
+
+  // Show loading state while data is being fetched
+  if (!metrics) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto">
+            <BarChart3 className="h-8 w-8 text-white animate-pulse" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
+          <p className="text-slate-400">Processing practice data and generating insights...</p>
+        </div>
+      </div>
+    )
   }
 
   const formatCurrency = (amount) => {
@@ -235,10 +138,65 @@ const Analytics = () => {
     )
   }
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     setIsLoading(true)
-    setTimeout(() => setIsLoading(false), 1500)
-  }
+    
+    // Clear cache and reload fresh data
+    analyticsDataEngine.clearCache()
+    
+    setTimeout(() => {
+      const data = {
+        overview: analyticsDataEngine.getOverviewMetrics(),
+        performance: analyticsDataEngine.getPerformanceMetrics(),
+        cases: analyticsDataEngine.getCasesData(),
+        conditions: analyticsDataEngine.getConditionsData(),
+        vaRegions: analyticsDataEngine.getVARegionsData(),
+        insights: analyticsDataEngine.getInsights()
+      }
+      
+      setMetrics(data)
+      setIsLoading(false)
+    }, 1200)
+  }, [])
+
+  /**
+   * Handle export functionality
+   */
+  const handleExportReport = useCallback(async (format = 'pdf') => {
+    if (!metrics) return
+    
+    setIsLoading(true)
+    
+    try {
+      // Generate comprehensive practice analytics report
+      const report = generatePracticeReport({
+        timeRange,
+        includeFinancials: true,
+        includeRegionalData: true,
+        format: 'json'
+      })
+      
+      // Export in requested format
+      const result = reportingEngine.exportData(report, format, `practice_analytics_${timeRange}`)
+      
+      // Announce successful export to screen readers
+      if (typeof announceToScreenReader === 'function') {
+        announceToScreenReader(`Analytics report exported successfully as ${format.toUpperCase()}`)
+      }
+      
+      console.log('Export completed:', result)
+      
+    } catch (error) {
+      console.error('Export failed:', error)
+      
+      // Announce error to screen readers
+      if (typeof announceToScreenReader === 'function') {
+        announceToScreenReader('Export failed. Please try again or contact support.')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [metrics, timeRange])
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -324,10 +282,54 @@ const Analytics = () => {
                   <span>Refresh</span>
                 </motion.button>
                 
-                <Button className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Report
-                </Button>
+                <div className="relative group">
+                  <Button 
+                    className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500"
+                    onClick={() => handleExportReport('pdf')}
+                    disabled={isLoading}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export Report
+                  </Button>
+                  
+                  {/* Export Format Dropdown */}
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div className="p-2">
+                      <button
+                        onClick={() => handleExportReport('pdf')}
+                        disabled={isLoading}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                      >
+                        <FileText className="h-4 w-4" />
+                        <span>Export as PDF</span>
+                      </button>
+                      <button
+                        onClick={() => handleExportReport('xlsx')}
+                        disabled={isLoading}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                      >
+                        <BarChart3 className="h-4 w-4" />
+                        <span>Export as Excel</span>
+                      </button>
+                      <button
+                        onClick={() => handleExportReport('csv')}
+                        disabled={isLoading}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                      >
+                        <Database className="h-4 w-4" />
+                        <span>Export as CSV</span>
+                      </button>
+                      <button
+                        onClick={() => handleExportReport('json')}
+                        disabled={isLoading}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                      >
+                        <Globe className="h-4 w-4" />
+                        <span>Export as JSON</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>

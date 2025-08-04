@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import Sidebar from './Sidebar'
 import QBitChat from '../chat/QBitChat'
+import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation'
 
 /**
  * Premium Layout Component
@@ -15,6 +16,12 @@ import QBitChat from '../chat/QBitChat'
  */
 const Layout = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  
+  // Enable keyboard navigation for the layout
+  useKeyboardNavigation({
+    enableGlobalShortcuts: true,
+    enableEscapeHandling: true
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">

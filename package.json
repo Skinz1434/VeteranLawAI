@@ -3,10 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Professional AI-powered legal platform for VA disability claims attorneys",
+  "keywords": ["va-law", "legal-tech", "ai", "veterans", "disability-claims"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/veteranlawai-platform.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && vercel deploy --prod",
+    "lint": "echo 'Linting not configured yet'",
+    "typecheck": "echo 'TypeScript checking not configured yet'"
   },
   "dependencies": {
     "react": "^18.2.0",

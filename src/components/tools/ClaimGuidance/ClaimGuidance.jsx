@@ -1,11 +1,14 @@
 /**
  * @fileoverview Premium Claim Intelligence - Advanced VA Disability Claim Optimization
  * @author VeteranLawAI Platform
- * @version 4.0.0
+ * @version 5.0.0
  */
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { vaConditionsDatabase } from './VAConditionsDatabase'
+import { formGenerator } from './FormGenerator'
+import { aiAnalysisEngine } from './AIAnalysisEngine'
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -90,24 +93,61 @@ const ClaimGuidance = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [claimData, setClaimData] = useState({
     veteran: {
-      name: '',
+      firstName: '',
+      lastName: '',
       ssn: '',
       dateOfBirth: '',
-      serviceInfo: {
-        branch: '',
+      email: '',
+      phoneNumber: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zipCode: ''
+      }
+    },
+    military: {
+      branch: '',
+      serviceNumber: '',
+      servicePeriods: [{
         startDate: '',
         endDate: '',
-        dischargeType: ''
-      }
+        serviceType: 'Active Duty'
+      }],
+      combatService: false,
+      specialCircumstances: []
     },
     conditions: [],
     evidence: [],
+    treatment: {
+      vaFacilities: [],
+      privateFacilities: []
+    },
+    employment: {
+      currentlyEmployed: false,
+      missedWorkDays: 0
+    },
     timeline: null,
     successProbability: null,
     recommendations: []
   })
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [conditionSearch, setConditionSearch] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+  const [selectedConditions, setSelectedConditions] = useState([])
+  const [generatedForms, setGeneratedForms] = useState([])
+  const [aiAnalysis, setAiAnalysis] = useState(null)
+  
+  // Search conditions when user types
+  useEffect(() => {
+    if (conditionSearch.trim()) {
+      const results = vaConditionsDatabase.searchConditions(conditionSearch)
+      setSearchResults(results)
+    } else {
+      setSearchResults([])
+    }
+  }, [conditionSearch])
 
   // Wizard steps configuration
   const steps = [
@@ -156,120 +196,102 @@ const ClaimGuidance = () => {
   ]
 
   // Enhanced comprehensive VA conditions database
-  const commonConditions = [
-    { 
-      name: 'PTSD', 
-      category: 'Mental Health', 
-      evidenceRequired: ['Current psychological evaluation', 'Stressor incident documentation', 'Treatment records', 'Lay statements'],
-      successRate: 94,
-      averageRating: 74,
-      difficulty: 'moderate',
-      keyPrecedents: ['Cartwright v. Derwinski', 'Cohen v. Brown'],
-      commonStressors: ['Combat exposure', 'MST', 'Training accidents', 'Fear of hostile action'],
-      cAndPQuestions: ['Describe your worst symptom', 'How do symptoms affect work/relationships?'],
-      pactActEligible: true,
-      avgTimeToDecision: '4.2 months',
-      strongEvidence: ['Buddy statements from unit members', 'Contemporary medical records', 'Combat medals/awards']
-    },
-    { 
-      name: 'Chronic Back Pain', 
-      category: 'Musculoskeletal', 
-      evidenceRequired: ['Recent MRI/X-rays', 'Range of motion tests', 'Orthopedic evaluation', 'Pain medication records'],
-      successRate: 89,
-      averageRating: 43,
-      difficulty: 'easy',
-      keyPrecedents: ['DeLuca v. Brown', 'Bover v. Brown'],
-      commonCauses: ['Heavy lifting', 'Vehicle accidents', 'Parachute landings', 'Poor ergonomics'],
-      cAndPQuestions: ['Rate pain on 1-10 scale', 'What activities worsen symptoms?'],
-      pactActEligible: false,
-      avgTimeToDecision: '3.8 months',
-      strongEvidence: ['Service incident reports', 'Physical therapy records', 'Functional capacity evaluation']
-    },
-    { 
-      name: 'Hearing Loss/Tinnitus', 
-      category: 'Sensory', 
-      evidenceRequired: ['Recent audiogram', 'Service medical records', 'Noise exposure documentation', 'ENT evaluation'],
-      successRate: 97,
-      averageRating: 18,
-      difficulty: 'easy',
-      keyPrecedents: ['Stefl v. Nicholson', 'Sacks v. West'],
-      commonCauses: ['Artillery/weapons fire', 'Aircraft noise', 'Heavy machinery', 'Explosions'],
-      cAndPQuestions: ['When did you first notice hearing problems?', 'Describe tinnitus sounds'],
-      pactActEligible: false,
-      avgTimeToDecision: '2.9 months',
-      strongEvidence: ['MOS records showing noise exposure', 'Unit assignment documentation', 'Deployment records']
-    },
-    { 
-      name: 'Sleep Apnea', 
-      category: 'Respiratory', 
-      evidenceRequired: ['Sleep study results', 'Nexus letter', 'CPAP compliance records', 'ENT evaluation'],
-      successRate: 92,
-      averageRating: 52,
-      difficulty: 'moderate',
-      keyPrecedents: ['Clemons v. Shinseki', 'Colvin v. Derwinski'],
-      commonCauses: ['Weight gain post-service', 'Deviated septum', 'PTSD medication', 'Smoking'],
-      cAndPQuestions: ['Do you use CPAP machine?', 'How many hours of sleep do you get?'],
-      pactActEligible: false,
-      avgTimeToDecision: '4.5 months',
-      strongEvidence: ['Sleep study showing AHI >5', 'Medical records of snoring/fatigue', 'Spouse statements']
-    },
-    { 
-      name: 'Knee Injuries', 
-      category: 'Musculoskeletal', 
-      evidenceRequired: ['X-rays/MRI', 'Orthopedic evaluation', 'Physical therapy records', 'Range of motion tests'],
-      successRate: 85,
-      averageRating: 38,
-      difficulty: 'moderate',
-      keyPrecedents: ['Mittleider v. West', 'Floyd v. Brown'],
-      commonCauses: ['Parachute landings', 'PT injuries', 'Vehicle accidents', 'Repetitive stress'],
-      cAndPQuestions: ['Describe knee instability', 'What activities cause pain?'],
-      pactActEligible: false,
-      avgTimeToDecision: '3.6 months',
-      strongEvidence: ['Service injury reports', 'Physical fitness test limitations', 'Surgery records']
-    },
-    { 
-      name: 'Hypertension', 
-      category: 'Cardiovascular', 
-      evidenceRequired: ['Blood pressure readings', 'Cardiology evaluation', 'Medication records', 'Family history'],
-      successRate: 78,
-      averageRating: 12,
-      difficulty: 'hard',
-      keyPrecedents: ['Kowalski v. Nicholson', 'Dalton v. Nicholson'],
-      commonCauses: ['Service stress', 'Dietary changes', 'Weight gain', 'Sleep disorders'],
-      cAndPQuestions: ['When was hypertension first diagnosed?', 'What medications do you take?'],
-      pactActEligible: false,
-      avgTimeToDecision: '5.2 months',
-      strongEvidence: ['Service medical records', 'Consistent BP readings >140/90', 'Medication compliance']
-    },
-    { 
-      name: 'Diabetes Type 2', 
-      category: 'Endocrine', 
-      evidenceRequired: ['HbA1c test results', 'Endocrinology evaluation', 'Medication records', 'Diet/lifestyle documentation'],
-      successRate: 68,
-      averageRating: 34,
-      difficulty: 'hard',
-      keyPrecedents: ['Walton v. McDonald', 'Russo v. Brown'],
-      commonCauses: ['Agent Orange exposure', 'Service diet/stress', 'Weight gain', 'Medication side effects'],
-      cAndPQuestions: ['When was diabetes diagnosed?', 'How do you manage blood sugar?'],
-      pactActEligible: true,
-      avgTimeToDecision: '6.1 months',
-      strongEvidence: ['Agent Orange exposure records', 'Progressive HbA1c results', 'Medication history']
-    },
-    { 
-      name: 'Peripheral Neuropathy', 
-      category: 'Neurological', 
-      evidenceRequired: ['EMG/NCV studies', 'Neurological evaluation', 'Blood work', 'Symptom documentation'],
-      successRate: 73,
-      averageRating: 28,
-      difficulty: 'moderate',
-      keyPrecedents: ['Correia v. Wilkie', 'Tyrues v. Secretary'],
-      commonCauses: ['Agent Orange exposure', 'Diabetes complications', 'Chemical exposure', 'Vitamin deficiency'],
-      cAndPQuestions: ['Describe numbness/tingling', 'How do symptoms affect daily activities?'],
-      pactActEligible: true,
-      avgTimeToDecision: '4.8 months',
-      strongEvidence: ['Agent Orange exposure documentation', 'EMG showing nerve damage', 'Progressive symptoms']
+  // Get condition categories for filtering
+  const conditionCategories = vaConditionsDatabase.getCategories()
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  
+  // Get conditions based on category filter
+  const getDisplayConditions = () => {
+    if (selectedCategory === 'all') {
+      return Object.values(vaConditionsDatabase.conditions)
     }
-  ]
+    return vaConditionsDatabase.getConditionsByCategory(selectedCategory)
+  }
+  
+  // Handle condition selection
+  const addCondition = (condition) => {
+    if (!selectedConditions.find(c => c.id === condition.id)) {
+      const conditionWithEvidence = {
+        ...condition,
+        providedEvidence: [],
+        hasNexusLetter: false,
+        currentDiagnosis: false,
+        treatmentGap: 0,
+        continuousSymptoms: true
+      }
+      setSelectedConditions([...selectedConditions, conditionWithEvidence])
+      setClaimData({
+        ...claimData,
+        conditions: [...claimData.conditions, conditionWithEvidence]
+      })
+    }
+  }
+  
+  const removeCondition = (conditionId) => {
+    setSelectedConditions(selectedConditions.filter(c => c.id !== conditionId))
+    setClaimData({
+      ...claimData,
+      conditions: claimData.conditions.filter(c => c.id !== conditionId)
+    })
+  }
+  
+  // Perform AI analysis
+  const performAIAnalysis = async () => {
+    setIsAnalyzing(true)
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // Perform real analysis
+    const analysisResult = aiAnalysisEngine.analyzeCliam(claimData)
+    setAiAnalysis(analysisResult)
+    setClaimData({
+      ...claimData,
+      successProbability: analysisResult.overallSuccessProbability,
+      recommendations: analysisResult.recommendations
+    })
+    
+    setIsAnalyzing(false)
+    return analysisResult
+  }
+  
+  // Generate VA forms
+  const generateForms = () => {
+    const forms = []
+    
+    // Generate 21-526EZ
+    try {
+      const form526 = formGenerator.generateForm('21-526EZ', claimData)
+      forms.push(form526)
+    } catch (error) {
+      console.error('Error generating 21-526EZ:', error)
+    }
+    
+    // Generate 21-4142 for each private provider
+    claimData.treatment.privateFacilities.forEach(facility => {
+      try {
+        const form4142 = formGenerator.generateForm('21-4142', {
+          ...claimData,
+          currentProvider: facility
+        })
+        forms.push(form4142)
+      } catch (error) {
+        console.error('Error generating 21-4142:', error)
+      }
+    })
+    
+    // Generate statement in support of claim
+    const statement = formGenerator.generateStatement(claimData)
+    forms.push({
+      formType: '21-4138',
+      formName: 'Statement in Support of Claim',
+      content: statement,
+      generatedDate: new Date().toISOString()
+    })
+    
+    setGeneratedForms(forms)
+    return forms
+  }
 
   /**
    * Handles form field updates
@@ -290,73 +312,6 @@ const ClaimGuidance = () => {
     })
   }, [])
 
-  /**
-   * Adds a medical condition to the claim
-   */
-  const addCondition = useCallback((condition) => {
-    setClaimData(prev => ({
-      ...prev,
-      conditions: [...prev.conditions, {
-        ...condition,
-        id: Date.now().toString(),
-        serviceConnection: '',
-        symptoms: [],
-        severity: 'moderate'
-      }]
-    }))
-  }, [])
-
-  /**
-   * Removes a condition from the claim
-   */
-  const removeCondition = useCallback((conditionId) => {
-    setClaimData(prev => ({
-      ...prev,
-      conditions: prev.conditions.filter(c => c.id !== conditionId)
-    }))
-  }, [])
-
-  /**
-   * Performs AI analysis of the claim
-   */
-  const performAIAnalysis = useCallback(async () => {
-    setIsAnalyzing(true)
-    
-    // Simulate AI analysis
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    
-    const analysis = {
-      successProbability: 0.87,
-      timeline: '4-6 months',
-      recommendations: [
-        {
-          type: 'critical',
-          title: 'Obtain Current Medical Records',
-          description: 'Recent medical records within the last 6 months will strengthen your claim significantly.',
-          impact: 'high'
-        },
-        {
-          type: 'important',
-          title: 'Nexus Letter Recommended',
-          description: 'Consider obtaining a nexus letter from your treating physician linking your conditions to military service.',
-          impact: 'medium'
-        },
-        {
-          type: 'suggestion',
-          title: 'Additional Buddy Statements',
-          description: 'Buddy statements from fellow service members can provide valuable corroborating evidence.',
-          impact: 'low'
-        }
-      ]
-    }
-    
-    setClaimData(prev => ({
-      ...prev,
-      ...analysis
-    }))
-    
-    setIsAnalyzing(false)
-  }, [])
 
   /**
    * Navigates to next step
@@ -487,24 +442,73 @@ const ClaimGuidance = () => {
             <div className="text-center mb-8">
               <Stethoscope className="h-16 w-16 text-purple-500 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-white mb-2">Medical Conditions</h2>
-              <p className="text-slate-300">Select conditions you want to claim</p>
+              <p className="text-slate-300">Select conditions you want to claim - AI will analyze success probability</p>
             </div>
 
-            {claimData.conditions.length > 0 && (
+            {/* Search Bar */}
+            <div className="mb-6">
+              <Input
+                placeholder="Search conditions by name or symptoms (e.g., 'back pain', 'anxiety', 'hearing')..."
+                value={conditionSearch}
+                onChange={(e) => setConditionSearch(e.target.value)}
+                icon={Search}
+                className="text-lg"
+              />
+            </div>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Button
+                size="sm"
+                variant={selectedCategory === 'all' ? 'primary' : 'outline'}
+                onClick={() => setSelectedCategory('all')}
+              >
+                All Conditions
+              </Button>
+              {conditionCategories.map(category => (
+                <Button
+                  key={category}
+                  size="sm"
+                  variant={selectedCategory === category ? 'primary' : 'outline'}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+
+            {/* Selected Conditions */}
+            {selectedConditions.length > 0 && (
               <div className="mb-8">
-                <h3 className="text-lg font-bold text-white mb-4">Selected Conditions</h3>
+                <h3 className="text-lg font-bold text-white mb-4">
+                  Selected Conditions ({selectedConditions.length})
+                </h3>
                 <div className="space-y-3">
-                  {claimData.conditions.map((condition) => (
-                    <Card key={condition.id} className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium">{condition.name}</h4>
-                          <p className="text-slate-400 text-sm">{condition.category}</p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <span className="text-green-400 text-sm">
-                            {condition.successRate}% success rate
-                          </span>
+                  {selectedConditions.map((condition) => {
+                    const successProb = vaConditionsDatabase.calculateSuccessProbability(
+                      condition.id,
+                      condition.providedEvidence || []
+                    )
+                    return (
+                      <Card key={condition.id} className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h4 className="text-white font-medium">{condition.name}</h4>
+                            <p className="text-slate-400 text-sm">
+                              {condition.category} • Diagnostic Code: {condition.diagnosticCode}
+                            </p>
+                            <div className="flex items-center space-x-4 mt-2">
+                              <span className="text-green-400 text-sm">
+                                {successProb}% success probability
+                              </span>
+                              <span className="text-slate-400 text-sm">
+                                Avg rating: {condition.averageRating}%
+                              </span>
+                              <span className="text-slate-400 text-sm">
+                                ~{condition.processingTimeDays} days
+                              </span>
+                            </div>
+                          </div>
                           <Button
                             size="sm"
                             variant="outline"
@@ -513,34 +517,58 @@ const ClaimGuidance = () => {
                             Remove
                           </Button>
                         </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    )
+                  })}
                 </div>
+                
+                {/* Combined Rating Preview */}
+                {selectedConditions.length > 1 && (
+                  <div className="mt-4 p-4 bg-slate-800/50 rounded-lg">
+                    <p className="text-slate-300">
+                      Estimated Combined Rating: {' '}
+                      <span className="text-cyan-400 font-bold">
+                        {vaConditionsDatabase.getCombinedRating(
+                          selectedConditions.map(c => c.averageRating)
+                        )}%
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
+            {/* Available Conditions */}
             <div>
-              <h3 className="text-lg font-bold text-white mb-4">Common Conditions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {commonConditions.map((condition, index) => (
-                  <Card
-                    key={index}
-                    className="p-4 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
-                    onClick={() => addCondition(condition)}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-white font-medium">{condition.name}</h4>
-                      <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-full">
-                        {condition.category}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-green-400">{condition.successRate}% success</span>
-                      <span className="text-slate-400">Avg: {condition.averageRating}% rating</span>
-                    </div>
-                  </Card>
-                ))}
+              <h3 className="text-lg font-bold text-white mb-4">
+                {conditionSearch ? 'Search Results' : 'Available Conditions'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                {(conditionSearch ? searchResults : getDisplayConditions()).map((condition) => {
+                  const isSelected = selectedConditions.find(c => c.id === condition.id)
+                  return (
+                    <Card
+                      key={condition.id}
+                      className={`p-4 transition-all duration-300 cursor-pointer ${
+                        isSelected 
+                          ? 'border-green-500/50 bg-green-500/10' 
+                          : 'hover:border-cyan-500/30'
+                      }`}
+                      onClick={() => !isSelected && addCondition(condition)}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-white font-medium">{condition.name}</h4>
+                        <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-full">
+                          {condition.category}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-green-400">{Math.round(condition.successRate * 100)}% success</span>
+                        <span className="text-slate-400">Avg: {condition.averageRating}% rating</span>
+                      </div>
+                    </Card>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -591,64 +619,231 @@ const ClaimGuidance = () => {
 
       case 'analysis':
         return (
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto">
             {isAnalyzing ? (
-              <div>
+              <div className="text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-8 animate-pulse">
-                  <Zap className="h-12 w-12 text-white" />
+                  <Brain className="h-12 w-12 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-4">Analyzing Your Claim</h2>
+                <h2 className="text-3xl font-bold text-white mb-4">AI Analyzing Your Claim</h2>
                 <p className="text-xl text-slate-300 mb-8">
-                  Our AI is evaluating your claim strength and generating personalized recommendations...
+                  Our advanced AI is evaluating {selectedConditions.length} conditions, analyzing evidence gaps, 
+                  and calculating success probabilities...
                 </p>
                 <div className="flex justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
                 </div>
               </div>
-            ) : (
+            ) : aiAnalysis ? (
               <div>
-                <CheckCircle className="h-24 w-24 text-green-500 mx-auto mb-8" />
-                <h2 className="text-3xl font-bold text-white mb-4">Analysis Complete</h2>
+                <div className="text-center mb-8">
+                  <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                  <h2 className="text-3xl font-bold text-white mb-4">AI Analysis Complete</h2>
+                  <p className="text-slate-300">Comprehensive analysis of your VA disability claim</p>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <Card className="p-6">
-                    <h3 className="text-2xl font-bold text-green-400 mb-2">
-                      {Math.round(claimData.successProbability * 100)}%
+                {/* Key Metrics */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <Card className="p-6 text-center">
+                    <h3 className="text-3xl font-bold text-green-400 mb-2">
+                      {aiAnalysis.overallSuccessProbability}%
                     </h3>
-                    <p className="text-white font-medium">Success Probability</p>
+                    <p className="text-white font-medium">Overall Success Probability</p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Based on {selectedConditions.length} conditions
+                    </p>
                   </Card>
-                  <Card className="p-6">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-2">
-                      {claimData.timeline}
+                  <Card className="p-6 text-center">
+                    <h3 className="text-3xl font-bold text-blue-400 mb-2">
+                      {vaConditionsDatabase.getAverageProcessingTime(selectedConditions.map(c => c.id))}
                     </h3>
-                    <p className="text-white font-medium">Expected Timeline</p>
+                    <p className="text-white font-medium">Est. Processing Days</p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Average timeline
+                    </p>
+                  </Card>
+                  <Card className="p-6 text-center">
+                    <h3 className="text-3xl font-bold text-purple-400 mb-2">
+                      {aiAnalysis.potentialRating?.combined || vaConditionsDatabase.getCombinedRating(selectedConditions.map(c => c.averageRating))}%
+                    </h3>
+                    <p className="text-white font-medium">Estimated Rating</p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Combined rating
+                    </p>
                   </Card>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold text-white mb-4">AI Recommendations</h3>
-                  {claimData.recommendations.map((rec, index) => (
-                    <Card key={index} className="p-4 text-left">
-                      <div className="flex items-start space-x-3">
-                        <div className={`p-2 rounded-lg ${
-                          rec.type === 'critical' ? 'bg-red-500/20' :
-                          rec.type === 'important' ? 'bg-yellow-500/20' :
-                          'bg-blue-500/20'
-                        }`}>
-                          <AlertTriangle className={`h-4 w-4 ${
-                            rec.type === 'critical' ? 'text-red-400' :
-                            rec.type === 'important' ? 'text-yellow-400' :
-                            'text-blue-400'
-                          }`} />
+                {/* Condition Analysis */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4">Individual Condition Analysis</h3>
+                  <div className="space-y-4">
+                    {aiAnalysis.conditionAnalysis.map((analysis, index) => (
+                      <Card key={index} className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="text-lg font-bold text-white">{analysis.conditionName}</h4>
+                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            analysis.successProbability >= 70 ? 'bg-green-500/20 text-green-400' :
+                            analysis.successProbability >= 50 ? 'bg-yellow-500/20 text-yellow-400' :
+                            'bg-red-500/20 text-red-400'
+                          }`}>
+                            {analysis.successProbability}% Success Probability
+                          </span>
                         </div>
-                        <div>
-                          <h4 className="font-bold text-white">{rec.title}</h4>
-                          <p className="text-slate-300 text-sm">{rec.description}</p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <h5 className="font-medium text-green-400 mb-2">Strengths</h5>
+                            <ul className="text-sm text-slate-300 space-y-1">
+                              {analysis.strengths?.map((strength, i) => (
+                                <li key={i} className="flex items-center space-x-2">
+                                  <CheckCircle className="h-3 w-3 text-green-400" />
+                                  <span>{strength}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 className="font-medium text-red-400 mb-2">Areas to Strengthen</h5>
+                            <ul className="text-sm text-slate-300 space-y-1">
+                              {analysis.weaknesses?.map((weakness, i) => (
+                                <li key={i} className="flex items-center space-x-2">
+                                  <AlertTriangle className="h-3 w-3 text-red-400" />
+                                  <span>{weakness}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    ))}
+                  </div>
                 </div>
+
+                {/* Evidence Gaps */}
+                {aiAnalysis.evidenceGaps.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-xl font-bold text-white mb-4">Evidence Gaps Analysis</h3>
+                    <div className="space-y-3">
+                      {aiAnalysis.evidenceGaps.map((gap, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className={`p-2 rounded-lg ${
+                              gap.severity === 'critical' ? 'bg-red-500/20' :
+                              gap.severity === 'high' ? 'bg-yellow-500/20' :
+                              'bg-blue-500/20'
+                            }`}>
+                              <AlertTriangle className={`h-4 w-4 ${
+                                gap.severity === 'critical' ? 'text-red-400' :
+                                gap.severity === 'high' ? 'text-yellow-400' :
+                                'text-blue-400'
+                              }`} />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-medium text-white">{gap.type} - {gap.condition}</h4>
+                              <p className="text-sm text-slate-300 mb-2">{gap.description}</p>
+                              <p className="text-sm text-cyan-400">
+                                <strong>Action:</strong> {gap.action}
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* AI Recommendations */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4">AI Strategic Recommendations</h3>
+                  <div className="space-y-4">
+                    {aiAnalysis.recommendations.map((rec, index) => (
+                      <Card key={index} className="p-4">
+                        <div className="flex items-start space-x-3">
+                          <div className={`p-2 rounded-lg ${
+                            rec.priority === 'high' ? 'bg-red-500/20' :
+                            rec.priority === 'medium' ? 'bg-yellow-500/20' :
+                            'bg-green-500/20'
+                          }`}>
+                            <Lightbulb className={`h-4 w-4 ${
+                              rec.priority === 'high' ? 'text-red-400' :
+                              rec.priority === 'medium' ? 'text-yellow-400' :
+                              'text-green-400'
+                            }`} />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-white">{rec.recommendation}</h4>
+                            <p className="text-sm text-slate-300 mb-2">{rec.details}</p>
+                            <div className="flex items-center space-x-4 text-xs text-slate-400">
+                              <span>Priority: {rec.priority.toUpperCase()}</span>
+                              <span>Category: {rec.category}</span>
+                              <span>Timeframe: {rec.timeframe}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Secondary Conditions */}
+                {aiAnalysis.secondaryConditions.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-xl font-bold text-white mb-4">Potential Secondary Conditions</h3>
+                    <p className="text-slate-300 mb-4">
+                      Based on your primary conditions, you may be eligible for these secondary claims:
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {aiAnalysis.secondaryConditions.slice(0, 6).map((secondary, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-white">{secondary.condition}</h4>
+                            <span className="text-xs text-green-400 font-medium">
+                              {Math.round(secondary.probability * 100)}% likely
+                            </span>
+                          </div>
+                          <p className="text-sm text-slate-300 mb-2">
+                            Secondary to: {secondary.primaryConnection}
+                          </p>
+                          <p className="text-xs text-slate-400">{secondary.reason}</p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Strategic Advice */}
+                {aiAnalysis.strategicAdvice.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-4">Strategic Advice</h3>
+                    <div className="space-y-4">
+                      {aiAnalysis.strategicAdvice.map((advice, index) => (
+                        <Card key={index} className="p-4">
+                          <h4 className="font-medium text-cyan-400 mb-2">{advice.title}</h4>
+                          <p className="text-sm text-slate-300 mb-2">{advice.description}</p>
+                          <p className="text-xs text-green-400">
+                            <strong>Impact:</strong> {advice.impact}
+                          </p>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center">
+                <Brain className="h-16 w-16 text-slate-400 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-white mb-4">Ready for Analysis</h2>
+                <p className="text-slate-300 mb-6">
+                  Click "Analyze Claim" to get AI-powered insights about your VA disability claim
+                </p>
+                <Button 
+                  onClick={performAIAnalysis}
+                  disabled={selectedConditions.length === 0}
+                  className="bg-gradient-to-r from-purple-500 to-pink-600"
+                >
+                  <Brain className="h-4 w-4 mr-2" />
+                  Analyze Claim
+                </Button>
               </div>
             )}
           </div>
