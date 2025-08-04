@@ -15,6 +15,9 @@ import LoginModal from './components/modals/LoginModal'
 import CameraOCR from './components/tools/CameraOCR'
 import LegalKnowledgeBase from './components/tools/LegalKnowledgeBase'
 import ClaimGuidance from './components/tools/ClaimGuidance'
+import AudioTranscription from './components/tools/AudioTranscription'
+import CaseResearch from './components/tools/CaseResearch'
+import Analytics from './components/tools/Analytics'
 
 function App() {
   return (
@@ -56,9 +59,9 @@ function AppContent() {
         <Route path="/camera-ocr" element={<ProtectedRoute><CameraOCR /></ProtectedRoute>} />
         <Route path="/legal-knowledge" element={<ProtectedRoute><LegalKnowledgeBase /></ProtectedRoute>} />
         <Route path="/claim-guidance" element={<ProtectedRoute><ClaimGuidance /></ProtectedRoute>} />
-        <Route path="/audio-transcription" element={<ProtectedRoute><ToolPage title="Legal Audio Transcription" /></ProtectedRoute>} />
-        <Route path="/case-research" element={<ProtectedRoute><ToolPage title="Case Precedent Research" /></ProtectedRoute>} />
-        <Route path="/analytics" element={<ProtectedRoute><ToolPage title="Claim Success Analytics" /></ProtectedRoute>} />
+        <Route path="/audio-transcription" element={<ProtectedRoute><AudioTranscription /></ProtectedRoute>} />
+        <Route path="/case-research" element={<ProtectedRoute><CaseResearch /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/health" element={<HealthPage />} />
       </Routes>
 
