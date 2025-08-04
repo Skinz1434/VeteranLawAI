@@ -7,7 +7,7 @@
   "keywords": ["va-law", "legal-tech", "ai", "veterans", "disability-claims"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/veteranlawai-platform.git"
+    "url": "https://github.com/Skinz1434/VeteranLawAI.git"
   },
   "scripts": {
     "dev": "vite",
