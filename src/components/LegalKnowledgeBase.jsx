@@ -350,23 +350,21 @@ Covered Conditions:
         </div>
 
         {/* Google Drive Integration */}
-            <div className="p-4 border-t border-slate-700">
-              <div className="bg-slate-700 rounded-lg p-3">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Cloud className="h-4 w-4 text-cyan-400" />
-                  <span className="text-sm font-medium text-white">Google Drive</span>
-                </div>
-                <div className="text-xs text-slate-300 mb-2">
-                  Connected: legal@lawfirm.com
-                </div>
-                <div className="text-xs text-slate-400">
-                  Saved Research: 847 documents
-                </div>
-              </div>
+        <div className="p-4 border-t border-slate-700">
+          <div className="bg-slate-700 rounded-lg p-3">
+            <div className="flex items-center space-x-2 mb-2">
+              <Cloud className="h-4 w-4 text-cyan-400" />
+              <span className="text-sm font-medium text-white">Google Drive</span>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className="text-xs text-slate-300 mb-2">
+              Connected: legal@lawfirm.com
+            </div>
+            <div className="text-xs text-slate-400">
+              Saved Research: 847 documents
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
