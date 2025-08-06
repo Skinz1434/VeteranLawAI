@@ -4,7 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Professional AI-powered legal platform for VA disability claims attorneys",
-  "keywords": ["va-law", "legal-tech", "ai", "veterans", "disability-claims"],
+  "keywords": [
+    "va-law",
+    "legal-tech",
+    "ai",
+    "veterans",
+    "disability-claims"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Skinz1434/VeteranLawAI.git"
@@ -14,21 +20,30 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && vercel deploy --prod",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
     "lint": "echo 'Linting not configured yet'",
     "typecheck": "echo 'TypeScript checking not configured yet'"
   },
   "dependencies": {
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.310.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
-    "framer-motion": "^11.0.0",
-    "lucide-react": "^0.310.0"
+    "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.16",
+    "jsdom": "^26.1.0",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^3.2.4"
   }
 }
