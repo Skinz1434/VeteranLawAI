@@ -243,7 +243,7 @@ const ClaimGuidance = () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
     
     // Perform real analysis
-    const analysisResult = aiAnalysisEngine.analyzeCliam(claimData)
+    const analysisResult = aiAnalysisEngine.analyzeClaim(claimData)
     setAiAnalysis(analysisResult)
     setClaimData({
       ...claimData,
@@ -385,10 +385,16 @@ const ClaimGuidance = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
-                label="Full Name"
-                placeholder="John A. Veteran"
-                value={claimData.veteran.name}
-                onChange={(e) => updateClaimData('veteran.name', e.target.value)}
+                label="First Name"
+                placeholder="John"
+                value={claimData.veteran.firstName}
+                onChange={(e) => updateClaimData('veteran.firstName', e.target.value)}
+              />
+              <Input
+                label="Last Name"
+                placeholder="Veteran"
+                value={claimData.veteran.lastName}
+                onChange={(e) => updateClaimData('veteran.lastName', e.target.value)}
               />
               <Input
                 label="Social Security Number"
@@ -407,8 +413,8 @@ const ClaimGuidance = () => {
                   Military Branch
                 </label>
                 <select
-                  value={claimData.veteran.serviceInfo.branch}
-                  onChange={(e) => updateClaimData('veteran.serviceInfo.branch', e.target.value)}
+                  value={claimData.military.branch}
+                  onChange={(e) => updateClaimData('military.branch', e.target.value)}
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 >
                   <option value="">Select Branch</option>
@@ -423,14 +429,14 @@ const ClaimGuidance = () => {
               <Input
                 label="Service Start Date"
                 type="date"
-                value={claimData.veteran.serviceInfo.startDate}
-                onChange={(e) => updateClaimData('veteran.serviceInfo.startDate', e.target.value)}
+                value={claimData.military.servicePeriods[0].startDate}
+                onChange={(e) => updateClaimData('military.servicePeriods.0.startDate', e.target.value)}
               />
               <Input
                 label="Service End Date"
                 type="date"
-                value={claimData.veteran.serviceInfo.endDate}
-                onChange={(e) => updateClaimData('veteran.serviceInfo.endDate', e.target.value)}
+                value={claimData.military.servicePeriods[0].endDate}
+                onChange={(e) => updateClaimData('military.servicePeriods.0.endDate', e.target.value)}
               />
             </div>
           </div>
