@@ -88,16 +88,37 @@ npm run preview
    npm run deploy
    ```
 
-## 🏗️ Project Structure
+## 🏗️ Architecture Overview
+
+### High-Level Architecture
+```
+┌─────────────────────────────────────────────────┐
+│          VeteranLawAI Platform                  │
+├─────────────────────────────────────────────────┤
+│  Frontend Layer (React + Vite)                  │
+│  ├── UI Components & Tools                      │
+│  ├── Routing & State Management                 │
+│  └── Accessibility Framework                    │
+├─────────────────────────────────────────────────┤
+│  Services Layer                                 │
+│  ├── Databases (VA Data)                        │
+│  ├── Processing Engines                         │
+│  └── External APIs (OCR, Speech)                │
+└─────────────────────────────────────────────────┘
+```
+
+For detailed architecture documentation, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+## 📁 Project Structure
 
 ```
 src/
 ├── components/           # React components
-│   ├── layout/          # Layout components (Header, Sidebar, etc.)
+│   ├── layout/          # Layout components
 │   ├── tools/           # AI tool components
 │   │   ├── Analytics/   # Analytics dashboard
-│   │   ├── AudioTranscription/  # Speech-to-text tool
-│   │   ├── CameraOCR/   # Document OCR tool
+│   │   ├── AudioTranscription/  # Speech-to-text
+│   │   ├── CameraOCR/   # Document OCR
 │   │   ├── CaseResearch/  # Legal research tool
 │   │   ├── ClaimGuidance/  # Claim assistance wizard
 │   │   └── LegalKnowledgeBase/  # Legal database
@@ -105,15 +126,25 @@ src/
 │   ├── modals/          # Modal components
 │   └── ErrorBoundary/   # Error handling components
 ├── services/            # Business logic and API services
+│   ├── databases/       # Data storage modules
+│   │   ├── DocumentDatabase.js
+│   │   ├── VACaseLawDatabase.js
+│   │   └── VAConditionsDatabase.js
+│   ├── engines/         # Processing engines
+│   │   ├── AIAnalysisEngine.js
+│   │   ├── AnalyticsDataEngine.js
+│   │   ├── CaseAnalysisEngine.js
+│   │   └── FormGenerator.js
 │   ├── ocrService.js    # OCR processing service
-│   ├── speechToTextService.js  # Speech recognition
-│   └── analyticsService.js     # Analytics data processing
+│   └── speechToTextService.js  # Speech recognition
+├── contexts/            # React contexts
+│   └── AuthContext.jsx  # Authentication state
 ├── utils/               # Utility functions
 │   ├── accessibility.js # Accessibility helpers
-│   ├── dataExport.js   # Data export functionality
-│   └── reporting.js    # Report generation
-├── hooks/               # Custom React hooks
-└── data/               # Static data and mock databases
+│   └── reporting.js     # Report generation
+└── hooks/               # Custom React hooks
+    ├── useKeyboardNavigation.js
+    └── useLoading.js
 ```
 
 ## 🔧 Development
@@ -124,6 +155,9 @@ src/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run deploy` - Deploy to Vercel
+- `npm run test` - Run tests in watch mode
+- `npm run test:ui` - Run tests with UI
+- `npm run test:coverage` - Generate coverage report
 - `npm run lint` - Run linting (to be configured)
 - `npm run typecheck` - Run TypeScript checks (to be configured)
 
