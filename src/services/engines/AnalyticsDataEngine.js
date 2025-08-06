@@ -14,8 +14,8 @@
  * - Practice optimization recommendations
  */
 
-import { vaCaseLawDatabase } from '../CaseResearch/VACaseLawDatabase'
-import { vaConditionsDatabase } from '../ClaimGuidance/VAConditionsDatabase'
+import { vaCaseLawDatabase } from '../databases/VACaseLawDatabase'
+import { vaConditionsDatabase } from '../databases/VAConditionsDatabase'
 
 /**
  * Analytics Data Engine Class

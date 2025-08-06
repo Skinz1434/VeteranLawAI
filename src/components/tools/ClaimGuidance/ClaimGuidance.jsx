@@ -6,9 +6,9 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { vaConditionsDatabase } from './VAConditionsDatabase'
-import { formGenerator } from './FormGenerator'
-import { aiAnalysisEngine } from './AIAnalysisEngine'
+import { vaConditionsDatabase } from '../../../services/databases/VAConditionsDatabase'
+import { formGenerator } from '../../../services/engines/FormGenerator'
+import { aiAnalysisEngine } from '../../../services/engines/AIAnalysisEngine'
 import { 
   ArrowRight, 
   ArrowLeft, 

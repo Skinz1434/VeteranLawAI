@@ -15,9 +15,9 @@
  * - Compliance reporting
  */
 
-import { analyticsDataEngine } from '../components/tools/Analytics/AnalyticsDataEngine'
-import { vaCaseLawDatabase } from '../components/tools/CaseResearch/VACaseLawDatabase'
-import { vaConditionsDatabase } from '../components/tools/ClaimGuidance/VAConditionsDatabase'
+import { analyticsDataEngine } from '../services/engines/AnalyticsDataEngine'
+import { vaCaseLawDatabase } from '../services/databases/VACaseLawDatabase'
+import { vaConditionsDatabase } from '../services/databases/VAConditionsDatabase'
 
 /**
  * Report Generation Engine

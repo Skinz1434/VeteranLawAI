@@ -53,7 +53,7 @@ import {
 } from 'lucide-react'
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
-import { analyticsDataEngine } from './AnalyticsDataEngine'
+import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
 import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
 /**

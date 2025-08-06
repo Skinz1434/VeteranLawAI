@@ -39,8 +39,8 @@ import Button from '../../ui/Button'
 import Card from '../../ui/Card'
 import Input from '../../ui/Input'
 import Modal from '../../ui/Modal'
-import { vaCaseLawDatabase } from './VACaseLawDatabase'
-import { caseAnalysisEngine } from './CaseAnalysisEngine'
+import { vaCaseLawDatabase } from '../../../services/databases/VACaseLawDatabase'
+import { caseAnalysisEngine } from '../../../services/engines/CaseAnalysisEngine'
 import { reportingEngine } from '../../../utils/reporting'
 
 /**
