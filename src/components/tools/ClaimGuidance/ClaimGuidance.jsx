@@ -4,7 +4,7 @@
  * @version 5.0.0
  */
 
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { vaConditionsDatabase } from '../../../services/databases/VAConditionsDatabase'
 import { formGenerator } from '../../../services/engines/FormGenerator'
@@ -18,7 +18,6 @@ import {
   User, 
   Shield, 
   Stethoscope,
-  Calendar,
   Upload,
   Download,
   Lightbulb,
@@ -28,41 +27,22 @@ import {
   Zap,
   Brain,
   Crown,
-  Sparkles,
-  Activity,
   Search,
-  Filter,
-  Share2,
-  Archive,
-  Tag,
-  Bookmark,
-  Eye,
-  Scale,
-  BookOpen,
-  Info,
-  ExternalLink,
-  BarChart3,
-  Globe,
-  Database,
-  Briefcase,
-  Award,
-  TrendingUp,
-  PieChart,
-  RefreshCw,
-  Plus,
-  Minus,
-  Settings,
-  Users,
-  Radio,
-  Headphones,
-  Focus,
-  Layers,
-  Scan
+  BarChart3
 } from 'lucide-react'
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
 import Input from '../../ui/Input'
 import Modal from '../../ui/Modal'
+
+// Debounce utility function
+const debounce = (func, delay) => {
+  let timeoutId
+  return (...args) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => func.apply(null, args), delay)
+  }
+}
 
 /**
  * Premium Claim Intelligence Wizard Component
@@ -139,15 +119,23 @@ const ClaimGuidance = () => {
   const [generatedForms, setGeneratedForms] = useState([])
   const [aiAnalysis, setAiAnalysis] = useState(null)
   
-  // Search conditions when user types
+  // Debounced search function to prevent excessive API calls
+  const debouncedSearch = useMemo(
+    () => debounce((query) => {
+      if (query.trim()) {
+        const results = vaConditionsDatabase.searchConditions(query)
+        setSearchResults(results)
+      } else {
+        setSearchResults([])
+      }
+    }, 300),
+    []
+  )
+
+  // Search conditions when user types (debounced)
   useEffect(() => {
-    if (conditionSearch.trim()) {
-      const results = vaConditionsDatabase.searchConditions(conditionSearch)
-      setSearchResults(results)
-    } else {
-      setSearchResults([])
-    }
-  }, [conditionSearch])
+    debouncedSearch(conditionSearch)
+  }, [conditionSearch, debouncedSearch])
 
   // Wizard steps configuration
   const steps = [
@@ -196,17 +184,20 @@ const ClaimGuidance = () => {
   ]
 
   // Enhanced comprehensive VA conditions database
-  // Get condition categories for filtering
-  const conditionCategories = vaConditionsDatabase.getCategories()
+  // Get condition categories for filtering (memoized)
+  const conditionCategories = useMemo(
+    () => vaConditionsDatabase.getCategories(),
+    []
+  )
   const [selectedCategory, setSelectedCategory] = useState('all')
   
-  // Get conditions based on category filter
-  const getDisplayConditions = () => {
+  // Get conditions based on category filter (memoized)
+  const displayConditions = useMemo(() => {
     if (selectedCategory === 'all') {
       return Object.values(vaConditionsDatabase.conditions)
     }
     return vaConditionsDatabase.getConditionsByCategory(selectedCategory)
-  }
+  }, [selectedCategory])
   
   // Handle condition selection
   const addCondition = (condition) => {
@@ -550,7 +541,7 @@ const ClaimGuidance = () => {
                 {conditionSearch ? 'Search Results' : 'Available Conditions'}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-                {(conditionSearch ? searchResults : getDisplayConditions()).map((condition) => {
+                {(conditionSearch ? searchResults : displayConditions).map((condition) => {
                   const isSelected = selectedConditions.find(c => c.id === condition.id)
                   return (
                     <Card
@@ -1105,4 +1096,4 @@ const ClaimGuidance = () => {
   )
 }
 
-export default ClaimGuidance
+export default memo(ClaimGuidance)

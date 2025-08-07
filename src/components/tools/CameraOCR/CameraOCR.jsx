@@ -442,6 +442,8 @@ const CameraOCR = () => {
                   <motion.button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    aria-label={`Switch to ${tab.label} tab - ${tab.description}`}
+                    aria-pressed={isActive}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className={`flex-1 flex flex-col items-center space-y-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 group ${
@@ -491,6 +493,7 @@ const CameraOCR = () => {
                     <canvas
                       ref={canvasRef}
                       className="hidden"
+                      aria-hidden="true"
                     />
                     {!videoRef.current?.srcObject && (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -555,8 +558,13 @@ const CameraOCR = () => {
                           step="0.01"
                           value={confidenceThreshold}
                           onChange={(e) => setConfidenceThreshold(parseFloat(e.target.value))}
+                          aria-label="OCR Confidence Threshold"
+                          aria-describedby="confidence-threshold-description"
                           className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
                         />
+                        <span id="confidence-threshold-description" className="sr-only">
+                          Set minimum confidence level for OCR text extraction. Higher values mean more accuracy but may reject valid text.
+                        </span>
                       </div>
 
                       {/* Service Status */}
