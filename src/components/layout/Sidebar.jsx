@@ -242,11 +242,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             <AnimatePresence>
               {isHovered && (
                 <motion.div
-                  className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 via-white/5 to-transparent"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 via-white/3 to-transparent pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ zIndex: 0 }}
                 />
               )}
             </AnimatePresence>
