@@ -164,13 +164,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       >
         <Link to={item.path} className="block">
           <motion.div
-            className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-300 ${
+            className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-500 ease-out ${
               active 
                 ? `bg-gradient-to-r from-white/15 to-white/5 border border-white/20 ${item.glow} shadow-2xl backdrop-blur-xl` 
-                : 'hover:bg-gradient-to-r hover:from-white/8 hover:to-white/3 hover:border hover:border-white/10 hover:shadow-xl hover:backdrop-blur-lg'
+                : 'hover:bg-gradient-to-r hover:from-white/6 hover:to-white/2 hover:border hover:border-white/8 hover:shadow-lg hover:backdrop-blur-lg'
             }`}
-            whileHover={{ scale: 1.02, x: 3 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.005, x: 1 }}
+            whileTap={{ scale: 0.995 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, duration: 0.4 }}
             layout
           >
             {/* Active indicator */}
@@ -184,18 +185,19 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             )}
 
             {/* Icon with gradient background */}
-            <div className={`relative flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} p-2.5 mr-4 shadow-lg transition-all duration-300 ${
-              active ? `${item.glow} shadow-2xl` : `group-hover:${item.glow} group-hover:shadow-xl`
+            <div className={`relative flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} p-2.5 mr-4 shadow-lg transition-all duration-500 ease-out ${
+              active ? `${item.glow} shadow-2xl` : `group-hover:${item.glow} group-hover:shadow-lg`
             }`}>
               <Icon className="w-full h-full text-white drop-shadow-lg" />
               
               {/* Enhanced glow effect */}
               <motion.div 
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg transition-opacity duration-300`}
+                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg`}
                 animate={{ 
-                  opacity: isHovered ? 0.4 : 0,
-                  scale: isHovered ? 1.1 : 1
+                  opacity: isHovered ? 0.2 : 0,
+                  scale: isHovered ? 1.03 : 1
                 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               />
               
               {/* Premium badge */}
@@ -203,10 +205,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <motion.div 
                   className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
                   animate={{ 
-                    scale: isHovered ? 1.1 : 1,
-                    rotate: isHovered ? 5 : 0
+                    scale: isHovered ? 1.05 : 1,
+                    rotate: isHovered ? 2 : 0
                   }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   {item.badge}
                 </motion.div>
@@ -314,13 +316,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <div className="relative group">
                   <motion.div 
                     className="w-14 h-14 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/30"
-                    whileHover={{ scale: 1.05, rotate: 5 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.03, rotate: 2 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                   >
                     <Scale className="h-8 w-8 text-white drop-shadow-lg" />
                     <motion.div 
                       className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400 to-purple-600 blur-xl transition-opacity duration-300"
-                      animate={{ opacity: hoveredItem ? 0.6 : 0.3 }}
+                      animate={{ opacity: hoveredItem ? 0.4 : 0.2 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
                     />
                   </motion.div>
                   
@@ -328,10 +331,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   <motion.div 
                     className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg border border-white/20"
                     animate={{ 
-                      scale: hoveredItem ? 1.2 : 1,
-                      rotate: hoveredItem ? 15 : 0
+                      scale: hoveredItem ? 1.08 : 1,
+                      rotate: hoveredItem ? 8 : 0
                     }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                   >
                     <Crown className="h-3.5 w-3.5 text-white" />
                   </motion.div>

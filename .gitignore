@@ -79,3 +79,41 @@ temp/
 # Local development
 .env.development
 .env.staging
+
+# Development and testing files
+__tests__/
+*.test.js
+*.test.jsx
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.jsx
+*.spec.ts
+*.spec.tsx
+test/
+tests/
+mocks/
+.coverage/
+
+# Development documentation
+docs/reports/
+docs/*REFACTOR*.md
+docs/*IMPLEMENTATION*.md
+docs/PR_*.md
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Component development files
+*.example.tsx
+*.example.jsx
+components/*/components/
+*Refactored.tsx
+*Refactored.jsx
+
+# Stores and unused patterns
+src/stores/
+src/lib/demo.*
+src/pages/

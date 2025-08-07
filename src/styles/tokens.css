@@ -1,3 +1,0 @@
-:root { --bg:#0b0f1a; --panel:#121a2a; --panel-hi:#1a2340; --text:#dfe7ff; --muted:#9bb0ff; --accent:#7aa2ff; --ring:#89b4ff; --card:#0f1626; --border:rgba(255,255,255,0.08); }
-* { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
-body { background: #0b0f1a; color: var(--text); }
