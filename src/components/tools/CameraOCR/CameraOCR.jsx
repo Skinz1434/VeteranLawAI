@@ -56,9 +56,7 @@ import {
   Radio,
   Headphones
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Modal from '../../ui/Modal'
+import { Button, Card, Modal, LoadingOverlay } from '../../../shared/ui'
 import { 
   ocrService, 
   initializeOCR, 
@@ -831,57 +829,11 @@ const CameraOCR = () => {
           </Modal>
 
           {/* Enhanced Processing Overlay */}
-          <AnimatePresence>
-            {isProcessing && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-50"
-              >
-                <Card className="p-8 text-center max-w-md mx-4">
-                  <div className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Brain className="h-8 w-8 text-white animate-pulse" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Processing Document</h3>
-                    <p className="text-slate-300 mb-4">
-                      AI is analyzing your document with advanced OCR and VA form recognition...
-                    </p>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="w-full bg-slate-700 rounded-full h-2 mb-2">
-                      <motion.div 
-                        className="bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full"
-                        animate={{ width: `${processingProgress}%` }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm text-slate-400">
-                      <span>{Math.round(processingProgress)}% complete</span>
-                      <span>{ocrQuality} quality</span>
-                    </div>
-                  </div>
-
-                  {/* Current Status */}
-                  {currentProcessingStatus && (
-                    <div className="text-sm text-cyan-400 animate-pulse">
-                      {currentProcessingStatus}
-                    </div>
-                  )}
-
-                  {/* Service Info */}
-                  {serviceInfo && (
-                    <div className="mt-4 text-xs text-slate-500">
-                      OCR Engine Ready • {serviceInfo.vaFormsSupported} VA Forms Supported
-                    </div>
-                  )}
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <LoadingOverlay
+            isVisible={isProcessing}
+            tool="camera-ocr"
+            message={`Processing Document… ${Math.round(processingProgress)}%${currentProcessingStatus ? ` • ${currentProcessingStatus}` : ''}`}
+          />
         </div>
       </div>
     </div>
