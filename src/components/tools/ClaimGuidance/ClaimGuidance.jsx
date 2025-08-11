@@ -30,10 +30,7 @@ import {
   Search,
   BarChart3
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 
 // Debounce utility function
 const debounce = (func, delay) => {
@@ -618,19 +615,7 @@ const ClaimGuidance = () => {
         return (
           <div className="max-w-4xl mx-auto">
             {isAnalyzing ? (
-              <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-8 animate-pulse">
-                  <Brain className="h-12 w-12 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-4">AI Analyzing Your Claim</h2>
-                <p className="text-xl text-slate-300 mb-8">
-                  Our advanced AI is evaluating {selectedConditions.length} conditions, analyzing evidence gaps, 
-                  and calculating success probabilities...
-                </p>
-                <div className="flex justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
-                </div>
-              </div>
+              <LoadingOverlay isVisible={true} tool="claim-guidance" message={`Analyzing ${selectedConditions.length} condition(s)…`} />
             ) : aiAnalysis ? (
               <div>
                 <div className="text-center mb-8">
@@ -894,51 +879,25 @@ const ClaimGuidance = () => {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-teal-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-emerald-500/5 to-green-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Premium Progress Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-teal-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/25">
-                    <Target className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
+    <PageShell
+      header={(
+        <SectionHeader
+            title="Claim Intelligence"
+            subtitle={(
+              <p className="text-slate-300 text-lg flex items-center space-x-2">
+                <Brain className="h-5 w-5 text-cyan-400" />
+                <span>AI-Powered VA Disability Claim Optimization Wizard</span>
+                <div className="flex items-center space-x-1 ml-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-green-400 text-sm font-medium">94.7% Success Rate</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-cyan-200 to-teal-300 bg-clip-text text-transparent mb-2">
-                    Claim Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-cyan-400" />
-                    <span>AI-Powered VA Disability Claim Optimization Wizard</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">94.7% Success Rate</span>
-                    </div>
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4">
+              </p>
+            )}
+            icon={Target}
+            gradient="from-cyan-500 via-teal-500 to-emerald-600"
+            badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+            actions={(
+              <>
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/10 px-4 py-3">
                   <div className="text-slate-300 text-sm font-medium">
                     Step {currentStep + 1} of {steps.length}
@@ -947,7 +906,6 @@ const ClaimGuidance = () => {
                     {Math.round(((currentStep + 1) / steps.length) * 100)}% Complete
                   </div>
                 </div>
-                
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -956,9 +914,13 @@ const ClaimGuidance = () => {
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
                 </motion.button>
-              </div>
-            </div>
-          
+              </>
+            )}
+            className="mb-6"
+          />
+      )}
+    >
+
           {/* Progress Bar */}
           <div className="w-full bg-slate-800 rounded-full h-2 mb-4">
             <div 
@@ -997,7 +959,6 @@ const ClaimGuidance = () => {
               )
             })}
           </div>
-        </motion.div>
         
         {/* Step Content */}
         <motion.div
@@ -1090,9 +1051,7 @@ const ClaimGuidance = () => {
             </div>
           </div>
         </Modal>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   )
 }
 

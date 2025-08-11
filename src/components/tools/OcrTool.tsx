@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Scan } from 'lucide-react'
+import { PageShell, SectionHeader, Button } from '../../shared/ui'
 
 export default function OcrTool() {
   const [result, setResult] = useState<any>(null);
@@ -13,13 +15,25 @@ export default function OcrTool() {
   }
 
   return (
-    <div className="rounded-2xl p-5" style={{ background:'var(--panel)', border:'1px solid var(--border)' }}>
-      <h2 className="text-lg font-semibold" style={{ color:'var(--text)' }}>Camera OCR</h2>
-      <p className="text-sm mt-1" style={{ color:'var(--muted)' }}>Demo Mode returns a synthetic parse of VA Form 21-526EZ.</p>
-      <button onClick={runMock} className="mt-3 rounded-xl px-4 py-2" style={{ background:'var(--panel-hi)', color:'var(--text)', border:'1px solid var(--border)' }} disabled={loading}>
-        {loading ? 'Parsing…' : 'Run Demo'}
-      </button>
-      {result && <pre className="mt-4 p-3 rounded-xl overflow-auto" style={{ background:'var(--card)', border:'1px solid var(--border)' }}>{JSON.stringify(result, null, 2)}</pre>}
-    </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Camera OCR"
+          subtitle={<span className="text-slate-300">Demo mode returns a sample parse of VA Form 21-526EZ</span>}
+          icon={Scan as any}
+          gradient="from-blue-500 via-cyan-500 to-indigo-600"
+          actions={<Button onClick={runMock} disabled={loading}>{loading ? 'Parsing…' : 'Run Demo'}</Button>}
+          className="mb-8"
+        />
+      )}
+    >
+      <div className="rounded-2xl p-5 bg-slate-800/50 border border-white/10">
+        {result && (
+          <pre className="mt-2 p-3 rounded-xl overflow-auto bg-slate-800/70 border border-white/10 text-slate-200">
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        )}
+      </div>
+    </PageShell>
   );
 }

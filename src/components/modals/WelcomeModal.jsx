@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Scale, CheckCircle, ArrowRight, Star, Shield, Zap } from 'lucide-react'
-import Modal from '../ui/Modal'
-import Button from '../ui/Button'
+import { Modal, Button } from '../../shared/ui'
 
 const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
   const [currentStep, setCurrentStep] = useState(0)
@@ -13,8 +12,10 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
       subtitle: `Hello ${userName}! Ready to revolutionize your VA legal practice?`,
       content: (
         <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <Scale className="h-10 w-10 text-white" />
+          <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 overflow-hidden">
+            <div className="absolute inset-0 rounded-3xl border border-white/15" />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+            <Scale className="h-10 w-10 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
           </div>
           <p className="text-slate-300 text-lg mb-6">
             You now have access to the most advanced AI-powered legal platform designed specifically for VA disability claims attorneys.

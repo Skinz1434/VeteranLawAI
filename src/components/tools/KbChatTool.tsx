@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
+import { MessageCircle } from 'lucide-react'
+import { PageShell, SectionHeader, Button } from '../../shared/ui'
+
 export default function KbChatTool() {
   const [results, setResults] = useState<any[]>([]);
   async function run(){ const res = await fetch('/api/kb/search', { method:'POST' }); setResults(await res.json()); }
   return (
-    <div className="rounded-2xl p-5" style={{ background:'var(--panel)', border:'1px solid var(--border)' }}>
-      <h2 className="text-lg font-semibold" style={{ color:'var(--text)' }}>KB Chat (Mocked)</h2>
-      <p className="text-sm mt-1" style={{ color:'var(--muted)' }}>Ask a question → citations appear here.</p>
-      <button onClick={run} className="mt-3 rounded-xl px-4 py-2" style={{ background:'var(--panel-hi)', color:'var(--text)', border:'1px solid var(--border)' }}>Run Demo</button>
-      <ul className="mt-4 space-y-2">
-        {results.map(r => (
-          <li key={r.id} className="p-3 rounded-xl" style={{ background:'var(--card)', border:'1px solid var(--border)' }}>
-            <div className="text-sm" style={{ color:'var(--text)' }}>{r.title}</div>
-            <div className="text-xs mt-1" style={{ color:'var(--muted)' }}>{r.snippet}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="KB Chat"
+          subtitle={<span className="text-slate-300">Ask questions and view knowledge base citations</span>}
+          icon={MessageCircle as any}
+          gradient="from-indigo-500 via-purple-500 to-blue-600"
+          actions={<Button onClick={run}>Run Demo</Button>}
+          className="mb-8"
+        />
+      )}
+    >
+      <div className="rounded-2xl p-5 bg-slate-800/50 border border-white/10">
+        <ul className="mt-2 space-y-2">
+          {results.map((r: any) => (
+            <li key={r.id} className="p-3 rounded-xl bg-slate-800/70 border border-white/10">
+              <div className="text-sm text-white">{r.title}</div>
+              <div className="text-xs mt-1 text-slate-400">{r.snippet}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </PageShell>
   );
 }

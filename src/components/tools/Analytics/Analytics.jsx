@@ -51,8 +51,7 @@ import {
   Info,
   ExternalLink
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
+import { Button, Card, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
 import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
@@ -97,8 +96,10 @@ const Analytics = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto">
-            <BarChart3 className="h-8 w-8 text-white animate-pulse" />
+          <div className="relative w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto overflow-hidden">
+            <div className="absolute inset-0 rounded-2xl border border-white/15" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-25" />
+            <BarChart3 className="h-8 w-8 text-white animate-pulse drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
           </div>
           <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
           <p className="text-slate-400">Processing practice data and generating insights...</p>
@@ -199,152 +200,129 @@ const Analytics = () => {
   }, [metrics, timeRange])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/25">
-                    <BarChart3 className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-300 bg-clip-text text-transparent mb-2">
-                    Analytics Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-cyan-400" />
-                    <span>Advanced VA Legal Performance & Predictive Insights</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">Live Data</span>
-                    </div>
-                  </p>
-                </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Analytics Intelligence"
+          subtitle={( 
+            <p className="text-slate-300 text-lg flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-cyan-400" />
+              <span>Advanced VA Legal Performance & Predictive Insights</span>
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">Live Data</span>
+              </div>
+            </p>
+          )}
+          icon={BarChart3}
+          gradient="from-cyan-500 via-blue-500 to-purple-600"
+          badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+          actions={(
+            <>
+              <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/10 p-1">
+                {['dashboard', 'trends', 'insights'].map((view) => (
+                  <button
+                    key={view}
+                    onClick={() => setSelectedView(view)}
+                    aria-label={`Switch to ${view} view`}
+                    aria-pressed={selectedView === view}
+                    className={`px-4 py-2 rounded-xl transition-all duration-300 capitalize font-medium ${
+                      selectedView === view 
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' 
+                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    {view}
+                  </button>
+                ))}
               </div>
               
-              <div className="flex items-center space-x-3">
-                <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/10 p-1">
-                  {['dashboard', 'trends', 'insights'].map((view) => (
-                    <button
-                      key={view}
-                      onClick={() => setSelectedView(view)}
-                      aria-label={`Switch to ${view} view`}
-                      aria-pressed={selectedView === view}
-                      className={`px-4 py-2 rounded-xl transition-all duration-300 capitalize font-medium ${
-                        selectedView === view 
-                          ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' 
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      {view}
-                    </button>
-                  ))}
-                </div>
-                
-                <select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value)}
-                  aria-label="Select time range for analytics data"
-                  className="px-4 py-3 bg-slate-800/50 backdrop-blur-sm border border-white/20 rounded-2xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
-                >
-                  <option value="7d">Last 7 days</option>
-                  <option value="30d">Last 30 days</option>
-                  <option value="90d">Last 90 days</option>
-                  <option value="1y">Last year</option>
-                </select>
-                
-                <motion.button
-                  onClick={refreshData}
+              <select
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+                aria-label="Select time range for analytics data"
+                className="px-4 py-3 bg-slate-800/50 backdrop-blur-sm border border-white/20 rounded-2xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+              >
+                <option value="7d">Last 7 days</option>
+                <option value="30d">Last 30 days</option>
+                <option value="90d">Last 90 days</option>
+                <option value="1y">Last year</option>
+              </select>
+              
+              <motion.button
+                onClick={refreshData}
+                disabled={isLoading}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Refresh analytics data"
+                aria-describedby="refresh-help"
+                className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2 disabled:opacity-50"
+              >
+                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <span>Refresh</span>
+              </motion.button>
+              <div id="refresh-help" className="sr-only">
+                Reload analytics data from the server to get the latest information
+              </div>
+              
+              <div className="relative group">
+                <Button 
+                  className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500"
+                  onClick={() => handleExportReport('pdf')}
                   disabled={isLoading}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label="Refresh analytics data"
-                  aria-describedby="refresh-help"
-                  className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2 disabled:opacity-50"
                 >
-                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                  <span>Refresh</span>
-                </motion.button>
-                <div id="refresh-help" className="sr-only">
-                  Reload analytics data from the server to get the latest information
-                </div>
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Report
+                </Button>
                 
-                <div className="relative group">
-                  <Button 
-                    className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500"
-                    onClick={() => handleExportReport('pdf')}
-                    disabled={isLoading}
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Export Report
-                  </Button>
-                  
-                  {/* Export Format Dropdown */}
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                    <div className="p-2">
-                      <button
-                        onClick={() => handleExportReport('pdf')}
-                        disabled={isLoading}
-                        aria-label="Export analytics report as PDF document"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                      >
-                        <FileText className="h-4 w-4" />
-                        <span>Export as PDF</span>
-                      </button>
-                      <button
-                        onClick={() => handleExportReport('xlsx')}
-                        disabled={isLoading}
-                        aria-label="Export analytics report as Excel spreadsheet"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                      >
-                        <BarChart3 className="h-4 w-4" />
-                        <span>Export as Excel</span>
-                      </button>
-                      <button
-                        onClick={() => handleExportReport('csv')}
-                        disabled={isLoading}
-                        aria-label="Export analytics report as CSV data file"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                      >
-                        <Database className="h-4 w-4" />
-                        <span>Export as CSV</span>
-                      </button>
-                      <button
-                        onClick={() => handleExportReport('json')}
-                        disabled={isLoading}
-                        aria-label="Export analytics report as JSON data file"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                      >
-                        <Globe className="h-4 w-4" />
-                        <span>Export as JSON</span>
-                      </button>
-                    </div>
+                {/* Export Format Dropdown */}
+                <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  <div className="p-2">
+                    <button
+                      onClick={() => handleExportReport('pdf')}
+                      disabled={isLoading}
+                      aria-label="Export analytics report as PDF document"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span>Export as PDF</span>
+                    </button>
+                    <button
+                      onClick={() => handleExportReport('xlsx')}
+                      disabled={isLoading}
+                      aria-label="Export analytics report as Excel spreadsheet"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                    >
+                      <BarChart3 className="h-4 w-4" />
+                      <span>Export as Excel</span>
+                    </button>
+                    <button
+                      onClick={() => handleExportReport('csv')}
+                      disabled={isLoading}
+                      aria-label="Export analytics report as CSV data file"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                    >
+                      <Database className="h-4 w-4" />
+                      <span>Export as CSV</span>
+                    </button>
+                    <button
+                      onClick={() => handleExportReport('json')}
+                      disabled={isLoading}
+                      aria-label="Export analytics report as JSON data file"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
+                    >
+                      <Globe className="h-4 w-4" />
+                      <span>Export as JSON</span>
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </>
+          )}
+          className="mb-8"
+        />
+      )}
+    >
 
           {/* Enhanced Key Metrics Grid */}
           <motion.div
@@ -414,7 +392,7 @@ const Analytics = () => {
                   onHoverEnd={() => setHoveredCard(null)}
                   className="group relative"
                 >
-                  <div className={`relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-6 border transition-all duration-500 ${
+                  <div className={`relative glass-card gradient-outline bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl p-6 border transition-all duration-500 ${
                     hoveredCard === index 
                       ? 'border-cyan-500/50 shadow-2xl shadow-cyan-500/20 scale-105' 
                       : 'border-white/10 hover:border-white/20'
@@ -426,8 +404,10 @@ const Analytics = () => {
                     
                     <div className="relative">
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`w-14 h-14 bg-gradient-to-br ${metric.color} rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300`}>
-                          <Icon className="h-7 w-7 text-white drop-shadow-lg" />
+                        <div className={`relative w-14 h-14 bg-gradient-to-br ${metric.color} rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
+                          <div className="absolute inset-0 rounded-2xl border border-white/15" />
+                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                          <Icon className="h-7 w-7 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                         </div>
                         <div className="flex items-center space-x-1">
                           <TrendIcon value={metric.trend} />
@@ -763,9 +743,8 @@ const Analytics = () => {
             </div>
           </motion.div>
           </section>
-        </div>
-      </div>
-    </div>
+      <LoadingOverlay isVisible={isLoading} tool="analytics" message="Refreshing analytics…" />
+    </PageShell>
   )
 }
 

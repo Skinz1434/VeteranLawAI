@@ -12,7 +12,7 @@ export const Card = React.forwardRef(({
   ...props 
 }, ref) => {
   const baseClasses = `
-    rounded-2xl p-6 border border-slate-700/50
+    rounded-3xl p-6 border border-slate-700/50 gradient-outline
     ${blur ? 'backdrop-blur-sm' : ''}
     ${gradient ? 'bg-gradient-to-br from-slate-800/80 to-slate-900/80' : 'bg-slate-800/50'}
     ${hover ? 'hover:border-cyan-500/30 transition-all duration-300' : ''}

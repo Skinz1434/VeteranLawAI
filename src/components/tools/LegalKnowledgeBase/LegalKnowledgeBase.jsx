@@ -53,10 +53,7 @@ import {
   Layers,
   Scan
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 
 /**
  * Premium Legal Intelligence Database Component
@@ -166,67 +163,43 @@ const LegalKnowledgeBase = () => {
   }, [])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-amber-500/5 to-yellow-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-500 via-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-amber-500/25">
-                    <Database className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-amber-200 to-yellow-300 bg-clip-text text-transparent mb-2">
-                    Legal Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-amber-400" />
-                    <span>Advanced VA Legal Research Database & AI Search Platform</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
-                    </div>
-                  </p>
-                </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Legal Intelligence"
+          subtitle={(
+            <p className="text-slate-300 text-lg flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-amber-400" />
+              <span>Advanced VA Legal Research Database & AI Search Platform</span>
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
               </div>
-              
-              <div className="flex items-center space-x-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  <span>Research Trends</span>
-                </motion.button>
-                
-                <Button className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Preferences
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+            </p>
+          )}
+          icon={Database}
+          gradient="from-amber-500 via-yellow-500 to-orange-600"
+          badge={<div className="w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+          actions={(
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>Research Trends</span>
+              </motion.button>
+              <Button className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500">
+                <Settings className="h-4 w-4 mr-2" />
+                Preferences
+              </Button>
+            </>
+          )}
+          className="mb-8"
+        />
+      )}
+    >
 
           {/* Search Section */}
           <motion.div
@@ -312,20 +285,7 @@ const LegalKnowledgeBase = () => {
 
           {/* Search Results */}
           <AnimatePresence>
-            {isSearching && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-12"
-              >
-                <Loader className="h-12 w-12 text-amber-500 animate-spin mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Searching Legal Database</h3>
-                <p className="text-slate-300">
-                  AI is analyzing 18,500+ legal documents for relevant matches...
-                </p>
-              </motion.div>
-            )}
+            <LoadingOverlay isVisible={isSearching} tool="legal-knowledge" message="Searching legal database…" />
 
             {!isSearching && searchResults.length > 0 && (
               <motion.div
@@ -454,8 +414,10 @@ const LegalKnowledgeBase = () => {
                 const Icon = item.icon
                 return (
                   <Card key={index} className="p-6 hover:border-amber-500/30 transition-all duration-300 cursor-pointer">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center mb-4`}>
-                      <Icon className="h-6 w-6 text-white" />
+                    <div className={`relative w-12 h-12 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center mb-4 overflow-hidden`}>
+                      <div className="absolute inset-0 rounded-xl border border-white/15" />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                      <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                     </div>
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
                     <p className="text-2xl font-bold text-amber-400">{item.count}</p>
@@ -513,9 +475,7 @@ const LegalKnowledgeBase = () => {
               </div>
             )}
           </Modal>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   )
 }
 

@@ -64,10 +64,7 @@ import {
   Minus,
   Users
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay, Tabs, TabsList, TabsTrigger, TabsContent, PageShell, SectionHeader } from '../../../shared/ui'
 import { 
   speechToTextService, 
   initializeSpeechService, 
@@ -622,135 +619,46 @@ const AudioTranscription = () => {
   }, [])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 z-0" />
-      <div className="absolute inset-0 opacity-30 z-0" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-full blur-3xl animate-pulse z-0" />
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-teal-500/5 to-cyan-500/5 rounded-full blur-2xl animate-pulse z-0" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6 z-10">
-        <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-green-500/25">
-                    <BarChart3 className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-green-200 to-emerald-300 bg-clip-text text-transparent mb-2">
-                    Audio Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-green-400" />
-                    <span>Premium Legal Audio Processing & Transcription</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">98.7% Accuracy</span>
-                    </div>
-                  </p>
-                </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Audio Intelligence"
+          subtitle={(
+            <p className="text-slate-300 text-lg flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-green-400" />
+              <span>Premium Legal Audio Processing & Transcription</span>
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">98.7% Accuracy</span>
               </div>
-              
-              <div className="flex items-center space-x-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-3 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  <span>Analytics</span>
-                </motion.button>
-                
-                <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+            </p>
+          )}
+          icon={Mic}
+          gradient="from-green-500 via-emerald-500 to-teal-600"
+          badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+          actions={(
+            <>
+              <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500">
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
+              </Button>
+            </>
+          )}
+          className="mb-8"
+        />
+      )}
+    >
 
-          {/* Enhanced Tab Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
-          >
-            <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-white/10 p-2">
-              {[
-                { 
-                  id: 'record', 
-                  label: 'Live Recording', 
-                  icon: Mic,
-                  gradient: 'from-green-500 to-emerald-600',
-                  description: 'High-quality capture'
-                },
-                { 
-                  id: 'upload', 
-                  label: 'File Upload', 
-                  icon: Upload,
-                  gradient: 'from-teal-500 to-cyan-600', 
-                  description: 'Process existing files'
-                },
-                { 
-                  id: 'transcripts', 
-                  label: `Transcripts (${transcripts.length + mockTranscripts.length})`, 
-                  icon: FileText,
-                  gradient: 'from-blue-500 to-indigo-600',
-                  description: 'Completed transcriptions'
-                },
-                { 
-                  id: 'analytics', 
-                  label: 'Intelligence', 
-                  icon: Brain,
-                  gradient: 'from-purple-500 to-pink-600',
-                  description: 'AI insights & trends'
-                },
-              ].map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-                return (
-                  <motion.button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex-1 flex flex-col items-center space-y-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 group ${
-                      isActive
-                        ? `bg-gradient-to-r ${tab.gradient} text-white shadow-2xl shadow-green-500/20`
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-white/20 shadow-lg' 
-                        : `bg-gradient-to-br ${tab.gradient} opacity-60 group-hover:opacity-100`
-                    }`}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-sm">{tab.label}</div>
-                      <div className="text-xs opacity-70">{tab.description}</div>
-                    </div>
-                  </motion.button>
-                )
-              })}
-            </div>
+          {/* Unified Tab Navigation */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList>
+                <TabsTrigger value="record" icon={Mic} label="Live Recording" description="High-quality capture" gradient="from-green-500 to-emerald-600" />
+                <TabsTrigger value="upload" icon={Upload} label="File Upload" description="Process existing files" gradient="from-teal-500 to-cyan-600" />
+                <TabsTrigger value="transcripts" icon={FileText} label={`Transcripts (${transcripts.length + mockTranscripts.length})`} description="Completed transcriptions" gradient="from-blue-500 to-indigo-600" />
+                <TabsTrigger value="analytics" icon={Brain} label="Intelligence" description="AI insights & trends" gradient="from-purple-500 to-pink-600" />
+              </TabsList>
+            </Tabs>
           </motion.div>
 
           {/* Tab Content */}
@@ -1221,8 +1129,10 @@ const AudioTranscription = () => {
                   return (
                     <Card key={index} className="p-6 hover:border-emerald-500/30 transition-all duration-300">
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center`}>
-                          <Icon className="h-6 w-6 text-white" />
+                        <div className={`relative w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center overflow-hidden`}>
+                          <div className="absolute inset-0 rounded-xl border border-white/15" />
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                          <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                         </div>
                         <span className={`text-sm font-medium px-2 py-1 rounded-full ${
                           metric.change.startsWith('+') ? 'text-green-400 bg-green-500/20' : 'text-red-400 bg-red-500/20'
@@ -1311,42 +1221,12 @@ const AudioTranscription = () => {
           </Modal>
 
           {/* Processing Overlay */}
-          <AnimatePresence>
-            {isTranscribing && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50"
-              >
-                <Card className="p-8 text-center max-w-md mx-4">
-                  <div className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Brain className="h-8 w-8 text-white animate-pulse" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Processing Audio</h3>
-                    <p className="text-slate-300">
-                      AI is transcribing your audio with advanced legal terminology recognition...
-                    </p>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <div className="w-full bg-slate-700 rounded-full h-2">
-                      <motion.div 
-                        className="bg-gradient-to-r from-emerald-500 to-green-600 h-2 rounded-full"
-                        animate={{ width: `${transcriptionProgress}%` }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-                    <p className="text-sm text-slate-400 mt-2">{Math.round(transcriptionProgress)}% complete</p>
-                  </div>
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
+          <LoadingOverlay
+            isVisible={isTranscribing}
+            tool="audio-transcription"
+            message={`Processing Audio… ${Math.round(transcriptionProgress)}%`}
+          />
+    </PageShell>
   )
 }
 

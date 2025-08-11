@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
+import { Mic } from 'lucide-react'
+import { PageShell, SectionHeader, Button } from '../../shared/ui'
+
 export default function TranscribeTool() {
   const [result, setResult] = useState<any>(null);
   async function runMock(){ const res = await fetch('/api/transcribe', { method:'POST' }); setResult(await res.json()); }
   return (
-    <div className="rounded-2xl p-5" style={{ background:'var(--panel)', border:'1px solid var(--border)' }}>
-      <h2 className="text-lg font-semibold" style={{ color:'var(--text)' }}>Audio Transcription</h2>
-      <p className="text-sm mt-1" style={{ color:'var(--muted)' }}>Upload or record. Demo shows entities.</p>
-      <button onClick={runMock} className="mt-3 rounded-xl px-4 py-2" style={{ background:'var(--panel-hi)', color:'var(--text)', border:'1px solid var(--border)' }}>Run Demo</button>
-      {result && <pre className="mt-4 p-3 rounded-xl overflow-auto" style={{ background:'var(--card)', border:'1px solid var(--border)' }}>{JSON.stringify(result, null, 2)}</pre>}
-    </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Audio Transcription"
+          subtitle={<span className="text-slate-300">Upload or record audio. Demo shows recognized entities.</span>}
+          icon={Mic as any}
+          gradient="from-green-500 via-emerald-500 to-teal-600"
+          actions={<Button onClick={runMock}>Run Demo</Button>}
+          className="mb-8"
+        />
+      )}
+    >
+      <div className="rounded-2xl p-5 bg-slate-800/50 border border-white/10">
+        {result && (
+          <pre className="mt-2 p-3 rounded-xl overflow-auto bg-slate-800/70 border border-white/10 text-slate-200">
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        )}
+      </div>
+    </PageShell>
   );
 }

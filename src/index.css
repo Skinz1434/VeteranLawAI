@@ -18,6 +18,43 @@
     @apply bg-slate-950 text-slate-100 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+/* Respect prefers-reduced-motion to smooth out interactions for sensitive users */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Subtle glass + outline tokens */
+.glass-card {
+  background: linear-gradient(to bottom right, rgba(15,23,42,0.5), rgba(2,6,23,0.5));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 20px -10px rgba(0,0,0,0.4);
+}
+
+.thin-outline {
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.gradient-outline {
+  position: relative;
+}
+.gradient-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(6,182,212,0.35), rgba(59,130,246,0.25), rgba(139,92,246,0.25));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
   
   /* Custom scrollbars */
   .scrollbar-thin {
@@ -98,6 +135,21 @@
 }
 
 @layer utilities {
+  /* Focus ring utility for consistent a11y */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:ring-offset-0;
+  }
+
+  /* Motion tokens */
+  .motion-fast { @apply transition-all duration-200 ease-smooth; }
+  .motion-normal { @apply transition-all duration-300 ease-smooth; }
+  .motion-slow { @apply transition-all duration-500 ease-smooth; }
+
+  /* Rounding tokens */
+  .radius-xl { @apply rounded-xl; }
+  .radius-2xl { @apply rounded-2xl; }
+  .radius-3xl { @apply rounded-3xl; }
+
   /* Animation keyframes */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }

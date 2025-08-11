@@ -56,9 +56,7 @@ import {
   Radio,
   Headphones
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Modal from '../../ui/Modal'
+import { Button, Card, Modal, LoadingOverlay, SectionHeader, PageShell, Tabs, TabsList, TabsTrigger } from '../../../shared/ui'
 import { 
   ocrService, 
   initializeOCR, 
@@ -336,137 +334,54 @@ const CameraOCR = () => {
   }, [])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-cyan-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
-                    <Scan className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent mb-2">
-                    Document Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-blue-400" />
-                    <span>Advanced VA Legal Document Processing & AI Recognition</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">99.7% Accuracy</span>
-                    </div>
-                  </p>
-                </div>
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Document Intelligence"
+          subtitle={(
+            <p className="text-slate-300 text-lg flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-blue-400" />
+              <span>Advanced VA Legal Document Processing & AI Recognition</span>
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">99.7% Accuracy</span>
               </div>
-              
-              <div className="flex items-center space-x-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  <span>Analytics</span>
-                </motion.button>
-                
-                <Button className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-400 hover:to-cyan-500">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+            </p>
+          )}
+          icon={Scan}
+          gradient="from-blue-500 via-cyan-500 to-indigo-600"
+          badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+          actions={(
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Analytics</span>
+              </motion.button>
+              <Button className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-400 hover:to-cyan-500">
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
+              </Button>
+            </>
+          )}
+          className="mb-8"
+        />
+      )}
+    >
 
-          {/* Enhanced Tab Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
-          >
-            <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-white/10 p-2">
-              {[
-                { 
-                  id: 'capture', 
-                  label: 'Smart Capture', 
-                  icon: Focus,
-                  gradient: 'from-blue-500 to-cyan-600',
-                  description: 'AI-powered scanning'
-                },
-                { 
-                  id: 'upload', 
-                  label: 'Batch Upload', 
-                  icon: Layers,
-                  gradient: 'from-indigo-500 to-purple-600', 
-                  description: 'Multi-file processing'
-                },
-                { 
-                  id: 'results', 
-                  label: `Documents (${processedDocuments.length})`, 
-                  icon: Database,
-                  gradient: 'from-emerald-500 to-teal-600',
-                  description: 'Processed files'
-                },
-                { 
-                  id: 'analytics', 
-                  label: 'Intelligence', 
-                  icon: Brain,
-                  gradient: 'from-purple-500 to-pink-600',
-                  description: 'AI insights'
-                },
-              ].map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-                return (
-                  <motion.button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    aria-label={`Switch to ${tab.label} tab - ${tab.description}`}
-                    aria-pressed={isActive}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex-1 flex flex-col items-center space-y-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 group ${
-                      isActive
-                        ? `bg-gradient-to-r ${tab.gradient} text-white shadow-2xl shadow-blue-500/20`
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-white/20 shadow-lg' 
-                        : `bg-gradient-to-br ${tab.gradient} opacity-60 group-hover:opacity-100`
-                    }`}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-sm">{tab.label}</div>
-                      <div className="text-xs opacity-70">{tab.description}</div>
-                    </div>
-                  </motion.button>
-                )
-              })}
-            </div>
+          {/* Unified Tab Navigation */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList>
+                <TabsTrigger value="capture" icon={Focus} label="Smart Capture" description="AI-powered scanning" gradient="from-blue-500 to-cyan-600" />
+                <TabsTrigger value="upload" icon={Layers} label="Batch Upload" description="Multi-file processing" gradient="from-indigo-500 to-purple-600" />
+                <TabsTrigger value="results" icon={Database} label={`Documents (${processedDocuments.length})`} description="Processed files" gradient="from-emerald-500 to-teal-600" />
+                <TabsTrigger value="analytics" icon={Brain} label="Intelligence" description="AI insights" gradient="from-purple-500 to-pink-600" />
+              </TabsList>
+            </Tabs>
           </motion.div>
 
           {/* Tab Content */}
@@ -779,8 +694,10 @@ const CameraOCR = () => {
                   return (
                     <Card key={index} className="p-6 hover:border-cyan-500/30 transition-all duration-300">
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center`}>
-                          <Icon className="h-6 w-6 text-white" />
+                        <div className={`relative w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center overflow-hidden`}>
+                          <div className="absolute inset-0 rounded-xl border border-white/15" />
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                          <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                         </div>
                         <span className={`text-sm font-medium px-2 py-1 rounded-full ${
                           metric.change.startsWith('+') ? 'text-green-400 bg-green-500/20' : 'text-red-400 bg-red-500/20'
@@ -831,60 +748,12 @@ const CameraOCR = () => {
           </Modal>
 
           {/* Enhanced Processing Overlay */}
-          <AnimatePresence>
-            {isProcessing && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-50"
-              >
-                <Card className="p-8 text-center max-w-md mx-4">
-                  <div className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Brain className="h-8 w-8 text-white animate-pulse" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Processing Document</h3>
-                    <p className="text-slate-300 mb-4">
-                      AI is analyzing your document with advanced OCR and VA form recognition...
-                    </p>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="w-full bg-slate-700 rounded-full h-2 mb-2">
-                      <motion.div 
-                        className="bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full"
-                        animate={{ width: `${processingProgress}%` }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm text-slate-400">
-                      <span>{Math.round(processingProgress)}% complete</span>
-                      <span>{ocrQuality} quality</span>
-                    </div>
-                  </div>
-
-                  {/* Current Status */}
-                  {currentProcessingStatus && (
-                    <div className="text-sm text-cyan-400 animate-pulse">
-                      {currentProcessingStatus}
-                    </div>
-                  )}
-
-                  {/* Service Info */}
-                  {serviceInfo && (
-                    <div className="mt-4 text-xs text-slate-500">
-                      OCR Engine Ready • {serviceInfo.vaFormsSupported} VA Forms Supported
-                    </div>
-                  )}
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
+          <LoadingOverlay
+            isVisible={isProcessing}
+            tool="camera-ocr"
+            message={`Processing Document… ${Math.round(processingProgress)}%${currentProcessingStatus ? ` • ${currentProcessingStatus}` : ''}`}
+          />
+    </PageShell>
   )
 }
 

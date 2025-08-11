@@ -34,6 +34,7 @@ import {
   Award,
   Database
 } from 'lucide-react'
+import { Tooltip } from '../../shared/ui'
 import { useAuth } from '../../contexts/AuthContext'
 
 /**
@@ -162,7 +163,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         onHoverEnd={() => setHoveredItem(null)}
         className="relative group"
       >
-        <Link to={item.path} className="block">
+        <Link to={item.path} className="block focus-ring">
           <motion.div
             className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-500 ease-out ${
               active 
@@ -185,35 +186,37 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             )}
 
             {/* Icon with gradient background */}
-            <div className={`relative flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} p-2.5 mr-4 shadow-lg transition-all duration-500 ease-out ${
-              active ? `${item.glow} shadow-2xl` : `group-hover:${item.glow} group-hover:shadow-lg`
-            }`}>
-              <Icon className="w-full h-full text-white drop-shadow-lg" />
+            <Tooltip content={item.description} side="right">
+              <div className={`relative flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} p-2.5 mr-4 shadow-lg transition-all duration-500 ease-out ${
+                active ? `${item.glow} shadow-2xl` : `group-hover:${item.glow} group-hover:shadow-lg`
+              }`}>
+                <Icon className="w-full h-full text-white drop-shadow-lg" />
               
-              {/* Enhanced glow effect */}
-              <motion.div 
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg`}
-                animate={{ 
-                  opacity: isHovered ? 0.2 : 0,
-                  scale: isHovered ? 1.03 : 1
-                }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              />
-              
-              {/* Premium badge */}
-              {item.badge && (
+                {/* Enhanced glow effect */}
                 <motion.div 
-                  className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
+                  className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg`}
                   animate={{ 
-                    scale: isHovered ? 1.05 : 1,
-                    rotate: isHovered ? 2 : 0
+                    opacity: isHovered ? 0.2 : 0,
+                    scale: isHovered ? 1.03 : 1
                   }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                >
-                  {item.badge}
-                </motion.div>
-              )}
-            </div>
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                />
+              
+                {/* Premium badge */}
+                {item.badge && (
+                  <motion.div 
+                    className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
+                    animate={{ 
+                      scale: isHovered ? 1.05 : 1,
+                      rotate: isHovered ? 2 : 0
+                    }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  >
+                    {item.badge}
+                  </motion.div>
+                )}
+              </div>
+            </Tooltip>
 
             {/* Text content */}
             <AnimatePresence mode="wait">
@@ -287,7 +290,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
   return (
     <motion.div
-      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-500 ease-in-out ${
+      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-500 ease-in-out gradient-outline ${
         isCollapsed ? 'w-20' : 'w-80'
       }`}
       initial={false}
