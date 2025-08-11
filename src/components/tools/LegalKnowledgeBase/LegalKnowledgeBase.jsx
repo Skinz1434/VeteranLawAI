@@ -53,7 +53,7 @@ import {
   Layers,
   Scan
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
 
 /**
  * Premium Legal Intelligence Database Component
@@ -176,38 +176,23 @@ const LegalKnowledgeBase = () => {
       
       <div className="relative p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-500 via-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-amber-500/25">
-                    <Database className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
+          <SectionHeader
+            title="Legal Intelligence"
+            subtitle={(
+              <p className="text-slate-300 text-lg flex items-center space-x-2">
+                <Brain className="h-5 w-5 text-amber-400" />
+                <span>Advanced VA Legal Research Database & AI Search Platform</span>
+                <div className="flex items-center space-x-1 ml-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-amber-200 to-yellow-300 bg-clip-text text-transparent mb-2">
-                    Legal Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-amber-400" />
-                    <span>Advanced VA Legal Research Database & AI Search Platform</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
-                    </div>
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3">
+              </p>
+            )}
+            icon={Database}
+            gradient="from-amber-500 via-yellow-500 to-orange-600"
+            badge={<div className="w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+            actions={(
+              <>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -216,14 +201,14 @@ const LegalKnowledgeBase = () => {
                   <TrendingUp className="h-4 w-4" />
                   <span>Research Trends</span>
                 </motion.button>
-                
                 <Button className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500">
                   <Settings className="h-4 w-4 mr-2" />
                   Preferences
                 </Button>
-              </div>
-            </div>
-          </motion.div>
+              </>
+            )}
+            className="mb-8"
+          />
 
           {/* Search Section */}
           <motion.div

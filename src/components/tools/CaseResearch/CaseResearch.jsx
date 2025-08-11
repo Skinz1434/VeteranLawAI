@@ -35,7 +35,7 @@ import {
   ArrowDownRight,
   Minus
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
 import { vaCaseLawDatabase } from '../../../services/databases/VACaseLawDatabase'
 import { caseAnalysisEngine } from '../../../services/engines/CaseAnalysisEngine'
 import { reportingEngine } from '../../../utils/reporting'
@@ -403,38 +403,23 @@ const CaseResearch = () => {
       
       <div className="relative p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/25">
-                    <Scale className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Gavel className="h-3 w-3 text-white" />
-                  </div>
+          <SectionHeader
+            title="Legal Intelligence"
+            subtitle={(
+              <p className="text-slate-300 text-lg flex items-center space-x-2">
+                <Target className="h-5 w-5 text-indigo-400" />
+                <span>AI-Powered Case Research & Precedent Analysis Platform</span>
+                <div className="flex items-center space-x-1 ml-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-green-400 text-sm font-medium">15,000+ Cases</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent mb-2">
-                    Legal Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Target className="h-5 w-5 text-indigo-400" />
-                    <span>AI-Powered Case Research & Precedent Analysis Platform</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">15,000+ Cases</span>
-                    </div>
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3">
+              </p>
+            )}
+            icon={Scale}
+            gradient="from-indigo-500 via-purple-500 to-pink-600"
+            badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Gavel className="h-3 w-3 text-white" /></div>}
+            actions={(
+              <>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -443,12 +428,10 @@ const CaseResearch = () => {
                   <BarChart3 className="h-4 w-4" />
                   <span>Research Trends</span>
                 </motion.button>
-                
                 <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500">
                   <BookOpen className="h-4 w-4 mr-2" />
                   Legal Library
                 </Button>
-                
                 {searchResults.length > 0 && (
                   <Button 
                     className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500"
@@ -459,9 +442,10 @@ const CaseResearch = () => {
                     Export Research
                   </Button>
                 )}
-              </div>
-            </div>
-          </motion.div>
+              </>
+            )}
+            className="mb-8"
+          />
 
         {/* Search Interface */}
         <motion.div

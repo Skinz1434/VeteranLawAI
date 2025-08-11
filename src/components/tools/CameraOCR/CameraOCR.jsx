@@ -56,7 +56,7 @@ import {
   Radio,
   Headphones
 } from 'lucide-react'
-import { Button, Card, Modal, LoadingOverlay } from '../../../shared/ui'
+import { Button, Card, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
 import { 
   ocrService, 
   initializeOCR, 
@@ -347,38 +347,23 @@ const CameraOCR = () => {
       
       <div className="relative p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-cyan-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
-                    <Scan className="h-8 w-8 text-white drop-shadow-lg" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-3 w-3 text-white" />
-                  </div>
+          <SectionHeader
+            title="Document Intelligence"
+            subtitle={(
+              <p className="text-slate-300 text-lg flex items-center space-x-2">
+                <Brain className="h-5 w-5 text-blue-400" />
+                <span>Advanced VA Legal Document Processing & AI Recognition</span>
+                <div className="flex items-center space-x-1 ml-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-green-400 text-sm font-medium">99.7% Accuracy</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent mb-2">
-                    Document Intelligence
-                  </h1>
-                  <p className="text-slate-300 text-lg flex items-center space-x-2">
-                    <Brain className="h-5 w-5 text-blue-400" />
-                    <span>Advanced VA Legal Document Processing & AI Recognition</span>
-                    <div className="flex items-center space-x-1 ml-4">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400 text-sm font-medium">99.7% Accuracy</span>
-                    </div>
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3">
+              </p>
+            )}
+            icon={Scan}
+            gradient="from-blue-500 via-cyan-500 to-indigo-600"
+            badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+            actions={(
+              <>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -387,14 +372,14 @@ const CameraOCR = () => {
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
                 </motion.button>
-                
                 <Button className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-400 hover:to-cyan-500">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
                 </Button>
-              </div>
-            </div>
-          </motion.div>
+              </>
+            )}
+            className="mb-8"
+          />
 
           {/* Enhanced Tab Navigation */}
           <motion.div
