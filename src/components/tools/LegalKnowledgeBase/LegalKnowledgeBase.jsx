@@ -53,7 +53,7 @@ import {
   Layers,
   Scan
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 
 /**
  * Premium Legal Intelligence Database Component

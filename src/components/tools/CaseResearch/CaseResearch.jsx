@@ -35,7 +35,7 @@ import {
   ArrowDownRight,
   Minus
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 import { vaCaseLawDatabase } from '../../../services/databases/VACaseLawDatabase'
 import { caseAnalysisEngine } from '../../../services/engines/CaseAnalysisEngine'
 import { reportingEngine } from '../../../utils/reporting'

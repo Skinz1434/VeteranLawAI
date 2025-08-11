@@ -56,7 +56,7 @@ import {
   Radio,
   Headphones
 } from 'lucide-react'
-import { Button, Card, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
+import { Button, Card, Modal, LoadingOverlay, SectionHeader, PageShell, Tabs, TabsList, TabsTrigger } from '../../../shared/ui'
 import { 
   ocrService, 
   initializeOCR, 

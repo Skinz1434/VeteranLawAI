@@ -30,7 +30,7 @@ import {
   Search,
   BarChart3
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 
 // Debounce utility function
 const debounce = (func, delay) => {
