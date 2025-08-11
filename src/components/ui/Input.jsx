@@ -26,7 +26,7 @@ const Input = React.forwardRef(({
           {required && <span className="text-red-400 ml-1">*</span>}
         </label>
       )}
-      <div className="relative">
+      <div className="relative gradient-outline rounded-xl">
         {Icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400">
             <Icon className="h-5 w-5" />
@@ -41,15 +41,15 @@ const Input = React.forwardRef(({
           disabled={disabled}
           className={`
             w-full px-4 py-3 rounded-xl
-            bg-slate-800/50 backdrop-blur-sm
-            border border-slate-700/50
+            bg-slate-800/60 backdrop-blur-sm
+            border border-slate-700/30
             text-white placeholder-slate-500
-            focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50
+            focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500/40
             disabled:opacity-50 disabled:cursor-not-allowed
-            transition-all duration-300
+            transition-all duration-300 ease-smooth
             ${Icon ? 'pl-11' : ''}
             ${type === 'password' ? 'pr-11' : ''}
-            ${error ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50' : ''}
+            ${error ? 'border-red-500/50 focus:ring-red-500/40 focus:border-red-500/40' : ''}
           `.trim()}
           {...props}
         />
