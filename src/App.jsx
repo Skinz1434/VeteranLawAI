@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { Scale, Camera, BookOpen, FileText, Mic, Search, BarChart3, User, LogOut, Settings, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,13 +15,13 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SkipLinks from './components/ui/SkipLinks'
 import { LoadingSpinner } from './components/ui/LoadingStates'
 
-// Tools
-import CameraOCR from './components/tools/CameraOCR'
-import LegalKnowledgeBase from './components/tools/LegalKnowledgeBase'
-import ClaimGuidance from './components/tools/ClaimGuidance'
-import AudioTranscription from './components/tools/AudioTranscription/AudioTranscription'
-import CaseResearch from './components/tools/CaseResearch'
-import Analytics from './components/tools/Analytics'
+// Tools (lazy-loaded for faster initial paint)
+const CameraOCR = lazy(() => import('./components/tools/CameraOCR'))
+const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase'))
+const ClaimGuidance = lazy(() => import('./components/tools/ClaimGuidance'))
+const AudioTranscription = lazy(() => import('./components/tools/AudioTranscription/AudioTranscription'))
+const CaseResearch = lazy(() => import('./components/tools/CaseResearch'))
+const Analytics = lazy(() => import('./components/tools/Analytics'))
 
 // Accessibility utilities
 import { announceToScreenReader, focusManager } from './utils/accessibility'
@@ -74,7 +74,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="cameraocr" supportEmail="support@veteranlawai.com">
-                <CameraOCR />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Document Scanner" /></div>}>
+                  <CameraOCR />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
@@ -83,7 +85,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="legalknowledge" supportEmail="support@veteranlawai.com">
-                <LegalKnowledgeBase />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Legal Knowledge" /></div>}>
+                  <LegalKnowledgeBase />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
@@ -92,7 +96,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="claimguidance" supportEmail="support@veteranlawai.com">
-                <ClaimGuidance />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Claim Assistant" /></div>}>
+                  <ClaimGuidance />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
@@ -101,7 +107,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="audiotranscription" supportEmail="support@veteranlawai.com">
-                <AudioTranscription />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Audio Intelligence" /></div>}>
+                  <AudioTranscription />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
@@ -110,7 +118,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="caseresearch" supportEmail="support@veteranlawai.com">
-                <CaseResearch />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Case Research" /></div>}>
+                  <CaseResearch />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
@@ -119,7 +129,9 @@ function AppContent() {
           <ProtectedRoute>
             <Layout>
               <ErrorBoundary errorType="analytics" supportEmail="support@veteranlawai.com">
-                <Analytics />
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Analytics" /></div>}>
+                  <Analytics />
+                </Suspense>
               </ErrorBoundary>
             </Layout>
           </ProtectedRoute>
