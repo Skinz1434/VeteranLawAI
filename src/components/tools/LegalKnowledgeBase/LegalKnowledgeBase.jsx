@@ -53,10 +53,7 @@ import {
   Layers,
   Scan
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
 
 /**
  * Premium Legal Intelligence Database Component
@@ -312,20 +309,7 @@ const LegalKnowledgeBase = () => {
 
           {/* Search Results */}
           <AnimatePresence>
-            {isSearching && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-12"
-              >
-                <Loader className="h-12 w-12 text-amber-500 animate-spin mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Searching Legal Database</h3>
-                <p className="text-slate-300">
-                  AI is analyzing 18,500+ legal documents for relevant matches...
-                </p>
-              </motion.div>
-            )}
+            <LoadingOverlay isVisible={isSearching} tool="legal-knowledge" message="Searching legal database…" />
 
             {!isSearching && searchResults.length > 0 && (
               <motion.div
