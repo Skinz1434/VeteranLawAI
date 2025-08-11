@@ -53,7 +53,7 @@ import {
 } from 'lucide-react'
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
-import { analyticsDataEngine } from './AnalyticsDataEngine'
+import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
 import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
 /**
@@ -249,6 +249,8 @@ const Analytics = () => {
                     <button
                       key={view}
                       onClick={() => setSelectedView(view)}
+                      aria-label={`Switch to ${view} view`}
+                      aria-pressed={selectedView === view}
                       className={`px-4 py-2 rounded-xl transition-all duration-300 capitalize font-medium ${
                         selectedView === view 
                           ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' 
@@ -263,6 +265,7 @@ const Analytics = () => {
                 <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
+                  aria-label="Select time range for analytics data"
                   className="px-4 py-3 bg-slate-800/50 backdrop-blur-sm border border-white/20 rounded-2xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                 >
                   <option value="7d">Last 7 days</option>
@@ -276,11 +279,16 @@ const Analytics = () => {
                   disabled={isLoading}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  aria-label="Refresh analytics data"
+                  aria-describedby="refresh-help"
                   className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2 disabled:opacity-50"
                 >
                   <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                   <span>Refresh</span>
                 </motion.button>
+                <div id="refresh-help" className="sr-only">
+                  Reload analytics data from the server to get the latest information
+                </div>
                 
                 <div className="relative group">
                   <Button 
@@ -298,6 +306,7 @@ const Analytics = () => {
                       <button
                         onClick={() => handleExportReport('pdf')}
                         disabled={isLoading}
+                        aria-label="Export analytics report as PDF document"
                         className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
                       >
                         <FileText className="h-4 w-4" />
@@ -306,6 +315,7 @@ const Analytics = () => {
                       <button
                         onClick={() => handleExportReport('xlsx')}
                         disabled={isLoading}
+                        aria-label="Export analytics report as Excel spreadsheet"
                         className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
                       >
                         <BarChart3 className="h-4 w-4" />
@@ -314,6 +324,7 @@ const Analytics = () => {
                       <button
                         onClick={() => handleExportReport('csv')}
                         disabled={isLoading}
+                        aria-label="Export analytics report as CSV data file"
                         className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
                       >
                         <Database className="h-4 w-4" />
@@ -322,6 +333,7 @@ const Analytics = () => {
                       <button
                         onClick={() => handleExportReport('json')}
                         disabled={isLoading}
+                        aria-label="Export analytics report as JSON data file"
                         className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
                       >
                         <Globe className="h-4 w-4" />
@@ -445,7 +457,9 @@ const Analytics = () => {
           </motion.div>
 
           {/* Advanced Charts and Analytics Section */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+          <section>
+            <h2 className="sr-only">Performance Charts and Analytics</h2>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
             {/* Enhanced Case Activity Timeline */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -460,7 +474,7 @@ const Analytics = () => {
                       <LineChart className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-white">Case Performance Timeline</h3>
+                      <h2 className="text-2xl font-bold text-white">Case Performance Timeline</h2>
                       <p className="text-slate-400">Monthly filing and success metrics</p>
                     </div>
                   </div>
@@ -548,7 +562,7 @@ const Analytics = () => {
                     <Brain className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">AI Insights</h3>
+                    <h2 className="text-xl font-bold text-white">AI Insights</h2>
                     <p className="text-slate-400 text-sm">Predictive analytics</p>
                   </div>
                 </div>
@@ -601,9 +615,12 @@ const Analytics = () => {
               </div>
             </motion.div>
           </div>
+          </section>
 
           {/* Enhanced Conditions Analysis */}
-          <motion.div
+          <section>
+            <h2 className="sr-only">Condition Performance Analysis</h2>
+            <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -616,7 +633,7 @@ const Analytics = () => {
                     <Database className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">Condition Performance Analysis</h3>
+                    <h2 className="text-2xl font-bold text-white">Condition Performance Analysis</h2>
                     <p className="text-slate-400">Success rates, precedents, and strategic insights</p>
                   </div>
                 </div>
@@ -705,9 +722,12 @@ const Analytics = () => {
               </div>
             </div>
           </motion.div>
+          </section>
 
           {/* VA Regional Office Performance */}
-          <motion.div
+          <section>
+            <h2 className="sr-only">Regional Office Performance</h2>
+            <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -718,7 +738,7 @@ const Analytics = () => {
                   <Globe className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">VA Regional Office Performance</h3>
+                  <h2 className="text-2xl font-bold text-white">VA Regional Office Performance</h2>
                   <p className="text-slate-400">Strategic insights by jurisdiction</p>
                 </div>
               </div>
@@ -742,6 +762,7 @@ const Analytics = () => {
               </div>
             </div>
           </motion.div>
+          </section>
         </div>
       </div>
     </div>

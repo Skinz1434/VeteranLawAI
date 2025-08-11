@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { documentDatabase } from './DocumentDatabase'
+import { documentDatabase } from '../../../services/databases/DocumentDatabase'
 import { 
   Search, 
   BookOpen, 

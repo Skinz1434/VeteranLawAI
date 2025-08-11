@@ -4,7 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Professional AI-powered legal platform for VA disability claims attorneys",
-  "keywords": ["va-law", "legal-tech", "ai", "veterans", "disability-claims"],
+  "keywords": [
+    "va-law",
+    "legal-tech",
+    "ai",
+    "veterans",
+    "disability-claims"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Skinz1434/VeteranLawAI.git"
@@ -14,21 +20,74 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && vercel deploy --prod",
-    "lint": "echo 'Linting not configured yet'",
-    "typecheck": "echo 'TypeScript checking not configured yet'"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-popover": "^1.1.14",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@tanstack/react-query": "^5.84.1",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
+    "ai": "^5.0.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.18.2",
+    "lucide-react": "^0.310.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
-    "framer-motion": "^11.0.0",
-    "lucide-react": "^0.310.0"
+    "react-window": "^1.8.8",
+    "recharts": "^3.1.2",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.25.76",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@mswjs/data": "^0.16.2",
+    "@playwright/test": "^1.54.2",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.2.0",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/react-window": "^1.8.8",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.16",
+    "eslint": "^8.57.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.0",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^13.0.0",
+    "msw": "^2.10.4",
+    "playwright": "^1.54.2",
     "postcss": "^8.4.32",
+    "prettier": "^3.6.2",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.0.8"
+    "typescript": "^5.9.2",
+    "vite": "^5.0.8",
+    "vite-plugin-checker": "^0.10.2",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

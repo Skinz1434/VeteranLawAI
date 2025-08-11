@@ -19,7 +19,7 @@ import { LoadingSpinner } from './components/ui/LoadingStates'
 import CameraOCR from './components/tools/CameraOCR'
 import LegalKnowledgeBase from './components/tools/LegalKnowledgeBase'
 import ClaimGuidance from './components/tools/ClaimGuidance'
-import AudioTranscription from './components/tools/AudioTranscription'
+import AudioTranscription from './components/tools/AudioTranscription/AudioTranscription'
 import CaseResearch from './components/tools/CaseResearch'
 import Analytics from './components/tools/Analytics'
 

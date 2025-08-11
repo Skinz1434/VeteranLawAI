@@ -4,11 +4,11 @@
  * @version 5.0.0
  */
 
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { vaConditionsDatabase } from './VAConditionsDatabase'
-import { formGenerator } from './FormGenerator'
-import { aiAnalysisEngine } from './AIAnalysisEngine'
+import { vaConditionsDatabase } from '../../../services/databases/VAConditionsDatabase'
+import { formGenerator } from '../../../services/engines/FormGenerator'
+import { aiAnalysisEngine } from '../../../services/engines/AIAnalysisEngine'
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -18,7 +18,6 @@ import {
   User, 
   Shield, 
   Stethoscope,
-  Calendar,
   Upload,
   Download,
   Lightbulb,
@@ -28,41 +27,22 @@ import {
   Zap,
   Brain,
   Crown,
-  Sparkles,
-  Activity,
   Search,
-  Filter,
-  Share2,
-  Archive,
-  Tag,
-  Bookmark,
-  Eye,
-  Scale,
-  BookOpen,
-  Info,
-  ExternalLink,
-  BarChart3,
-  Globe,
-  Database,
-  Briefcase,
-  Award,
-  TrendingUp,
-  PieChart,
-  RefreshCw,
-  Plus,
-  Minus,
-  Settings,
-  Users,
-  Radio,
-  Headphones,
-  Focus,
-  Layers,
-  Scan
+  BarChart3
 } from 'lucide-react'
 import Button from '../../ui/Button'
 import Card from '../../ui/Card'
 import Input from '../../ui/Input'
 import Modal from '../../ui/Modal'
+
+// Debounce utility function
+const debounce = (func, delay) => {
+  let timeoutId
+  return (...args) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => func.apply(null, args), delay)
+  }
+}
 
 /**
  * Premium Claim Intelligence Wizard Component
@@ -139,15 +119,23 @@ const ClaimGuidance = () => {
   const [generatedForms, setGeneratedForms] = useState([])
   const [aiAnalysis, setAiAnalysis] = useState(null)
   
-  // Search conditions when user types
+  // Debounced search function to prevent excessive API calls
+  const debouncedSearch = useMemo(
+    () => debounce((query) => {
+      if (query.trim()) {
+        const results = vaConditionsDatabase.searchConditions(query)
+        setSearchResults(results)
+      } else {
+        setSearchResults([])
+      }
+    }, 300),
+    []
+  )
+
+  // Search conditions when user types (debounced)
   useEffect(() => {
-    if (conditionSearch.trim()) {
-      const results = vaConditionsDatabase.searchConditions(conditionSearch)
-      setSearchResults(results)
-    } else {
-      setSearchResults([])
-    }
-  }, [conditionSearch])
+    debouncedSearch(conditionSearch)
+  }, [conditionSearch, debouncedSearch])
 
   // Wizard steps configuration
   const steps = [
@@ -196,17 +184,20 @@ const ClaimGuidance = () => {
   ]
 
   // Enhanced comprehensive VA conditions database
-  // Get condition categories for filtering
-  const conditionCategories = vaConditionsDatabase.getCategories()
+  // Get condition categories for filtering (memoized)
+  const conditionCategories = useMemo(
+    () => vaConditionsDatabase.getCategories(),
+    []
+  )
   const [selectedCategory, setSelectedCategory] = useState('all')
   
-  // Get conditions based on category filter
-  const getDisplayConditions = () => {
+  // Get conditions based on category filter (memoized)
+  const displayConditions = useMemo(() => {
     if (selectedCategory === 'all') {
       return Object.values(vaConditionsDatabase.conditions)
     }
     return vaConditionsDatabase.getConditionsByCategory(selectedCategory)
-  }
+  }, [selectedCategory])
   
   // Handle condition selection
   const addCondition = (condition) => {
@@ -243,7 +234,7 @@ const ClaimGuidance = () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
     
     // Perform real analysis
-    const analysisResult = aiAnalysisEngine.analyzeCliam(claimData)
+    const analysisResult = aiAnalysisEngine.analyzeClaim(claimData)
     setAiAnalysis(analysisResult)
     setClaimData({
       ...claimData,
@@ -385,10 +376,16 @@ const ClaimGuidance = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
-                label="Full Name"
-                placeholder="John A. Veteran"
-                value={claimData.veteran.name}
-                onChange={(e) => updateClaimData('veteran.name', e.target.value)}
+                label="First Name"
+                placeholder="John"
+                value={claimData.veteran.firstName}
+                onChange={(e) => updateClaimData('veteran.firstName', e.target.value)}
+              />
+              <Input
+                label="Last Name"
+                placeholder="Veteran"
+                value={claimData.veteran.lastName}
+                onChange={(e) => updateClaimData('veteran.lastName', e.target.value)}
               />
               <Input
                 label="Social Security Number"
@@ -407,8 +404,8 @@ const ClaimGuidance = () => {
                   Military Branch
                 </label>
                 <select
-                  value={claimData.veteran.serviceInfo.branch}
-                  onChange={(e) => updateClaimData('veteran.serviceInfo.branch', e.target.value)}
+                  value={claimData.military.branch}
+                  onChange={(e) => updateClaimData('military.branch', e.target.value)}
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 >
                   <option value="">Select Branch</option>
@@ -423,14 +420,14 @@ const ClaimGuidance = () => {
               <Input
                 label="Service Start Date"
                 type="date"
-                value={claimData.veteran.serviceInfo.startDate}
-                onChange={(e) => updateClaimData('veteran.serviceInfo.startDate', e.target.value)}
+                value={claimData.military.servicePeriods[0].startDate}
+                onChange={(e) => updateClaimData('military.servicePeriods.0.startDate', e.target.value)}
               />
               <Input
                 label="Service End Date"
                 type="date"
-                value={claimData.veteran.serviceInfo.endDate}
-                onChange={(e) => updateClaimData('veteran.serviceInfo.endDate', e.target.value)}
+                value={claimData.military.servicePeriods[0].endDate}
+                onChange={(e) => updateClaimData('military.servicePeriods.0.endDate', e.target.value)}
               />
             </div>
           </div>
@@ -544,7 +541,7 @@ const ClaimGuidance = () => {
                 {conditionSearch ? 'Search Results' : 'Available Conditions'}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-                {(conditionSearch ? searchResults : getDisplayConditions()).map((condition) => {
+                {(conditionSearch ? searchResults : displayConditions).map((condition) => {
                   const isSelected = selectedConditions.find(c => c.id === condition.id)
                   return (
                     <Card
@@ -1099,4 +1096,4 @@ const ClaimGuidance = () => {
   )
 }
 
-export default ClaimGuidance
+export default memo(ClaimGuidance)
