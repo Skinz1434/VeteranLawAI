@@ -30,10 +30,7 @@ import {
   Search,
   BarChart3
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
 
 // Debounce utility function
 const debounce = (func, delay) => {
@@ -618,19 +615,7 @@ const ClaimGuidance = () => {
         return (
           <div className="max-w-4xl mx-auto">
             {isAnalyzing ? (
-              <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-8 animate-pulse">
-                  <Brain className="h-12 w-12 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-4">AI Analyzing Your Claim</h2>
-                <p className="text-xl text-slate-300 mb-8">
-                  Our advanced AI is evaluating {selectedConditions.length} conditions, analyzing evidence gaps, 
-                  and calculating success probabilities...
-                </p>
-                <div className="flex justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
-                </div>
-              </div>
+              <LoadingOverlay isVisible={true} tool="claim-guidance" message={`Analyzing ${selectedConditions.length} condition(s)…`} />
             ) : aiAnalysis ? (
               <div>
                 <div className="text-center mb-8">
