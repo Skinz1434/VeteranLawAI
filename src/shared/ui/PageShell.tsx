@@ -8,7 +8,7 @@ type PageShellProps = {
 
 export default function PageShell({ header, children, className = '' }: PageShellProps) {
   return (
-    <div className={`min-h-screen relative overflow-hidden ${className}`}>
+    <div className={`min-h-screen relative overflow-x-hidden ${className}`}>
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 z-0" />
       <div
         className="absolute inset-0 opacity-30 z-0"
