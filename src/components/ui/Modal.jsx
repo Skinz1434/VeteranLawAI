@@ -69,7 +69,7 @@ const Modal = ({
             className={`
               relative w-full ${sizes[size]} mx-4
               bg-gradient-to-br from-slate-800/90 to-slate-900/90 glass-card gradient-outline
-              rounded-3xl max-h-[90vh] overflow-hidden
+              rounded-3xl max-h-[90vh] overflow-hidden motion-normal
               ${className}
             `.trim()}
           >

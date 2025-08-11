@@ -21,4 +21,5 @@ export { default as Tooltip } from './Tooltip'
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs'
 export { default as SectionHeader } from './SectionHeader'
 export { default as PageShell } from './PageShell'
+export { default as IconTile } from './IconTile'
 

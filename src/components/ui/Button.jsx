@@ -31,7 +31,7 @@ const Button = React.forwardRef(({
   }
 
   const baseClasses = `
-    font-medium rounded-xl transition-all duration-300 ease-smooth
+    font-medium rounded-xl motion-normal focus-ring
     disabled:opacity-50 disabled:cursor-not-allowed
     flex items-center justify-center gap-2
     ${fullWidth ? 'w-full' : ''}

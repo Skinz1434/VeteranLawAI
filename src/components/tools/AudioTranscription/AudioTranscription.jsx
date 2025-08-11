@@ -633,7 +633,7 @@ const AudioTranscription = () => {
               </div>
             </p>
           )}
-          icon={BarChart3}
+          icon={Mic}
           gradient="from-green-500 via-emerald-500 to-teal-600"
           badge={<div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
           actions={(
@@ -644,6 +644,7 @@ const AudioTranscription = () => {
               </Button>
             </>
           )}
+          className="mb-8"
         />
       )}
     >
@@ -1128,8 +1129,10 @@ const AudioTranscription = () => {
                   return (
                     <Card key={index} className="p-6 hover:border-emerald-500/30 transition-all duration-300">
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center`}>
-                          <Icon className="h-6 w-6 text-white" />
+                        <div className={`relative w-12 h-12 bg-gradient-to-br ${metric.color} rounded-xl flex items-center justify-center overflow-hidden`}>
+                          <div className="absolute inset-0 rounded-xl border border-white/15" />
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                          <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                         </div>
                         <span className={`text-sm font-medium px-2 py-1 rounded-full ${
                           metric.change.startsWith('+') ? 'text-green-400 bg-green-500/20' : 'text-red-400 bg-red-500/20'

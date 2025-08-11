@@ -414,8 +414,10 @@ const LegalKnowledgeBase = () => {
                 const Icon = item.icon
                 return (
                   <Card key={index} className="p-6 hover:border-amber-500/30 transition-all duration-300 cursor-pointer">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center mb-4`}>
-                      <Icon className="h-6 w-6 text-white" />
+                    <div className={`relative w-12 h-12 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center mb-4 overflow-hidden`}>
+                      <div className="absolute inset-0 rounded-xl border border-white/15" />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                      <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                     </div>
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
                     <p className="text-2xl font-bold text-amber-400">{item.count}</p>

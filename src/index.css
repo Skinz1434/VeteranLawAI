@@ -135,6 +135,21 @@
 }
 
 @layer utilities {
+  /* Focus ring utility for consistent a11y */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:ring-offset-0;
+  }
+
+  /* Motion tokens */
+  .motion-fast { @apply transition-all duration-200 ease-smooth; }
+  .motion-normal { @apply transition-all duration-300 ease-smooth; }
+  .motion-slow { @apply transition-all duration-500 ease-smooth; }
+
+  /* Rounding tokens */
+  .radius-xl { @apply rounded-xl; }
+  .radius-2xl { @apply rounded-2xl; }
+  .radius-3xl { @apply rounded-3xl; }
+
   /* Animation keyframes */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }

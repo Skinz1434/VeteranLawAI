@@ -44,12 +44,12 @@ const Input = React.forwardRef(({
             bg-slate-800/60 backdrop-blur-sm
             border border-slate-700/30
             text-white placeholder-slate-500
-            focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500/40
+            focus-ring
             disabled:opacity-50 disabled:cursor-not-allowed
-            transition-all duration-300 ease-smooth
+            motion-normal
             ${Icon ? 'pl-11' : ''}
             ${type === 'password' ? 'pr-11' : ''}
-            ${error ? 'border-red-500/50 focus:ring-red-500/40 focus:border-red-500/40' : ''}
+            ${error ? 'border-red-500/50 ring-red-500/40 focus:ring-red-500/40 focus:border-red-500/40' : ''}
           `.trim()}
           {...props}
         />

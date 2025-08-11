@@ -163,7 +163,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         onHoverEnd={() => setHoveredItem(null)}
         className="relative group"
       >
-        <Link to={item.path} className="block">
+        <Link to={item.path} className="block focus-ring">
           <motion.div
             className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-500 ease-out ${
               active 

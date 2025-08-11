@@ -393,7 +393,7 @@ const CaseResearch = () => {
     <PageShell
       header={(
         <SectionHeader
-          title="Legal Intelligence"
+          title="Case Research"
           subtitle={(
             <p className="text-slate-300 text-lg flex items-center space-x-2">
               <Target className="h-5 w-5 text-indigo-400" />
@@ -771,8 +771,10 @@ const CaseResearch = () => {
                     performSearch(category.query)
                   }}
                 >
-                  <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center mb-4`}>
-                    <Icon className="h-6 w-6 text-white" />
+                   <div className={`relative w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center mb-4 overflow-hidden`}>
+                    <div className="absolute inset-0 rounded-xl border border-white/15" />
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
+                    <Icon className="h-6 w-6 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
                   </div>
                   <h3 className="text-lg font-bold text-white mb-2">{category.title}</h3>
                   <p className="text-2xl font-bold text-cyan-400">{category.count}</p>

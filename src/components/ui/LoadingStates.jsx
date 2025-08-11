@@ -160,7 +160,7 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
       <div className="relative">
         <div className={`absolute inset-0 bg-gradient-to-r ${config.bgGlow} rounded-full blur-2xl animate-pulse`} />
         <motion.div
-          className={`relative w-20 h-20 bg-gradient-to-br ${config.color} rounded-2xl flex items-center justify-center shadow-2xl`}
+          className={`relative w-20 h-20 bg-gradient-to-br ${config.color} rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden`}
           animate={{
             scale: [1, 1.1, 1],
             rotate: [0, 5, -5, 0]
@@ -171,7 +171,9 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
             ease: "easeInOut"
           }}
         >
-          <Icon className="h-10 w-10 text-white drop-shadow-lg" />
+          <div className="absolute inset-0 rounded-2xl border border-white/15" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-25" />
+          <Icon className="h-10 w-10 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
         </motion.div>
       </div>
 
