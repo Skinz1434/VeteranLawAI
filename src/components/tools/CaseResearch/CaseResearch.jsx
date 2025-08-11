@@ -35,10 +35,7 @@ import {
   ArrowDownRight,
   Minus
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
 import { vaCaseLawDatabase } from '../../../services/databases/VACaseLawDatabase'
 import { caseAnalysisEngine } from '../../../services/engines/CaseAnalysisEngine'
 import { reportingEngine } from '../../../utils/reporting'
@@ -602,21 +599,7 @@ const CaseResearch = () => {
         )}
 
         {/* Search Results */}
-        <AnimatePresence>
-          {isSearching && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-12"
-            >
-              <Loader className="h-12 w-12 text-cyan-500 animate-spin mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">Researching Case Law</h3>
-              <p className="text-slate-300">
-                AI is analyzing 10,000+ precedents for relevant matches...
-              </p>
-            </motion.div>
-          )}
+        <LoadingOverlay isVisible={isSearching} tool="case-search" message="Researching case law…" />
 
           {!isSearching && searchResults.length > 0 && (
             <motion.div
@@ -786,7 +769,6 @@ const CaseResearch = () => {
               </Button>
             </motion.div>
           )}
-        </AnimatePresence>
 
         {/* Quick Research Categories */}
         {!searchQuery && (

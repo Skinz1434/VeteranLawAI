@@ -64,10 +64,7 @@ import {
   Minus,
   Users
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
-import Input from '../../ui/Input'
-import Modal from '../../ui/Modal'
+import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
 import { 
   speechToTextService, 
   initializeSpeechService, 
@@ -1311,39 +1308,11 @@ const AudioTranscription = () => {
           </Modal>
 
           {/* Processing Overlay */}
-          <AnimatePresence>
-            {isTranscribing && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50"
-              >
-                <Card className="p-8 text-center max-w-md mx-4">
-                  <div className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Brain className="h-8 w-8 text-white animate-pulse" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Processing Audio</h3>
-                    <p className="text-slate-300">
-                      AI is transcribing your audio with advanced legal terminology recognition...
-                    </p>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <div className="w-full bg-slate-700 rounded-full h-2">
-                      <motion.div 
-                        className="bg-gradient-to-r from-emerald-500 to-green-600 h-2 rounded-full"
-                        animate={{ width: `${transcriptionProgress}%` }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-                    <p className="text-sm text-slate-400 mt-2">{Math.round(transcriptionProgress)}% complete</p>
-                  </div>
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <LoadingOverlay
+            isVisible={isTranscribing}
+            tool="audio-transcription"
+            message={`Processing Audio… ${Math.round(transcriptionProgress)}%`}
+          />
         </div>
       </div>
     </div>
