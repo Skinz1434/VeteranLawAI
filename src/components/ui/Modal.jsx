@@ -68,9 +68,8 @@ const Modal = ({
             transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
             className={`
               relative w-full ${sizes[size]} mx-4
-              bg-gradient-to-br from-slate-800/95 to-slate-900/95
-              backdrop-blur-sm rounded-3xl border border-slate-700/50
-              shadow-2xl max-h-[90vh] overflow-hidden
+              bg-gradient-to-br from-slate-800/90 to-slate-900/90 glass-card gradient-outline
+              rounded-3xl max-h-[90vh] overflow-hidden
               ${className}
             `.trim()}
           >

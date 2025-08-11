@@ -16,7 +16,7 @@ const Button = React.forwardRef(({
   ...props
 }, ref) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:from-cyan-400 hover:to-blue-500 shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/40',
+    primary: 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:from-cyan-400 hover:to-blue-500 shadow-glow',
     secondary: 'bg-slate-700/50 text-white hover:bg-slate-700/70 border border-slate-600 hover:border-slate-500',
     outline: 'bg-transparent text-cyan-400 border border-cyan-400/50 hover:bg-cyan-400/10 hover:border-cyan-400',
     ghost: 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800/50',
@@ -31,7 +31,7 @@ const Button = React.forwardRef(({
   }
 
   const baseClasses = `
-    font-medium rounded-xl transition-all duration-300
+    font-medium rounded-xl transition-all duration-300 ease-smooth
     disabled:opacity-50 disabled:cursor-not-allowed
     flex items-center justify-center gap-2
     ${fullWidth ? 'w-full' : ''}
