@@ -51,8 +51,7 @@ import {
   Info,
   ExternalLink
 } from 'lucide-react'
-import Button from '../../ui/Button'
-import Card from '../../ui/Card'
+import { Button, Card, LoadingOverlay } from '../../../shared/ui'
 import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
 import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
@@ -765,6 +764,7 @@ const Analytics = () => {
           </section>
         </div>
       </div>
+      <LoadingOverlay isVisible={isLoading} tool="analytics" message="Refreshing analytics…" />
     </div>
   )
 }
