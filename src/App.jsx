@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AuthProvider, { useAuth } from './contexts/AuthContext'
 
 // Components
-import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader } from './shared/ui'
+import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui'
 import WelcomeModal from './components/modals/WelcomeModal'
 import LoginModal from './components/modals/LoginModal'
 import Layout from './components/layout/Layout'
@@ -253,11 +253,12 @@ function LandingPage({ onLogin }) {
               onClick={onLogin}
             >
               <Tooltip content={tool.desc} side="top">
-                <div className={`relative w-14 h-14 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
-                  <div className="absolute inset-0 rounded-xl border border-white/15" />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                  <Icon className="h-7 w-7 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                </div>
+                <IconTile 
+                  icon={Icon} 
+                  gradient={tool.color} 
+                  size="lg" 
+                  className="mb-4 group-hover:scale-110 transition-transform duration-300"
+                />
               </Tooltip>
               <h3 className="text-lg font-bold text-white mb-2">{tool.title}</h3>
               <p className="text-slate-300 text-sm">{tool.desc}</p>
@@ -399,9 +400,11 @@ function Dashboard() {
                     className={`flex items-center space-x-3 px-6 py-4 bg-gradient-to-r ${stat.color}/20 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300`}
                     whileHover={{ scale: 1.05, y: -2 }}
                   >
-                    <div className={`p-2 bg-gradient-to-br ${stat.color} rounded-xl shadow-lg`}>
-                      <StatIcon className="h-5 w-5 text-white" />
-                    </div>
+                    <IconTile 
+                      icon={StatIcon} 
+                      gradient={stat.color} 
+                      size="sm" 
+                    />
                     <div>
                       <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                         {stat.value}
@@ -471,11 +474,12 @@ function Dashboard() {
                   <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   {/* Icon with enhanced styling */}
-                   <div className={`relative w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mb-6 shadow-2xl ${stat.glow} group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
-                    <div className="absolute inset-0 rounded-2xl border border-white/15" />
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                    <StatIcon className="h-8 w-8 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                  </div>
+                  <IconTile 
+                    icon={StatIcon} 
+                    gradient={stat.color} 
+                    size="lg" 
+                    className={`mb-6 ${stat.glow} group-hover:scale-110 transition-transform duration-300`}
+                  />
                   
                   {/* Value with gradient text */}
                   <h3 className={`text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
@@ -561,24 +565,12 @@ function Dashboard() {
                       
                       {/* Icon container with enhanced styling */}
                       <div className="relative mb-6">
-                        <motion.div 
-                          className={`relative w-20 h-20 bg-gradient-to-br ${tool.color} rounded-2xl flex items-center justify-center shadow-2xl ${tool.glow} mb-4 overflow-hidden`}
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div className="absolute inset-0 rounded-2xl border border-white/15" />
-                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                          <Icon className="h-10 w-10 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                          
-                          {/* Enhanced glow effect */}
-                          <motion.div 
-                            className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tool.color} blur-lg transition-opacity duration-300`}
-                            animate={{ 
-                              opacity: isHovered ? 0.6 : 0.3,
-                              scale: isHovered ? 1.2 : 1
-                            }}
-                          />
-                        </motion.div>
+                        <IconTile 
+                          icon={Icon} 
+                          gradient={tool.color} 
+                          size="xl" 
+                          className={`${tool.glow} mb-4`}
+                        />
                         
                         {/* Premium badge */}
                         {tool.badge && (

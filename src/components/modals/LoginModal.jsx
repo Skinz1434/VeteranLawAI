@@ -4,6 +4,7 @@ import { Scale, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
 import Input from '../ui/Input'
+import { IconTile } from '../../shared/ui'
 import { useAuth } from '../../contexts/AuthContext'
 
 const LoginModal = ({ isOpen, onClose }) => {
@@ -93,11 +94,12 @@ const LoginModal = ({ isOpen, onClose }) => {
       className="max-w-md"
     >
       <div className="text-center mb-8">
-        <div className="relative w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden">
-          <div className="absolute inset-0 rounded-2xl border border-white/15" />
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-          <Scale className="h-8 w-8 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-        </div>
+        <IconTile 
+          icon={Scale} 
+          gradient="from-cyan-500 to-blue-600" 
+          size="lg" 
+          className="mx-auto mb-4"
+        />
         <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
         <p className="text-slate-400">Sign in to your VeteranLawAI account</p>
       </div>
