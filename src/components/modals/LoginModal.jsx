@@ -52,6 +52,7 @@ const LoginModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log('Form submitted!', formData)
 
     if (!validateForm()) return
 
@@ -73,6 +74,7 @@ const LoginModal = ({ isOpen, onClose }) => {
   }
 
   const handleDemoLogin = async () => {
+    console.log('Demo login clicked!')
     setLoading(true)
     try {
       const result = await login('demo@veteranlawai.com', 'demo123')
@@ -162,6 +164,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             fullWidth
             loading={loading}
             disabled={loading}
+            onClick={handleSubmit}
           >
             Sign In
           </Button>

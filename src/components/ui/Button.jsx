@@ -58,12 +58,18 @@ const Button = React.forwardRef(({
   )
 
   const handleClick = (e) => {
-    if (disabled || loading) return
+    console.log('Button clicked:', children, 'onClick:', !!onClick, 'disabled:', disabled, 'loading:', loading)
     
-    console.log('Button clicked:', children, 'onClick:', !!onClick)
+    if (disabled || loading) {
+      console.log('Button is disabled or loading, ignoring click')
+      return
+    }
     
     if (onClick) {
+      console.log('Calling onClick handler')
       onClick(e)
+    } else {
+      console.log('No onClick handler provided')
     }
   }
 
