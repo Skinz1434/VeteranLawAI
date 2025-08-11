@@ -44,15 +44,13 @@ function AppContent() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [autoDemo, setAutoDemo] = useState(false)
 
-  // Check if user should see welcome modal
+  // Show welcome modal until completed, regardless of auth
   useEffect(() => {
-    if (isAuthenticated && user) {
-      const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
-      if (!hasSeenWelcome) {
-        setShowWelcomeModal(true)
-      }
+    const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
+    if (!hasSeenWelcome) {
+      setShowWelcomeModal(true)
     }
-  }, [isAuthenticated, user])
+  }, [])
 
   if (loading) {
     return <LoadingScreen />
@@ -144,13 +142,8 @@ function AppContent() {
       {/* Modals */}
       <WelcomeModal
         isOpen={showWelcomeModal}
-        onClose={() => setShowWelcomeModal(false)}
+        onClose={() => { setShowWelcomeModal(false); setShowLoginModal(true); }}
         userName={user?.name}
-      />
-
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
       />
     </>
   )
