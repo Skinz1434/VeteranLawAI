@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AuthProvider, { useAuth } from './contexts/AuthContext'
 
 // Components
-import Button from './components/ui/Button'
+import { Button, Tooltip, LoadingSpinner } from './shared/ui'
 import WelcomeModal from './components/modals/WelcomeModal'
 import LoginModal from './components/modals/LoginModal'
 import Layout from './components/layout/Layout'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SkipLinks from './components/ui/SkipLinks'
-import { LoadingSpinner } from './components/ui/LoadingStates'
+// LoadingSpinner re-exported from shared UI
 
 // Tools (lazy-loaded for faster initial paint)
 const CameraOCR = lazy(() => import('./components/tools/CameraOCR'))
@@ -254,14 +254,18 @@ function LandingPage({ onLogin }) {
               AI-powered legal platform designed exclusively for attorneys representing Veterans in VA disability claims
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={onLogin}>
-                Start Free Trial
-              </Button>
-              <Link to="/health">
-                <Button variant="outline" size="lg">
-                  System Health
+              <Tooltip content="Sign in to start your trial" side="top">
+                <Button size="lg" onClick={onLogin}>
+                  Start Free Trial
                 </Button>
-              </Link>
+              </Tooltip>
+               <Link to="/health">
+                 <Tooltip content="View build and service status" side="top">
+                   <Button variant="outline" size="lg">
+                     System Health
+                   </Button>
+                 </Tooltip>
+               </Link>
             </div>
           </motion.div>
 
@@ -278,9 +282,11 @@ function LandingPage({ onLogin }) {
                   className="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
                   onClick={onLogin}
                 >
-                  <div className={`w-14 h-14 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="h-7 w-7 text-white" />
-                  </div>
+                  <Tooltip content={tool.desc} side="top">
+                    <div className={`w-14 h-14 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="h-7 w-7 text-white" />
+                    </div>
+                  </Tooltip>
                   <h3 className="text-lg font-bold text-white mb-2">{tool.title}</h3>
                   <p className="text-slate-300 text-sm">{tool.desc}</p>
                 </motion.div>
@@ -733,17 +739,19 @@ function Dashboard() {
                             {tool.stats}
                           </p>
                           
-                          <motion.div
-                            className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors duration-300"
-                            whileHover={{ scale: 1.1 }}
-                          >
+                          <Tooltip content="Open tool" side="top">
                             <motion.div
-                              animate={{ x: isHovered ? 2 : 0 }}
-                              transition={{ duration: 0.2 }}
+                              className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors duration-300"
+                              whileHover={{ scale: 1.1 }}
                             >
-                              <ChevronRight className="h-4 w-4 text-white" />
+                              <motion.div
+                                animate={{ x: isHovered ? 2 : 0 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <ChevronRight className="h-4 w-4 text-white" />
+                              </motion.div>
                             </motion.div>
-                          </motion.div>
+                          </Tooltip>
                         </div>
                       </div>
                       

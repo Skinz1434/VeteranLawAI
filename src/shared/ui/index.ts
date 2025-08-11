@@ -17,3 +17,5 @@ export {
   ProgressBar,
 } from '../../components/ui/LoadingStates'
 
+export { default as Tooltip } from './Tooltip'
+
