@@ -64,7 +64,7 @@ import {
   Minus,
   Users
 } from 'lucide-react'
-import { Button, Card, Input, Modal, LoadingOverlay } from '../../../shared/ui'
+import { Button, Card, Input, Modal, LoadingOverlay, Tabs, TabsList, TabsTrigger, TabsContent } from '../../../shared/ui'
 import { 
   speechToTextService, 
   initializeSpeechService, 
@@ -681,73 +681,16 @@ const AudioTranscription = () => {
             </div>
           </motion.div>
 
-          {/* Enhanced Tab Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
-          >
-            <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-white/10 p-2">
-              {[
-                { 
-                  id: 'record', 
-                  label: 'Live Recording', 
-                  icon: Mic,
-                  gradient: 'from-green-500 to-emerald-600',
-                  description: 'High-quality capture'
-                },
-                { 
-                  id: 'upload', 
-                  label: 'File Upload', 
-                  icon: Upload,
-                  gradient: 'from-teal-500 to-cyan-600', 
-                  description: 'Process existing files'
-                },
-                { 
-                  id: 'transcripts', 
-                  label: `Transcripts (${transcripts.length + mockTranscripts.length})`, 
-                  icon: FileText,
-                  gradient: 'from-blue-500 to-indigo-600',
-                  description: 'Completed transcriptions'
-                },
-                { 
-                  id: 'analytics', 
-                  label: 'Intelligence', 
-                  icon: Brain,
-                  gradient: 'from-purple-500 to-pink-600',
-                  description: 'AI insights & trends'
-                },
-              ].map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-                return (
-                  <motion.button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex-1 flex flex-col items-center space-y-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 group ${
-                      isActive
-                        ? `bg-gradient-to-r ${tab.gradient} text-white shadow-2xl shadow-green-500/20`
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-white/20 shadow-lg' 
-                        : `bg-gradient-to-br ${tab.gradient} opacity-60 group-hover:opacity-100`
-                    }`}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-sm">{tab.label}</div>
-                      <div className="text-xs opacity-70">{tab.description}</div>
-                    </div>
-                  </motion.button>
-                )
-              })}
-            </div>
+          {/* Unified Tab Navigation */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList>
+                <TabsTrigger value="record" icon={Mic} label="Live Recording" description="High-quality capture" gradient="from-green-500 to-emerald-600" />
+                <TabsTrigger value="upload" icon={Upload} label="File Upload" description="Process existing files" gradient="from-teal-500 to-cyan-600" />
+                <TabsTrigger value="transcripts" icon={FileText} label={`Transcripts (${transcripts.length + mockTranscripts.length})`} description="Completed transcriptions" gradient="from-blue-500 to-indigo-600" />
+                <TabsTrigger value="analytics" icon={Brain} label="Intelligence" description="AI insights & trends" gradient="from-purple-500 to-pink-600" />
+              </TabsList>
+            </Tabs>
           </motion.div>
 
           {/* Tab Content */}

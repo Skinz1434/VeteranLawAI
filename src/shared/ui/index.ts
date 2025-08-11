@@ -18,4 +18,5 @@ export {
 } from '../../components/ui/LoadingStates'
 
 export { default as Tooltip } from './Tooltip'
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs'
 
