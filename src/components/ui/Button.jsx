@@ -57,6 +57,16 @@ const Button = React.forwardRef(({
     </>
   )
 
+  const handleClick = (e) => {
+    if (disabled || loading) return
+    
+    console.log('Button clicked:', children, 'onClick:', !!onClick)
+    
+    if (onClick) {
+      onClick(e)
+    }
+  }
+
   if (animate && !disabled) {
     return (
       <motion.button
@@ -65,7 +75,7 @@ const Button = React.forwardRef(({
         whileTap={{ scale: 0.98 }}
         className={baseClasses}
         disabled={disabled || loading}
-        onClick={onClick}
+        onClick={handleClick}
         {...props}
       >
         {buttonContent}
@@ -78,7 +88,7 @@ const Button = React.forwardRef(({
       ref={ref}
       className={baseClasses}
       disabled={disabled || loading}
-      onClick={onClick}
+      onClick={handleClick}
       {...props}
     >
       {buttonContent}

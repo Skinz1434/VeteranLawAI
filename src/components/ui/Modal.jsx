@@ -57,7 +57,11 @@ const Modal = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={closeOnOverlayClick ? onClose : undefined}
+            onClick={(e) => {
+              if (closeOnOverlayClick && e.target === e.currentTarget) {
+                onClose()
+              }
+            }}
           />
 
           {/* Modal */}
@@ -92,7 +96,7 @@ const Modal = ({
             )}
 
             {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-8rem)]">
+            <div className="p-6 overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(90vh - 8rem)' }}>
               {children}
             </div>
           </motion.div>
