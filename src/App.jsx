@@ -279,7 +279,7 @@ function LandingPage({ onLogin }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
+                  className="group glass-card gradient-outline rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
                   onClick={onLogin}
                 >
                   <Tooltip content={tool.desc} side="top">

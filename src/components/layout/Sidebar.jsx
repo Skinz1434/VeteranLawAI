@@ -290,7 +290,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
   return (
     <motion.div
-      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-500 ease-in-out ${
+      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-500 ease-in-out gradient-outline ${
         isCollapsed ? 'w-20' : 'w-80'
       }`}
       initial={false}
