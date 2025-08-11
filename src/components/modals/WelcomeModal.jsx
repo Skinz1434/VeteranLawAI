@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Scale, CheckCircle, ArrowRight, Star, Shield, Zap } from 'lucide-react'
-import Modal from '../ui/Modal'
-import Button from '../ui/Button'
+import { Modal, Button } from '../../shared/ui'
 
 const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
   const [currentStep, setCurrentStep] = useState(0)
