@@ -42,6 +42,7 @@ function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth()
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [autoDemo, setAutoDemo] = useState(false)
 
   // Check if user should see welcome modal
   useEffect(() => {
@@ -60,6 +61,7 @@ function AppContent() {
   return (
     <>
       <SkipLinks />
+      <LoginModal isOpen={showLoginModal} onClose={() => { setShowLoginModal(false); setAutoDemo(false) }} autoDemo={autoDemo} />
       <Routes>
         <Route path="/" element={
           isAuthenticated ? (
@@ -67,7 +69,7 @@ function AppContent() {
               <Dashboard />
             </Layout>
           ) : (
-            <LandingPage onLogin={() => setShowLoginModal(true)} />
+            <LandingPage onLogin={() => { setAutoDemo(false); setShowLoginModal(true) }} onDemo={() => { setAutoDemo(true); setShowLoginModal(true) }} />
           )
         } />
         <Route path="/camera-ocr" element={
@@ -207,7 +209,7 @@ function LoadingScreen() {
   )
 }
 
-function LandingPage({ onLogin }) {
+function LandingPage({ onLogin, onDemo }) {
   const tools = [
     { title: 'Camera OCR', href: '/camera-ocr', icon: Camera, color: 'from-cyan-500 to-blue-600', desc: 'Digitize VA forms and medical records instantly' },
     { title: 'Legal Knowledge', href: '/legal-knowledge', icon: BookOpen, color: 'from-blue-500 to-indigo-600', desc: '14,500+ VA regulations and precedents' },
@@ -250,7 +252,7 @@ function LandingPage({ onLogin }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group glass-card gradient-outline rounded-2xl p-6 hover:border-cyan-500/30 motion-normal cursor-pointer"
-              onClick={onLogin}
+              onClick={tool.title === 'Analytics' ? onDemo : onLogin}
             >
               <Tooltip content={tool.desc} side="top">
                 <IconTile 

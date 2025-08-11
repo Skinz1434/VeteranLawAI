@@ -49,14 +49,14 @@ const Modal = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 z-0 bg-black/80 backdrop-blur-sm"
             onClick={(e) => {
               if (closeOnOverlayClick && e.target === e.currentTarget) {
                 onClose()
@@ -71,11 +71,14 @@ const Modal = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
             className={`
-              relative w-full ${sizes[size]} mx-4
+              relative z-10 w-full ${sizes[size]} mx-4
               bg-gradient-to-br from-slate-800/90 to-slate-900/90 glass-card gradient-outline
               rounded-3xl max-h-[90vh] overflow-hidden motion-normal
               ${className}
             `.trim()}
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             {(title || showCloseButton) && (
@@ -85,6 +88,7 @@ const Modal = ({
                 )}
                 {showCloseButton && (
                   <Button
+                    type="button"
                     variant="ghost"
                     size="sm"
                     onClick={onClose}

@@ -7,7 +7,7 @@ import Input from '../ui/Input'
 import { IconTile } from '../../shared/ui'
 import { useAuth } from '../../contexts/AuthContext'
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose, autoDemo = false }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -87,6 +87,13 @@ const LoginModal = ({ isOpen, onClose }) => {
       setLoading(false)
     }
   }
+
+  // Auto-trigger demo when the modal opens with autoDemo flag
+  React.useEffect(() => {
+    if (isOpen && autoDemo) {
+      handleDemoLogin()
+    }
+  }, [isOpen, autoDemo])
 
   return (
     <Modal
