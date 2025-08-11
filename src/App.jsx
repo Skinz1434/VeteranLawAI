@@ -599,11 +599,13 @@ function Dashboard() {
                   initial={{ opacity: 0, y: 30, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                  className={`relative bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer group overflow-hidden ${stat.glow} hover:shadow-2xl`}
+                  className={`relative glass-card gradient-outline bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 rounded-3xl p-8 hover:border-white/20 transition-all duration-500 cursor-pointer group overflow-hidden ${stat.glow} hover:shadow-2xl`}
                   whileHover={{ scale: 1.02, y: -4 }}
                 >
                   {/* Background glow effect */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${stat.color}/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  {/* Subtle shine overlay */}
+                  <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   {/* Icon with enhanced styling */}
                   <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mb-6 shadow-2xl ${stat.glow} group-hover:scale-110 transition-transform duration-300`}>
@@ -673,7 +675,7 @@ function Dashboard() {
                 >
                   <Link to={tool.href}>
                     <motion.div
-                      className={`relative group bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer overflow-hidden ${tool.glow} hover:shadow-2xl`}
+                      className={`relative glass-card gradient-outline bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 rounded-3xl p-8 hover:border-white/20 transition-all duration-500 cursor-pointer overflow-hidden ${tool.glow} hover:shadow-2xl`}
                       whileHover={{ scale: 1.02, y: -6 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -683,12 +685,14 @@ function Dashboard() {
                       }} />
                       
                       {/* Gradient glow effect */}
-                      <motion.div 
-                        className={`absolute inset-0 bg-gradient-to-br ${tool.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
+                       <motion.div 
+                         className={`absolute inset-0 bg-gradient-to-br ${tool.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
                         animate={{ 
                           opacity: isHovered ? 0.15 : 0,
                         }}
                       />
+                       {/* Subtle shine overlay */}
+                       <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       
                       {/* Icon container with enhanced styling */}
                       <div className="relative mb-6">

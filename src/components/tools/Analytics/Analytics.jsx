@@ -413,7 +413,7 @@ const Analytics = () => {
                   onHoverEnd={() => setHoveredCard(null)}
                   className="group relative"
                 >
-                  <div className={`relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-6 border transition-all duration-500 ${
+                  <div className={`relative glass-card gradient-outline bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl p-6 border transition-all duration-500 ${
                     hoveredCard === index 
                       ? 'border-cyan-500/50 shadow-2xl shadow-cyan-500/20 scale-105' 
                       : 'border-white/10 hover:border-white/20'
