@@ -879,20 +879,9 @@ const ClaimGuidance = () => {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-teal-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-emerald-500/5 to-green-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          <SectionHeader
+    <PageShell
+      header={(
+        <SectionHeader
             title="Claim Intelligence"
             subtitle={(
               <p className="text-slate-300 text-lg flex items-center space-x-2">
@@ -929,6 +918,8 @@ const ClaimGuidance = () => {
             )}
             className="mb-6"
           />
+      )}
+    >
 
           {/* Progress Bar */}
           <div className="w-full bg-slate-800 rounded-full h-2 mb-4">
@@ -1060,9 +1051,7 @@ const ClaimGuidance = () => {
             </div>
           </div>
         </Modal>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   )
 }
 

@@ -163,52 +163,43 @@ const LegalKnowledgeBase = () => {
   }, [])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ultra-modern background with animated elements */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      <div className="fixed inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-amber-500/5 to-yellow-500/5 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-orange-500/5 to-red-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      <div className="relative p-6">
-        <div className="max-w-7xl mx-auto">
-          <SectionHeader
-            title="Legal Intelligence"
-            subtitle={(
-              <p className="text-slate-300 text-lg flex items-center space-x-2">
-                <Brain className="h-5 w-5 text-amber-400" />
-                <span>Advanced VA Legal Research Database & AI Search Platform</span>
-                <div className="flex items-center space-x-1 ml-4">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
-                </div>
-              </p>
-            )}
-            icon={Database}
-            gradient="from-amber-500 via-yellow-500 to-orange-600"
-            badge={<div className="w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
-            actions={(
-              <>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  <span>Research Trends</span>
-                </motion.button>
-                <Button className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Preferences
-                </Button>
-              </>
-            )}
-            className="mb-8"
-          />
+    <PageShell
+      header={(
+        <SectionHeader
+          title="Legal Intelligence"
+          subtitle={(
+            <p className="text-slate-300 text-lg flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-amber-400" />
+              <span>Advanced VA Legal Research Database & AI Search Platform</span>
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
+              </div>
+            </p>
+          )}
+          icon={Database}
+          gradient="from-amber-500 via-yellow-500 to-orange-600"
+          badge={<div className="w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center"><Crown className="h-3 w-3 text-white" /></div>}
+          actions={(
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2"
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>Research Trends</span>
+              </motion.button>
+              <Button className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500">
+                <Settings className="h-4 w-4 mr-2" />
+                Preferences
+              </Button>
+            </>
+          )}
+          className="mb-8"
+        />
+      )}
+    >
 
           {/* Search Section */}
           <motion.div
@@ -482,9 +473,7 @@ const LegalKnowledgeBase = () => {
               </div>
             )}
           </Modal>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   )
 }
 
