@@ -1,13 +1,26 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { Scale, Camera, BookOpen, FileText, Mic, Search, BarChart3, User, LogOut, Settings, ChevronRight, Activity } from 'lucide-react'
+import {
+  Scale,
+  Camera,
+  BookOpen,
+  FileText,
+  Mic,
+  Search,
+  BarChart3,
+  User,
+  LogOut,
+  Settings,
+  ChevronRight,
+  Activity,
+} from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Contexts
 import AuthProvider, { useAuth } from './contexts/AuthContext'
 
 // Components
-import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader } from './shared/ui'
+import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui'
 import WelcomeModal from './components/modals/WelcomeModal'
 import LoginModal from './components/modals/LoginModal'
 import Layout from './components/layout/Layout'
@@ -19,7 +32,9 @@ import SkipLinks from './components/ui/SkipLinks'
 const CameraOCR = lazy(() => import('./components/tools/CameraOCR'))
 const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase'))
 const ClaimGuidance = lazy(() => import('./components/tools/ClaimGuidance'))
-const AudioTranscription = lazy(() => import('./components/tools/AudioTranscription/AudioTranscription'))
+const AudioTranscription = lazy(
+  () => import('./components/tools/AudioTranscription/AudioTranscription')
+)
 const CaseResearch = lazy(() => import('./components/tools/CaseResearch'))
 const Analytics = lazy(() => import('./components/tools/Analytics'))
 
@@ -39,19 +54,18 @@ function App() {
 }
 
 function AppContent() {
-  const { user, isAuthenticated, logout, loading } = useAuth()
+  const { user, userProfile, isAuthenticated, logout, loading } = useAuth()
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [autoDemo, setAutoDemo] = useState(false)
 
-  // Check if user should see welcome modal
+  // Show welcome modal until completed, regardless of auth
   useEffect(() => {
-    if (isAuthenticated && user) {
-      const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
-      if (!hasSeenWelcome) {
-        setShowWelcomeModal(true)
-      }
+    const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
+    if (!hasSeenWelcome) {
+      setShowWelcomeModal(true)
     }
-  }, [isAuthenticated, user])
+  }, [])
 
   if (loading) {
     return <LoadingScreen />
@@ -60,95 +74,170 @@ function AppContent() {
   return (
     <>
       <SkipLinks />
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => {
+          setShowLoginModal(false)
+          setAutoDemo(false)
+        }}
+        autoDemo={autoDemo}
+      />
       <Routes>
-        <Route path="/" element={
-          isAuthenticated ? (
-            <Layout>
-              <Dashboard />
-            </Layout>
-          ) : (
-            <LandingPage onLogin={() => setShowLoginModal(true)} />
-          )
-        } />
-        <Route path="/camera-ocr" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="cameraocr" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Document Scanner" /></div>}>
-                  <CameraOCR />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/legal-knowledge" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="legalknowledge" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Legal Knowledge" /></div>}>
-                  <LegalKnowledgeBase />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/claim-guidance" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="claimguidance" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Claim Assistant" /></div>}>
-                  <ClaimGuidance />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/audio-transcription" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="audiotranscription" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Audio Intelligence" /></div>}>
-                  <AudioTranscription />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/case-research" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="caseresearch" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Case Research" /></div>}>
-                  <CaseResearch />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/analytics" element={
-          <ProtectedRoute>
-            <Layout>
-              <ErrorBoundary errorType="analytics" supportEmail="support@veteranlawai.com">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center p-8"><LoadingSpinner size="large" label="Loading Analytics" /></div>}>
-                  <Analytics />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </ProtectedRoute>
-        } />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <Dashboard />
+              </Layout>
+            ) : (
+              <LandingPage
+                onLogin={() => {
+                  setAutoDemo(false)
+                  setShowLoginModal(true)
+                }}
+                onDemo={() => {
+                  setAutoDemo(true)
+                  setShowLoginModal(true)
+                }}
+              />
+            )
+          }
+        />
+        <Route
+          path="/camera-ocr"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="cameraocr" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Document Scanner" />
+                      </div>
+                    }
+                  >
+                    <CameraOCR />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/legal-knowledge"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="legalknowledge" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Legal Knowledge" />
+                      </div>
+                    }
+                  >
+                    <LegalKnowledgeBase />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/claim-guidance"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="claimguidance" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Claim Assistant" />
+                      </div>
+                    }
+                  >
+                    <ClaimGuidance />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/audio-transcription"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary
+                  errorType="audiotranscription"
+                  supportEmail="support@veteranlawai.com"
+                >
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Audio Intelligence" />
+                      </div>
+                    }
+                  >
+                    <AudioTranscription />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/case-research"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="caseresearch" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Case Research" />
+                      </div>
+                    }
+                  >
+                    <CaseResearch />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="analytics" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Analytics" />
+                      </div>
+                    }
+                  >
+                    <Analytics />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
         <Route path="/health" element={<HealthPage />} />
       </Routes>
 
       {/* Modals */}
       <WelcomeModal
         isOpen={showWelcomeModal}
-        onClose={() => setShowWelcomeModal(false)}
+        onClose={() => {
+          setShowWelcomeModal(false)
+          setShowLoginModal(true)
+        }}
         userName={user?.name}
-      />
-
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
       />
     </>
   )
@@ -172,15 +261,10 @@ function ProtectedRoute({ children }) {
             <Scale className="h-16 w-16 text-cyan-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Authentication Required</h2>
             <p className="text-slate-400 mb-6">Please sign in to access this tool</p>
-            <Button onClick={() => setShowLoginModal(true)}>
-              Sign In
-            </Button>
+            <Button onClick={() => setShowLoginModal(true)}>Sign In</Button>
           </div>
         </div>
-        <LoginModal
-          isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-        />
+        <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       </>
     )
   }
@@ -192,9 +276,9 @@ function LoadingScreen() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="text-center">
-        <LoadingSpinner 
-          size="xlarge" 
-          color="cyan" 
+        <LoadingSpinner
+          size="xlarge"
+          color="cyan"
           label="Loading VeteranLawAI Platform"
           showLabel={true}
         />
@@ -207,38 +291,82 @@ function LoadingScreen() {
   )
 }
 
-function LandingPage({ onLogin }) {
+function LandingPage({ onLogin, onDemo }) {
   const tools = [
-    { title: 'Camera OCR', href: '/camera-ocr', icon: Camera, color: 'from-cyan-500 to-blue-600', desc: 'Digitize VA forms and medical records instantly' },
-    { title: 'Legal Knowledge', href: '/legal-knowledge', icon: BookOpen, color: 'from-blue-500 to-indigo-600', desc: '14,500+ VA regulations and precedents' },
-    { title: 'Claim Guidance', href: '/claim-guidance', icon: FileText, color: 'from-purple-500 to-pink-600', desc: 'AI-powered step-by-step assistance' },
-    { title: 'Audio Transcription', href: '/audio-transcription', icon: Mic, color: 'from-green-500 to-emerald-600', desc: 'Professional legal transcription' },
-    { title: 'Case Research', href: '/case-research', icon: Search, color: 'from-orange-500 to-red-600', desc: 'Find relevant precedents in seconds' },
-    { title: 'Analytics', href: '/analytics', icon: BarChart3, color: 'from-yellow-500 to-orange-600', desc: 'Track success rates and metrics' },
+    {
+      title: 'Camera OCR',
+      href: '/camera-ocr',
+      icon: Camera,
+      color: 'from-cyan-500 to-blue-600',
+      desc: 'Digitize VA forms and medical records instantly',
+    },
+    {
+      title: 'Legal Knowledge',
+      href: '/legal-knowledge',
+      icon: BookOpen,
+      color: 'from-blue-500 to-indigo-600',
+      desc: '14,500+ VA regulations and precedents',
+    },
+    {
+      title: 'Claim Guidance',
+      href: '/claim-guidance',
+      icon: FileText,
+      color: 'from-purple-500 to-pink-600',
+      desc: 'AI-powered step-by-step assistance',
+    },
+    {
+      title: 'Audio Transcription',
+      href: '/audio-transcription',
+      icon: Mic,
+      color: 'from-green-500 to-emerald-600',
+      desc: 'Professional legal transcription',
+    },
+    {
+      title: 'Case Research',
+      href: '/case-research',
+      icon: Search,
+      color: 'from-orange-500 to-red-600',
+      desc: 'Find relevant precedents in seconds',
+    },
+    {
+      title: 'Analytics',
+      href: '/analytics',
+      icon: BarChart3,
+      color: 'from-yellow-500 to-orange-600',
+      desc: 'Track success rates and metrics',
+    },
   ]
 
   return (
     <PageShell
-      header={(
+      header={
         <SectionHeader
-          title="VeteranLawAI"
-          subtitle={<span className="text-slate-300">AI platform for attorneys representing Veterans in VA disability claims</span>}
+          title={<span className="display-hero gradient-text-primary">VeteranLawAI</span>}
+          subtitle={
+            <span className="display-subtitle">
+              AI platform for attorneys representing Veterans in VA disability claims
+            </span>
+          }
           icon={Scale}
           gradient="from-cyan-500 via-blue-500 to-purple-600"
-          actions={(
+          actions={
             <div className="flex items-center space-x-3">
               <Tooltip content="Sign in to start your trial" side="top">
-                <Button size="lg" onClick={onLogin}>Start Free Trial</Button>
+                <Button size="lg" onClick={onLogin}>
+                  Start Free Trial
+                </Button>
               </Tooltip>
               <Link to="/health" className="focus-ring">
                 <Tooltip content="View build and service status" side="top">
-                  <Button variant="outline" size="lg">System Health</Button>
+                  <Button variant="outline" size="lg">
+                    System Health
+                  </Button>
                 </Tooltip>
               </Link>
             </div>
-          )}
+          }
         />
-      )}
+      }
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map((tool, index) => {
@@ -250,14 +378,15 @@ function LandingPage({ onLogin }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group glass-card gradient-outline rounded-2xl p-6 hover:border-cyan-500/30 motion-normal cursor-pointer"
-              onClick={onLogin}
+              onClick={tool.title === 'Analytics' ? onDemo : onLogin}
             >
               <Tooltip content={tool.desc} side="top">
-                <div className={`relative w-14 h-14 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
-                  <div className="absolute inset-0 rounded-xl border border-white/15" />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                  <Icon className="h-7 w-7 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                </div>
+                <IconTile
+                  icon={Icon}
+                  gradient={tool.color}
+                  size="lg"
+                  className="mb-4 group-hover:scale-110 transition-transform duration-300"
+                />
               </Tooltip>
               <h3 className="text-lg font-bold text-white mb-2">{tool.title}</h3>
               <p className="text-slate-300 text-sm">{tool.desc}</p>
@@ -270,86 +399,96 @@ function LandingPage({ onLogin }) {
 }
 
 function Dashboard() {
-  const { user, logout } = useAuth()
+  const { user, userProfile, logout } = useAuth()
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [hoveredTool, setHoveredTool] = useState(null)
 
   const tools = [
-    { 
-      title: 'Document Scanner', 
-      href: '/camera-ocr', 
-      icon: Camera, 
-      color: 'from-emerald-500 via-teal-500 to-cyan-600', 
+    {
+      title: 'Document Scanner',
+      href: '/camera-ocr',
+      icon: Camera,
+      color: 'from-emerald-500 via-teal-500 to-cyan-600',
       stats: '2,341 documents processed',
       badge: 'AI',
       glow: 'shadow-emerald-500/25',
-      description: '99.7% VA form accuracy with OCR'
+      description: '99.7% VA form accuracy with OCR',
     },
-    { 
-      title: 'Legal Intelligence', 
-      href: '/legal-knowledge', 
-      icon: BookOpen, 
-      color: 'from-amber-500 via-yellow-500 to-orange-600', 
+    {
+      title: 'Legal Intelligence',
+      href: '/legal-knowledge',
+      icon: BookOpen,
+      color: 'from-amber-500 via-yellow-500 to-orange-600',
       stats: '18,500+ regulations indexed',
       badge: 'PRO',
       glow: 'shadow-amber-500/25',
-      description: 'Advanced legal research database'
+      description: 'Advanced legal research database',
     },
-    { 
-      title: 'Claim Assistant', 
-      href: '/claim-guidance', 
-      icon: FileText, 
-      color: 'from-rose-500 via-pink-500 to-purple-600', 
+    {
+      title: 'Claim Assistant',
+      href: '/claim-guidance',
+      icon: FileText,
+      color: 'from-rose-500 via-pink-500 to-purple-600',
       stats: '156 claims filed this month',
       badge: 'NEW',
       glow: 'shadow-rose-500/25',
-      description: 'AI-powered step-by-step guidance'
+      description: 'AI-powered step-by-step guidance',
     },
-    { 
-      title: 'Audio Intelligence', 
-      href: '/audio-transcription', 
-      icon: Mic, 
-      color: 'from-green-500 via-emerald-500 to-teal-600', 
+    {
+      title: 'Audio Intelligence',
+      href: '/audio-transcription',
+      icon: Mic,
+      color: 'from-green-500 via-emerald-500 to-teal-600',
       stats: '412 hours transcribed',
       badge: 'BETA',
       glow: 'shadow-green-500/25',
-      description: 'Legal transcription & analysis'
+      description: 'Legal transcription & analysis',
     },
-    { 
-      title: 'Case Research', 
-      href: '/case-research', 
-      icon: Search, 
-      color: 'from-indigo-500 via-purple-500 to-blue-600', 
+    {
+      title: 'Case Research',
+      href: '/case-research',
+      icon: Search,
+      color: 'from-indigo-500 via-purple-500 to-blue-600',
       stats: '15,000+ case precedents',
       badge: null,
       glow: 'shadow-indigo-500/25',
-      description: 'Comprehensive precedent analysis'
+      description: 'Comprehensive precedent analysis',
     },
-    { 
-      title: 'Success Analytics', 
-      href: '/analytics', 
-      icon: BarChart3, 
-      color: 'from-violet-500 via-purple-500 to-indigo-600', 
+    {
+      title: 'Success Analytics',
+      href: '/analytics',
+      icon: BarChart3,
+      color: 'from-violet-500 via-purple-500 to-indigo-600',
       stats: '94.2% success rate tracked',
       badge: null,
       glow: 'shadow-violet-500/25',
-      description: 'Performance metrics & insights'
+      description: 'Performance metrics & insights',
     },
   ]
 
   return (
     <PageShell
-      header={(
+      header={
         <SectionHeader
           title="Command Center"
-          subtitle={<span className="text-slate-300">Welcome back, {user?.name?.split(' ')[0]}!</span>}
+          subtitle={
+            <span className="text-slate-300">
+              Welcome back,{' '}
+              {userProfile?.displayName?.split(' ')[0] ||
+                user?.displayName?.split(' ')[0] ||
+                'Attorney'}
+              !
+            </span>
+          }
           icon={Scale}
           gradient="from-cyan-500 via-blue-500 to-purple-600"
-          actions={(
-            <Button variant="outline" onClick={logout}>Sign Out</Button>
-          )}
+          actions={
+            <Button variant="outline" onClick={logout}>
+              Sign Out
+            </Button>
+          }
         />
-      )}
+      }
     >
       <main id="main-content" className="relative px-0 py-0">
         <div className="max-w-7xl mx-auto">
@@ -362,32 +501,51 @@ function Dashboard() {
           >
             <div className="relative inline-block">
               <h1 className="text-6xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-300 bg-clip-text text-transparent mb-4">
-                Welcome back, {user?.name?.split(' ')[0]}!
+                Welcome back,{' '}
+                {userProfile?.displayName?.split(' ')[0] ||
+                  user?.displayName?.split(' ')[0] ||
+                  'Attorney'}
+                !
               </h1>
-              <motion.div 
+              <motion.div
                 className="absolute -inset-4 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 blur-2xl rounded-full"
-                animate={{ 
+                animate={{
                   scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.6, 0.3]
+                  opacity: [0.3, 0.6, 0.3],
                 }}
-                transition={{ 
+                transition={{
                   duration: 4,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
               />
             </div>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Your AI-powered command center for VA disability claims is ready. 
+              Your AI-powered command center for VA disability claims is ready.
               <span className="text-cyan-400 font-medium">Here's what's happening today.</span>
             </p>
-            
+
             {/* Floating stats pills */}
             <div className="flex justify-center items-center space-x-6 mt-8">
               {[
-                { label: 'Active Cases', value: '47', icon: FileText, color: 'from-cyan-500 to-blue-600' },
-                { label: 'Success Rate', value: '94.2%', icon: BarChart3, color: 'from-green-500 to-emerald-600' },
-                { label: 'This Month', value: '12', icon: Scale, color: 'from-purple-500 to-pink-600' }
+                {
+                  label: 'Active Cases',
+                  value: '47',
+                  icon: FileText,
+                  color: 'from-cyan-500 to-blue-600',
+                },
+                {
+                  label: 'Success Rate',
+                  value: '94.2%',
+                  icon: BarChart3,
+                  color: 'from-green-500 to-emerald-600',
+                },
+                {
+                  label: 'This Month',
+                  value: '12',
+                  icon: Scale,
+                  color: 'from-purple-500 to-pink-600',
+                },
               ].map((stat, index) => {
                 const StatIcon = stat.icon
                 return (
@@ -399,11 +557,11 @@ function Dashboard() {
                     className={`flex items-center space-x-3 px-6 py-4 bg-gradient-to-r ${stat.color}/20 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300`}
                     whileHover={{ scale: 1.05, y: -2 }}
                   >
-                    <div className={`p-2 bg-gradient-to-br ${stat.color} rounded-xl shadow-lg`}>
-                      <StatIcon className="h-5 w-5 text-white" />
-                    </div>
+                    <IconTile icon={StatIcon} gradient={stat.color} size="sm" />
                     <div>
-                      <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                      <div
+                        className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}
+                      >
                         {stat.value}
                       </div>
                       <div className="text-sm text-slate-400">{stat.label}</div>
@@ -422,37 +580,37 @@ function Dashboard() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
           >
             {[
-              { 
-                label: 'Total Cases', 
-                value: user?.casesHandled || '247', 
-                color: 'from-cyan-500 via-blue-500 to-indigo-600', 
+              {
+                label: 'Total Cases',
+                value: userProfile?.casesHandled || '247',
+                color: 'from-cyan-500 via-blue-500 to-indigo-600',
                 icon: FileText,
                 change: '+12 this week',
-                glow: 'shadow-cyan-500/20'
+                glow: 'shadow-cyan-500/20',
               },
-              { 
-                label: 'Success Rate', 
-                value: `${user?.successRate || 94.2}%`, 
-                color: 'from-green-500 via-emerald-500 to-teal-600', 
+              {
+                label: 'Success Rate',
+                value: `${userProfile?.successRate || 94.2}%`,
+                color: 'from-green-500 via-emerald-500 to-teal-600',
                 icon: BarChart3,
                 change: '+2.3% vs last month',
-                glow: 'shadow-green-500/20'
+                glow: 'shadow-cyan-500/20',
               },
-              { 
-                label: 'This Month', 
-                value: '28', 
-                color: 'from-purple-500 via-violet-500 to-indigo-600', 
+              {
+                label: 'This Month',
+                value: '28',
+                color: 'from-purple-500 via-violet-500 to-indigo-600',
                 icon: Scale,
                 change: '18 pending review',
-                glow: 'shadow-purple-500/20'
+                glow: 'shadow-purple-500/20',
               },
-              { 
-                label: 'Total Awarded', 
-                value: '$4.2M', 
-                color: 'from-yellow-500 via-orange-500 to-red-600', 
+              {
+                label: 'Total Awarded',
+                value: '$4.2M',
+                color: 'from-yellow-500 via-orange-500 to-red-600',
                 icon: User,
                 change: '+$240K this quarter',
-                glow: 'shadow-yellow-500/20'
+                glow: 'shadow-yellow-500/20',
               },
             ].map((stat, index) => {
               const StatIcon = stat.icon
@@ -466,42 +624,47 @@ function Dashboard() {
                   whileHover={{ scale: 1.02, y: -4 }}
                 >
                   {/* Background glow effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.color}/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${stat.color}/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                  />
                   {/* Subtle shine overlay */}
                   <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   {/* Icon with enhanced styling */}
-                   <div className={`relative w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mb-6 shadow-2xl ${stat.glow} group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
-                    <div className="absolute inset-0 rounded-2xl border border-white/15" />
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                    <StatIcon className="h-8 w-8 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                  </div>
-                  
+                  <IconTile
+                    icon={StatIcon}
+                    gradient={stat.color}
+                    size="lg"
+                    className={`mb-6 ${stat.glow} group-hover:scale-110 transition-transform duration-300`}
+                  />
+
                   {/* Value with gradient text */}
-                  <h3 className={`text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
+                  <h3
+                    className={`text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}
+                  >
                     {stat.value}
                   </h3>
-                  
+
                   {/* Label */}
                   <p className="text-slate-300 font-medium mb-2">{stat.label}</p>
-                  
+
                   {/* Change indicator */}
                   <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
                     {stat.change}
                   </p>
-                  
+
                   {/* Floating orb effect */}
-                  <motion.div 
+                  <motion.div
                     className={`absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br ${stat.color}/20 rounded-full blur-xl`}
-                    animate={{ 
+                    animate={{
                       scale: [1, 1.2, 1],
-                      opacity: [0.3, 0.6, 0.3]
+                      opacity: [0.3, 0.6, 0.3],
                     }}
-                    transition={{ 
+                    transition={{
                       duration: 3,
                       repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: index * 0.5
+                      ease: 'easeInOut',
+                      delay: index * 0.5,
                     }}
                   />
                 </motion.div>
@@ -523,12 +686,12 @@ function Dashboard() {
               Enterprise-grade legal tools powered by advanced artificial intelligence
             </p>
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tools.map((tool, index) => {
               const Icon = tool.icon
               const isHovered = hoveredTool === tool.title
-              
+
               return (
                 <motion.div
                   key={tool.title}
@@ -545,48 +708,39 @@ function Dashboard() {
                       whileTap={{ scale: 0.98 }}
                     >
                       {/* Background texture overlay */}
-                      <div className="absolute inset-0 opacity-30" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                      }} />
-                      
+                      <div
+                        className="absolute inset-0 opacity-30"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        }}
+                      />
+
                       {/* Gradient glow effect */}
-                       <motion.div 
-                         className={`absolute inset-0 bg-gradient-to-br ${tool.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
-                        animate={{ 
+                      <motion.div
+                        className={`absolute inset-0 bg-gradient-to-br ${tool.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
+                        animate={{
                           opacity: isHovered ? 0.15 : 0,
                         }}
                       />
-                       {/* Subtle shine overlay */}
-                       <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      
+                      {/* Subtle shine overlay */}
+                      <div className="absolute inset-px rounded-[inherit] pointer-events-none bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
                       {/* Icon container with enhanced styling */}
                       <div className="relative mb-6">
-                        <motion.div 
-                          className={`relative w-20 h-20 bg-gradient-to-br ${tool.color} rounded-2xl flex items-center justify-center shadow-2xl ${tool.glow} mb-4 overflow-hidden`}
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div className="absolute inset-0 rounded-2xl border border-white/15" />
-                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                          <Icon className="h-10 w-10 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                          
-                          {/* Enhanced glow effect */}
-                          <motion.div 
-                            className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tool.color} blur-lg transition-opacity duration-300`}
-                            animate={{ 
-                              opacity: isHovered ? 0.6 : 0.3,
-                              scale: isHovered ? 1.2 : 1
-                            }}
-                          />
-                        </motion.div>
-                        
+                        <IconTile
+                          icon={Icon}
+                          gradient={tool.color}
+                          size="xl"
+                          className={`${tool.glow} mb-4`}
+                        />
+
                         {/* Premium badge */}
                         {tool.badge && (
-                          <motion.div 
+                          <motion.div
                             className="absolute -top-2 -right-2 px-3 py-1.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-xl border border-white/20"
-                            animate={{ 
+                            animate={{
                               scale: isHovered ? 1.1 : 1,
-                              rotate: isHovered ? 5 : 0
+                              rotate: isHovered ? 5 : 0,
                             }}
                             transition={{ duration: 0.2 }}
                           >
@@ -594,22 +748,24 @@ function Dashboard() {
                           </motion.div>
                         )}
                       </div>
-                      
+
                       {/* Content */}
                       <div className="relative z-10">
                         <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-200 transition-colors duration-300">
                           {tool.title}
                         </h3>
-                        
+
                         <p className="text-slate-300 text-sm mb-4 leading-relaxed group-hover:text-slate-200 transition-colors duration-300">
                           {tool.description}
                         </p>
-                        
+
                         <div className="flex items-center justify-between">
-                          <p className={`text-sm font-semibold bg-gradient-to-r ${tool.color} bg-clip-text text-transparent`}>
+                          <p
+                            className={`text-sm font-semibold bg-gradient-to-r ${tool.color} bg-clip-text text-transparent`}
+                          >
                             {tool.stats}
                           </p>
-                          
+
                           <Tooltip content="Open tool" side="top">
                             <motion.div
                               className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors duration-300"
@@ -625,33 +781,33 @@ function Dashboard() {
                           </Tooltip>
                         </div>
                       </div>
-                      
+
                       {/* Floating orb effects */}
-                      <motion.div 
+                      <motion.div
                         className={`absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br ${tool.color}/20 rounded-full blur-2xl`}
-                        animate={{ 
+                        animate={{
                           scale: [1, 1.2, 1],
-                          opacity: [0.3, 0.6, 0.3]
+                          opacity: [0.3, 0.6, 0.3],
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 4,
                           repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: index * 0.7
+                          ease: 'easeInOut',
+                          delay: index * 0.7,
                         }}
                       />
-                      
-                      <motion.div 
+
+                      <motion.div
                         className={`absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br ${tool.color}/15 rounded-full blur-xl`}
-                        animate={{ 
+                        animate={{
                           scale: [1, 1.3, 1],
-                          opacity: [0.2, 0.5, 0.2]
+                          opacity: [0.2, 0.5, 0.2],
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 3,
                           repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 1 + index * 0.5
+                          ease: 'easeInOut',
+                          delay: 1 + index * 0.5,
                         }}
                       />
                     </motion.div>
@@ -669,14 +825,18 @@ function Dashboard() {
 function ToolPage({ title }) {
   return (
     <PageShell
-      header={(
+      header={
         <SectionHeader
           title={title}
-          subtitle={<span className="text-slate-300">This enhanced tool is ready for professional use with advanced AI capabilities.</span>}
+          subtitle={
+            <span className="text-slate-300">
+              This enhanced tool is ready for professional use with advanced AI capabilities.
+            </span>
+          }
           icon={FileText}
           gradient="from-cyan-500 via-blue-500 to-purple-600"
         />
-      )}
+      }
     >
       <div className="max-w-4xl mx-auto">
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-700/50 text-center">
@@ -695,14 +855,16 @@ function ToolPage({ title }) {
 function HealthPage() {
   return (
     <PageShell
-      header={(
+      header={
         <SectionHeader
           title="System Health"
-          subtitle={<span className="text-slate-300">Build and service status for the platform</span>}
+          subtitle={
+            <span className="text-slate-300">Build and service status for the platform</span>
+          }
           icon={Activity}
           gradient="from-emerald-500 via-teal-500 to-cyan-600"
         />
-      )}
+      }
     >
       <div className="max-w-4xl mx-auto">
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-700/50">

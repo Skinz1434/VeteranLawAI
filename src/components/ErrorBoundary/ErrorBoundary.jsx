@@ -2,7 +2,7 @@
  * @fileoverview Error Boundary Component for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Comprehensive error handling with veteran-friendly error messages
  * and accessibility features. Provides fallback UI when components crash.
  */
@@ -23,25 +23,25 @@ class ErrorBoundary extends React.Component {
       hasError: false,
       error: null,
       errorInfo: null,
-      errorId: null
+      errorId: null,
     }
   }
 
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI
-    return { 
+    return {
       hasError: true,
-      errorId: Date.now().toString(36) + Math.random().toString(36).substr(2)
+      errorId: Date.now().toString(36) + Math.random().toString(36).substr(2),
     }
   }
 
   componentDidCatch(error, errorInfo) {
     // Log error details for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo)
-    
+
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     })
 
     // Announce error to screen readers
@@ -70,7 +70,7 @@ class ErrorBoundary extends React.Component {
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
       url: window.location.href,
-      userId: this.props.userId || 'anonymous'
+      userId: this.props.userId || 'anonymous',
     }
 
     // Send to error reporting service
@@ -86,7 +86,7 @@ class ErrorBoundary extends React.Component {
       hasError: false,
       error: null,
       errorInfo: null,
-      errorId: null
+      errorId: null,
     })
 
     // Announce recovery attempt
@@ -118,8 +118,9 @@ class ErrorBoundary extends React.Component {
     if (error.message.includes('fetch') || error.message.includes('network')) {
       return {
         title: 'Connection Problem',
-        message: 'We\'re having trouble connecting to our servers. Please check your internet connection and try again.',
-        suggestion: 'If you continue to have problems, please contact our support team.'
+        message:
+          "We're having trouble connecting to our servers. Please check your internet connection and try again.",
+        suggestion: 'If you continue to have problems, please contact our support team.',
       }
     }
 
@@ -127,8 +128,10 @@ class ErrorBoundary extends React.Component {
     if (error.message.includes('permission') || error.message.includes('unauthorized')) {
       return {
         title: 'Access Issue',
-        message: 'You may not have permission to access this information, or your session may have expired.',
-        suggestion: 'Please try logging in again or contact support if you believe this is an error.'
+        message:
+          'You may not have permission to access this information, or your session may have expired.',
+        suggestion:
+          'Please try logging in again or contact support if you believe this is an error.',
       }
     }
 
@@ -137,7 +140,7 @@ class ErrorBoundary extends React.Component {
       return {
         title: 'Data Loading Problem',
         message: 'We encountered a problem loading your information.',
-        suggestion: 'Please try refreshing the page. If the problem continues, contact support.'
+        suggestion: 'Please try refreshing the page. If the problem continues, contact support.',
       }
     }
 
@@ -145,32 +148,42 @@ class ErrorBoundary extends React.Component {
     const componentMessages = {
       analytics: {
         title: 'Analytics Unavailable',
-        message: 'We\'re having trouble loading your analytics data right now.',
-        suggestion: 'Please try again in a few minutes. Your data is safe and will be available shortly.'
+        message: "We're having trouble loading your analytics data right now.",
+        suggestion:
+          'Please try again in a few minutes. Your data is safe and will be available shortly.',
       },
       caseresearch: {
         title: 'Case Research Unavailable',
         message: 'The legal research tools are temporarily unavailable.',
-        suggestion: 'Please try again shortly. You can still access other features of the platform.'
+        suggestion:
+          'Please try again shortly. You can still access other features of the platform.',
       },
       claimguidance: {
         title: 'Claim Guidance Unavailable',
         message: 'The claim guidance tools are having issues loading.',
-        suggestion: 'Please try refreshing or contact support for immediate assistance with your claim.'
-      }
+        suggestion:
+          'Please try refreshing or contact support for immediate assistance with your claim.',
+      },
     }
 
-    return componentMessages[errorType] || {
-      title: 'Something Went Wrong',
-      message: 'We encountered an unexpected problem while loading this section.',
-      suggestion: 'Please try refreshing the page or contact our support team if the problem continues.'
-    }
+    return (
+      componentMessages[errorType] || {
+        title: 'Something Went Wrong',
+        message: 'We encountered an unexpected problem while loading this section.',
+        suggestion:
+          'Please try refreshing the page or contact our support team if the problem continues.',
+      }
+    )
   }
 
   render() {
     if (this.state.hasError) {
       const errorMessage = this.getUserFriendlyMessage()
-      const { showDetails = false, supportEmail = 'support@veteranlawai.com', supportPhone = '1-800-VETERAN' } = this.props
+      const {
+        showDetails = false,
+        supportEmail = 'support@veteranlawai.com',
+        supportPhone = '1-800-VETERAN',
+      } = this.props
 
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-6">
@@ -189,19 +202,22 @@ class ErrorBoundary extends React.Component {
                 <h1 className="text-3xl font-bold text-white mb-4">
                   {errorMessage?.title || 'Oops! Something went wrong'}
                 </h1>
-                
+
                 <p className="text-slate-300 text-lg mb-4 leading-relaxed">
-                  {errorMessage?.message || 'We encountered an unexpected error while loading this page.'}
+                  {errorMessage?.message ||
+                    'We encountered an unexpected error while loading this page.'}
                 </p>
-                
+
                 <p className="text-slate-400 text-sm">
-                  {errorMessage?.suggestion || 'Please try refreshing the page or contact support if the problem persists.'}
+                  {errorMessage?.suggestion ||
+                    'Please try refreshing the page or contact support if the problem persists.'}
                 </p>
 
                 {/* Error ID for support reference */}
                 <div className="mt-4 p-3 bg-slate-700/30 rounded-xl border border-slate-600/30">
                   <p className="text-slate-400 text-xs">
-                    Error Reference: <span className="text-slate-300 font-mono">{this.state.errorId}</span>
+                    Error Reference:{' '}
+                    <span className="text-slate-300 font-mono">{this.state.errorId}</span>
                   </p>
                   <p className="text-slate-500 text-xs mt-1">
                     Please include this reference when contacting support
@@ -219,7 +235,7 @@ class ErrorBoundary extends React.Component {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
                 </Button>
-                
+
                 <Button
                   onClick={this.handleGoHome}
                   variant="outline"
@@ -260,7 +276,7 @@ class ErrorBoundary extends React.Component {
                     <pre className="text-xs text-slate-300 whitespace-pre-wrap mb-4 overflow-auto">
                       {this.state.error.toString()}
                     </pre>
-                    
+
                     {this.state.errorInfo && (
                       <>
                         <h4 className="text-red-400 font-medium mb-2">Component Stack:</h4>
@@ -277,8 +293,8 @@ class ErrorBoundary extends React.Component {
             {/* Accessibility Information */}
             <div className="mt-6 text-center">
               <p className="text-slate-500 text-sm">
-                If you're using assistive technology and need immediate help, 
-                please call our accessibility support line at {supportPhone}
+                If you're using assistive technology and need immediate help, please call our
+                accessibility support line at {supportPhone}
               </p>
             </div>
           </div>
@@ -313,13 +329,13 @@ export function withErrorBoundary(Component, errorBoundaryProps = {}) {
 export function useErrorHandler() {
   return (error, errorInfo = {}) => {
     console.error('Component error:', error, errorInfo)
-    
+
     // Announce error to screen readers
     announceToScreenReader(
       'An error occurred. Please try refreshing or contact support.',
       'assertive'
     )
-    
+
     // Could integrate with error reporting service here
     if (process.env.NODE_ENV === 'production') {
       // Report to monitoring service

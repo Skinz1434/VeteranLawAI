@@ -2,7 +2,7 @@
  * @fileoverview Keyboard Navigation Hook for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Comprehensive keyboard navigation support for accessibility compliance.
  * Provides keyboard shortcuts, focus management, and navigation helpers.
  */
@@ -14,7 +14,7 @@ import { announceToScreenReader } from '../utils/accessibility'
 /**
  * Keyboard Navigation Hook
  * Provides comprehensive keyboard navigation functionality
- * 
+ *
  * @param {Object} options - Configuration options
  * @returns {Object} Navigation utilities and handlers
  */
@@ -24,7 +24,7 @@ export function useKeyboardNavigation(options = {}) {
     enableArrowNavigation = false,
     enableEscapeHandling = true,
     containerRef = null,
-    onNavigate = null
+    onNavigate = null,
   } = options
 
   const navigate = useNavigate()
@@ -43,15 +43,15 @@ export function useKeyboardNavigation(options = {}) {
     'Alt+g': () => navigate('/claim-guidance'),
     'Alt+t': () => navigate('/audio-transcription'),
     'Alt+o': () => navigate('/camera-ocr'),
-    
+
     // Accessibility shortcuts
     'Alt+s': () => focusSearch(),
     'Alt+n': () => focusNavigation(),
     'Alt+m': () => focusMainContent(),
-    
+
     // Help shortcuts
     'Alt+?': () => showKeyboardShortcuts(),
-    'F1': () => showKeyboardShortcuts()
+    F1: () => showKeyboardShortcuts(),
   }
 
   /**
@@ -71,18 +71,21 @@ export function useKeyboardNavigation(options = {}) {
       'a[href]',
       '[tabindex]:not([tabindex="-1"])',
       '[contenteditable="true"]',
-      '.focusable'
+      '.focusable',
     ].join(', ')
 
-    const elements = Array.from(containerRef.current.querySelectorAll(selectors))
-      .filter(element => {
+    const elements = Array.from(containerRef.current.querySelectorAll(selectors)).filter(
+      element => {
         // Filter out invisible elements
         const style = window.getComputedStyle(element)
-        return style.display !== 'none' && 
-               style.visibility !== 'hidden' && 
-               element.offsetWidth > 0 && 
-               element.offsetHeight > 0
-      })
+        return (
+          style.display !== 'none' &&
+          style.visibility !== 'hidden' &&
+          element.offsetWidth > 0 &&
+          element.offsetHeight > 0
+        )
+      }
+    )
 
     focusableElements.current = elements
   }, [containerRef])
@@ -90,110 +93,124 @@ export function useKeyboardNavigation(options = {}) {
   /**
    * Handle arrow key navigation
    */
-  const handleArrowNavigation = useCallback((event) => {
-    if (!enableArrowNavigation || focusableElements.current.length === 0) return
+  const handleArrowNavigation = useCallback(
+    event => {
+      if (!enableArrowNavigation || focusableElements.current.length === 0) return
 
-    const { key } = event
-    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) return
+      const { key } = event
+      if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) return
 
-    event.preventDefault()
+      event.preventDefault()
 
-    const currentIndex = focusableElements.current.indexOf(document.activeElement)
-    let newIndex = currentIndex
+      const currentIndex = focusableElements.current.indexOf(document.activeElement)
+      let newIndex = currentIndex
 
-    switch (key) {
-      case 'ArrowDown':
-      case 'ArrowRight':
-        newIndex = currentIndex < focusableElements.current.length - 1 ? currentIndex + 1 : 0
-        break
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        newIndex = currentIndex > 0 ? currentIndex - 1 : focusableElements.current.length - 1
-        break
-      case 'Home':
-        newIndex = 0
-        break
-      case 'End':
-        newIndex = focusableElements.current.length - 1
-        break
-    }
-
-    if (newIndex !== currentIndex && focusableElements.current[newIndex]) {
-      focusableElements.current[newIndex].focus()
-      currentFocusIndex.current = newIndex
-      
-      if (onNavigate) {
-        onNavigate(newIndex, focusableElements.current[newIndex])
+      switch (key) {
+        case 'ArrowDown':
+        case 'ArrowRight':
+          newIndex = currentIndex < focusableElements.current.length - 1 ? currentIndex + 1 : 0
+          break
+        case 'ArrowUp':
+        case 'ArrowLeft':
+          newIndex = currentIndex > 0 ? currentIndex - 1 : focusableElements.current.length - 1
+          break
+        case 'Home':
+          newIndex = 0
+          break
+        case 'End':
+          newIndex = focusableElements.current.length - 1
+          break
       }
-    }
-  }, [enableArrowNavigation, onNavigate])
+
+      if (newIndex !== currentIndex && focusableElements.current[newIndex]) {
+        focusableElements.current[newIndex].focus()
+        currentFocusIndex.current = newIndex
+
+        if (onNavigate) {
+          onNavigate(newIndex, focusableElements.current[newIndex])
+        }
+      }
+    },
+    [enableArrowNavigation, onNavigate]
+  )
 
   /**
    * Handle escape key for modal/overlay dismissal
    */
-  const handleEscapeKey = useCallback((event) => {
-    if (!enableEscapeHandling || event.key !== 'Escape') return
+  const handleEscapeKey = useCallback(
+    event => {
+      if (!enableEscapeHandling || event.key !== 'Escape') return
 
-    // Check for open modals or overlays
-    const openModal = document.querySelector('[role="dialog"][aria-hidden="false"]')
-    const openDropdown = document.querySelector('[aria-expanded="true"]')
-    const openPopover = document.querySelector('.popover.open')
+      // Check for open modals or overlays
+      const openModal = document.querySelector('[role="dialog"][aria-hidden="false"]')
+      const openDropdown = document.querySelector('[aria-expanded="true"]')
+      const openPopover = document.querySelector('.popover.open')
 
-    if (openModal) {
-      // Close modal and return focus to trigger
-      const closeButton = openModal.querySelector('[aria-label*="close"], [data-dismiss="modal"]')
-      if (closeButton) {
-        closeButton.click()
+      if (openModal) {
+        // Close modal and return focus to trigger
+        const closeButton = openModal.querySelector('[aria-label*="close"], [data-dismiss="modal"]')
+        if (closeButton) {
+          closeButton.click()
+        }
+        event.preventDefault()
+        announceToScreenReader('Modal closed')
+      } else if (openDropdown) {
+        // Close dropdown
+        const trigger = document.querySelector(`[aria-controls="${openDropdown.id}"]`)
+        if (trigger) {
+          trigger.click()
+          trigger.focus()
+        }
+        event.preventDefault()
+        announceToScreenReader('Dropdown closed')
+      } else if (openPopover) {
+        // Close popover
+        openPopover.classList.remove('open')
+        event.preventDefault()
       }
-      event.preventDefault()
-      announceToScreenReader('Modal closed')
-    } else if (openDropdown) {
-      // Close dropdown
-      const trigger = document.querySelector(`[aria-controls="${openDropdown.id}"]`)
-      if (trigger) {
-        trigger.click()
-        trigger.focus()
-      }
-      event.preventDefault()
-      announceToScreenReader('Dropdown closed')
-    } else if (openPopover) {
-      // Close popover
-      openPopover.classList.remove('open')
-      event.preventDefault()
-    }
-  }, [enableEscapeHandling])
+    },
+    [enableEscapeHandling]
+  )
 
   /**
    * Handle global keyboard shortcuts
    */
-  const handleGlobalShortcuts = useCallback((event) => {
-    if (!enableGlobalShortcuts) return
+  const handleGlobalShortcuts = useCallback(
+    event => {
+      if (!enableGlobalShortcuts) return
 
-    const shortcutKey = getShortcutKey(event)
-    const handler = globalShortcuts[shortcutKey]
+      const shortcutKey = getShortcutKey(event)
+      const handler = globalShortcuts[shortcutKey]
 
-    if (handler) {
-      event.preventDefault()
-      handler()
-    }
-  }, [enableGlobalShortcuts, navigate])
+      if (handler) {
+        event.preventDefault()
+        handler()
+      }
+    },
+    [enableGlobalShortcuts, navigate]
+  )
 
   /**
    * Get shortcut key combination from event
    */
-  const getShortcutKey = (event) => {
+  const getShortcutKey = event => {
     const parts = []
     if (event.ctrlKey) parts.push('Ctrl')
     if (event.altKey) parts.push('Alt')
     if (event.shiftKey) parts.push('Shift')
     if (event.metaKey) parts.push('Meta')
-    
+
     // Handle special keys
     if (event.key === 'F1') return 'F1'
-    if (event.key !== 'Control' && event.key !== 'Alt' && event.key !== 'Shift' && event.key !== 'Meta') {
+    if (
+      event.key !== 'Control' &&
+      event.key !== 'Alt' &&
+      event.key !== 'Shift' &&
+      event.key !== 'Meta'
+    ) {
       parts.push(event.key)
     }
-    
+
     return parts.join('+')
   }
 
@@ -201,7 +218,9 @@ export function useKeyboardNavigation(options = {}) {
    * Focus search input
    */
   const focusSearch = useCallback(() => {
-    const searchInput = document.querySelector('input[type="search"], input[placeholder*="search" i], #search-input')
+    const searchInput = document.querySelector(
+      'input[type="search"], input[placeholder*="search" i], #search-input'
+    )
     if (searchInput) {
       searchInput.focus()
       announceToScreenReader('Search focused')
@@ -251,11 +270,11 @@ export function useKeyboardNavigation(options = {}) {
       'Alt+?: Show this help',
       'Escape: Close modals/dropdowns',
       'Tab: Next element',
-      'Shift+Tab: Previous element'
+      'Shift+Tab: Previous element',
     ]
 
     const message = 'Keyboard shortcuts available:\n' + shortcuts.join('\n')
-    
+
     // In a real app, this would show a proper modal
     alert(message)
     announceToScreenReader('Keyboard shortcuts displayed')
@@ -264,23 +283,26 @@ export function useKeyboardNavigation(options = {}) {
   /**
    * Handle keyboard events
    */
-  const handleKeyDown = useCallback((event) => {
-    // Handle global shortcuts first
-    handleGlobalShortcuts(event)
-    
-    // Then handle navigation
-    if (!event.defaultPrevented) {
-      handleArrowNavigation(event)
-      handleEscapeKey(event)
-    }
-  }, [handleGlobalShortcuts, handleArrowNavigation, handleEscapeKey])
+  const handleKeyDown = useCallback(
+    event => {
+      // Handle global shortcuts first
+      handleGlobalShortcuts(event)
+
+      // Then handle navigation
+      if (!event.defaultPrevented) {
+        handleArrowNavigation(event)
+        handleEscapeKey(event)
+      }
+    },
+    [handleGlobalShortcuts, handleArrowNavigation, handleEscapeKey]
+  )
 
   /**
    * Setup keyboard event listeners
    */
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
-    
+
     // Update focusable elements when DOM changes
     const observer = new MutationObserver(updateFocusableElements)
     if (containerRef?.current) {
@@ -288,7 +310,7 @@ export function useKeyboardNavigation(options = {}) {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['disabled', 'tabindex', 'aria-hidden']
+        attributeFilter: ['disabled', 'tabindex', 'aria-hidden'],
       })
     }
 
@@ -329,7 +351,7 @@ export function useKeyboardNavigation(options = {}) {
     /**
      * Focus element by index
      */
-    focusIndex: (index) => {
+    focusIndex: index => {
       if (index >= 0 && index < focusableElements.current.length) {
         focusableElements.current[index].focus()
         currentFocusIndex.current = index
@@ -346,7 +368,7 @@ export function useKeyboardNavigation(options = {}) {
     /**
      * Get focusable elements count
      */
-    getCount: () => focusableElements.current.length
+    getCount: () => focusableElements.current.length,
   }
 
   return {
@@ -356,7 +378,7 @@ export function useKeyboardNavigation(options = {}) {
     focusSearch,
     focusNavigation,
     focusMainContent,
-    showKeyboardShortcuts
+    showKeyboardShortcuts,
   }
 }
 
@@ -376,43 +398,44 @@ export function useFocusTrap(isActive = false, containerRef = null) {
       'select:not([disabled])',
       'textarea:not([disabled])',
       'a[href]',
-      '[tabindex]:not([tabindex="-1"])'
+      '[tabindex]:not([tabindex="-1"])',
     ].join(', ')
 
-    focusableElements.current = Array.from(
-      containerRef.current.querySelectorAll(selectors)
-    ).filter(element => {
-      const style = window.getComputedStyle(element)
-      return style.display !== 'none' && 
-             style.visibility !== 'hidden' &&
-             element.offsetWidth > 0
-    })
+    focusableElements.current = Array.from(containerRef.current.querySelectorAll(selectors)).filter(
+      element => {
+        const style = window.getComputedStyle(element)
+        return style.display !== 'none' && style.visibility !== 'hidden' && element.offsetWidth > 0
+      }
+    )
   }, [containerRef])
 
-  const handleKeyDown = useCallback((event) => {
-    if (!isActive || event.key !== 'Tab') return
+  const handleKeyDown = useCallback(
+    event => {
+      if (!isActive || event.key !== 'Tab') return
 
-    const firstElement = focusableElements.current[0]
-    const lastElement = focusableElements.current[focusableElements.current.length - 1]
+      const firstElement = focusableElements.current[0]
+      const lastElement = focusableElements.current[focusableElements.current.length - 1]
 
-    if (event.shiftKey) {
-      if (document.activeElement === firstElement) {
-        event.preventDefault()
-        lastElement?.focus()
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          event.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          event.preventDefault()
+          firstElement?.focus()
+        }
       }
-    } else {
-      if (document.activeElement === lastElement) {
-        event.preventDefault()
-        firstElement?.focus()
-      }
-    }
-  }, [isActive])
+    },
+    [isActive]
+  )
 
   useEffect(() => {
     if (isActive) {
       previouslyFocusedElement.current = document.activeElement
       updateFocusableElements()
-      
+
       // Focus first element
       if (focusableElements.current.length > 0) {
         focusableElements.current[0].focus()

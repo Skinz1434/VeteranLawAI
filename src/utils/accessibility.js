@@ -2,10 +2,10 @@
  * @fileoverview Accessibility Utilities for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Comprehensive accessibility utilities ensuring WCAG 2.1 AA compliance
  * specifically designed for veteran users who may have disabilities.
- * 
+ *
  * Features:
  * - Screen reader optimization
  * - Keyboard navigation support
@@ -24,7 +24,7 @@
 const CONTRAST_RATIOS = {
   NORMAL_TEXT: 4.5,
   LARGE_TEXT: 3.0,
-  UI_COMPONENTS: 3.0
+  UI_COMPONENTS: 3.0,
 }
 
 /**
@@ -36,7 +36,7 @@ const VETERAN_ACCESSIBILITY_CONSIDERATIONS = {
   VISION: 'Vision impairments from combat injuries or aging',
   HEARING: 'Hearing loss from noise exposure during service',
   MOBILITY: 'Limited mobility from combat injuries or aging',
-  COGNITIVE: 'Cognitive processing differences from TBI or PTSD'
+  COGNITIVE: 'Cognitive processing differences from TBI or PTSD',
 }
 
 /**
@@ -47,17 +47,17 @@ const VETERAN_ACCESSIBILITY_CONSIDERATIONS = {
 export function getRelativeLuminance(color) {
   // Remove # if present
   color = color.replace('#', '')
-  
+
   // Convert to RGB
   const r = parseInt(color.substr(0, 2), 16) / 255
   const g = parseInt(color.substr(2, 2), 16) / 255
   const b = parseInt(color.substr(4, 2), 16) / 255
-  
+
   // Apply gamma correction
   const rs = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4)
   const gs = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4)
   const bs = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4)
-  
+
   return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
 }
 
@@ -70,10 +70,10 @@ export function getRelativeLuminance(color) {
 export function getContrastRatio(color1, color2) {
   const l1 = getRelativeLuminance(color1)
   const l2 = getRelativeLuminance(color2)
-  
+
   const lighter = Math.max(l1, l2)
   const darker = Math.min(l1, l2)
-  
+
   return (lighter + 0.05) / (darker + 0.05)
 }
 
@@ -86,18 +86,22 @@ export function getContrastRatio(color1, color2) {
  */
 export function checkColorCompliance(foreground, background, level = 'normal') {
   const ratio = getContrastRatio(foreground, background)
-  const requiredRatio = level === 'large' ? CONTRAST_RATIOS.LARGE_TEXT : 
-                       level === 'ui' ? CONTRAST_RATIOS.UI_COMPONENTS : 
-                       CONTRAST_RATIOS.NORMAL_TEXT
-  
+  const requiredRatio =
+    level === 'large'
+      ? CONTRAST_RATIOS.LARGE_TEXT
+      : level === 'ui'
+        ? CONTRAST_RATIOS.UI_COMPONENTS
+        : CONTRAST_RATIOS.NORMAL_TEXT
+
   return {
     ratio: Math.round(ratio * 100) / 100,
     required: requiredRatio,
     passes: ratio >= requiredRatio,
     level: ratio >= 7 ? 'AAA' : ratio >= requiredRatio ? 'AA' : 'Fail',
-    recommendation: ratio < requiredRatio ? 
-      `Increase contrast. Current: ${Math.round(ratio * 100) / 100}:1, Required: ${requiredRatio}:1` : 
-      'Contrast meets accessibility standards'
+    recommendation:
+      ratio < requiredRatio
+        ? `Increase contrast. Current: ${Math.round(ratio * 100) / 100}:1, Required: ${requiredRatio}:1`
+        : 'Contrast meets accessibility standards',
   }
 }
 
@@ -120,11 +124,11 @@ export function generateAriaAttributes(options = {}) {
     invalid,
     live = 'polite',
     atomic = false,
-    relevant = 'additions text'
+    relevant = 'additions text',
   } = options
-  
+
   const attrs = {}
-  
+
   if (role) attrs['role'] = role
   if (label) attrs['aria-label'] = label
   if (labelledby) attrs['aria-labelledby'] = labelledby
@@ -138,7 +142,7 @@ export function generateAriaAttributes(options = {}) {
   if (live) attrs['aria-live'] = live
   if (atomic) attrs['aria-atomic'] = atomic.toString()
   if (relevant) attrs['aria-relevant'] = relevant
-  
+
   return attrs
 }
 
@@ -151,7 +155,7 @@ export function createScreenReaderText(text) {
   return {
     children: text,
     className: 'sr-only',
-    'aria-hidden': false
+    'aria-hidden': false,
   }
 }
 
@@ -163,7 +167,7 @@ export class FocusManager {
     this.focusStack = []
     this.trapActive = false
   }
-  
+
   /**
    * Save current focus to stack
    */
@@ -173,7 +177,7 @@ export class FocusManager {
       this.focusStack.push(activeElement)
     }
   }
-  
+
   /**
    * Restore last saved focus
    */
@@ -186,22 +190,22 @@ export class FocusManager {
       }, 10)
     }
   }
-  
+
   /**
    * Trap focus within an element (for modals, etc.)
    * @param {HTMLElement} element - Container element
    */
   trapFocus(element) {
     if (!element) return
-    
+
     this.trapActive = true
     const focusableElements = this.getFocusableElements(element)
     const firstElement = focusableElements[0]
     const lastElement = focusableElements[focusableElements.length - 1]
-    
-    const handleKeyDown = (e) => {
+
+    const handleKeyDown = e => {
       if (e.key !== 'Tab') return
-      
+
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
           e.preventDefault()
@@ -214,20 +218,20 @@ export class FocusManager {
         }
       }
     }
-    
+
     element.addEventListener('keydown', handleKeyDown)
-    
+
     // Focus first element
     if (firstElement) {
       firstElement.focus()
     }
-    
+
     return () => {
       element.removeEventListener('keydown', handleKeyDown)
       this.trapActive = false
     }
   }
-  
+
   /**
    * Get all focusable elements within a container
    * @param {HTMLElement} container - Container element
@@ -241,13 +245,14 @@ export class FocusManager {
       'textarea:not([disabled])',
       'a[href]',
       '[tabindex]:not([tabindex="-1"])',
-      '[contenteditable="true"]'
+      '[contenteditable="true"]',
     ].join(',')
-    
-    return Array.from(container.querySelectorAll(focusableSelectors))
-      .filter(element => {
-        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
-      })
+
+    return Array.from(container.querySelectorAll(focusableSelectors)).filter(element => {
+      return (
+        element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+      )
+    })
   }
 }
 
@@ -261,39 +266,33 @@ export const KeyboardNavigation = {
    * @param {Object} options - Navigation options
    */
   handleArrowKeys(event, options = {}) {
-    const { 
-      currentIndex, 
-      itemCount, 
-      onNavigate, 
-      orientation = 'vertical',
-      wrap = true 
-    } = options
-    
+    const { currentIndex, itemCount, onNavigate, orientation = 'vertical', wrap = true } = options
+
     let newIndex = currentIndex
-    
+
     switch (event.key) {
       case 'ArrowUp':
         if (orientation === 'vertical') {
           event.preventDefault()
-          newIndex = currentIndex > 0 ? currentIndex - 1 : (wrap ? itemCount - 1 : 0)
+          newIndex = currentIndex > 0 ? currentIndex - 1 : wrap ? itemCount - 1 : 0
         }
         break
       case 'ArrowDown':
         if (orientation === 'vertical') {
           event.preventDefault()
-          newIndex = currentIndex < itemCount - 1 ? currentIndex + 1 : (wrap ? 0 : itemCount - 1)
+          newIndex = currentIndex < itemCount - 1 ? currentIndex + 1 : wrap ? 0 : itemCount - 1
         }
         break
       case 'ArrowLeft':
         if (orientation === 'horizontal') {
           event.preventDefault()
-          newIndex = currentIndex > 0 ? currentIndex - 1 : (wrap ? itemCount - 1 : 0)
+          newIndex = currentIndex > 0 ? currentIndex - 1 : wrap ? itemCount - 1 : 0
         }
         break
       case 'ArrowRight':
         if (orientation === 'horizontal') {
           event.preventDefault()
-          newIndex = currentIndex < itemCount - 1 ? currentIndex + 1 : (wrap ? 0 : itemCount - 1)
+          newIndex = currentIndex < itemCount - 1 ? currentIndex + 1 : wrap ? 0 : itemCount - 1
         }
         break
       case 'Home':
@@ -305,25 +304,25 @@ export const KeyboardNavigation = {
         newIndex = itemCount - 1
         break
     }
-    
+
     if (newIndex !== currentIndex && onNavigate) {
       onNavigate(newIndex)
     }
   },
-  
+
   /**
    * Create keyboard event handler for buttons/interactive elements
    * @param {Function} onClick - Click handler
    * @returns {Function} Keyboard event handler
    */
   createKeyHandler(onClick) {
-    return (event) => {
+    return event => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault()
         onClick(event)
       }
     }
-  }
+  },
 }
 
 /**
@@ -337,9 +336,9 @@ export function announceToScreenReader(message, priority = 'polite') {
   announcement.setAttribute('aria-atomic', 'true')
   announcement.className = 'sr-only'
   announcement.textContent = message
-  
+
   document.body.appendChild(announcement)
-  
+
   // Clean up after announcement
   setTimeout(() => {
     document.body.removeChild(announcement)
@@ -354,32 +353,32 @@ export function announceToScreenReader(message, priority = 'polite') {
 export function validateFormAccessibility(form) {
   const issues = []
   const inputs = form.querySelectorAll('input, select, textarea')
-  
+
   inputs.forEach((input, index) => {
     // Check for labels
     const hasLabel = input.id && form.querySelector(`label[for="${input.id}"]`)
     const hasAriaLabel = input.getAttribute('aria-label')
     const hasAriaLabelledby = input.getAttribute('aria-labelledby')
-    
+
     if (!hasLabel && !hasAriaLabel && !hasAriaLabelledby) {
       issues.push({
         element: input,
         issue: 'Missing label',
         suggestion: 'Add a label element or aria-label attribute',
-        severity: 'error'
+        severity: 'error',
       })
     }
-    
+
     // Check required fields
     if (input.required && !input.getAttribute('aria-required')) {
       issues.push({
         element: input,
         issue: 'Missing aria-required on required field',
         suggestion: 'Add aria-required="true" to required fields',
-        severity: 'warning'
+        severity: 'warning',
       })
     }
-    
+
     // Check error states
     if (input.getAttribute('aria-invalid') === 'true') {
       const errorId = input.getAttribute('aria-describedby')
@@ -388,16 +387,16 @@ export function validateFormAccessibility(form) {
           element: input,
           issue: 'Invalid field without error description',
           suggestion: 'Link to error message with aria-describedby',
-          severity: 'error'
+          severity: 'error',
         })
       }
     }
   })
-  
+
   return {
     isAccessible: issues.filter(i => i.severity === 'error').length === 0,
     issues,
-    score: Math.round(((inputs.length - issues.length) / inputs.length) * 100)
+    score: Math.round(((inputs.length - issues.length) / inputs.length) * 100),
   }
 }
 
@@ -413,53 +412,53 @@ export function getVeteranAccessibilityRecommendations(userType = 'general') {
       'Provide consistent navigation patterns',
       'Include skip links for keyboard users',
       'Ensure 4.5:1 color contrast minimum',
-      'Allow users to pause auto-playing content'
+      'Allow users to pause auto-playing content',
     ],
     tbi: [
       'Reduce cognitive load with clear headings and sections',
       'Provide progress indicators for multi-step processes',
       'Allow extra time for form completion',
       'Use consistent layouts and navigation',
-      'Minimize distractions and animations'
+      'Minimize distractions and animations',
     ],
     ptsd: [
       'Avoid sudden audio or visual changes',
       'Provide clear warnings for potentially triggering content',
       'Allow users to control autoplay features',
       'Use calming color schemes',
-      'Provide easy exit options from stressful processes'
+      'Provide easy exit options from stressful processes',
     ],
     vision: [
       'Support screen readers with proper ARIA labels',
       'Ensure high contrast ratios (7:1 for AAA)',
       'Make all functionality available via keyboard',
       'Support browser zoom up to 200%',
-      'Use descriptive link text and headings'
+      'Use descriptive link text and headings',
     ],
     hearing: [
       'Provide captions for all video content',
       'Include visual indicators for audio alerts',
       'Offer text alternatives to audio instructions',
       'Use visual focus indicators',
-      'Provide transcripts for audio content'
+      'Provide transcripts for audio content',
     ],
     mobility: [
       'Ensure all interactive elements are keyboard accessible',
       'Make click targets at least 44px square',
       'Provide sufficient time for interactions',
       'Support voice control software',
-      'Avoid requiring precise mouse movements'
-    ]
+      'Avoid requiring precise mouse movements',
+    ],
   }
-  
+
   return {
     primary: recommendations[userType] || recommendations.general,
     additional: recommendations.general,
     resources: [
       'VA.gov Accessibility Guidelines',
       'Section 508 Compliance Resources',
-      'WCAG 2.1 AA Standards'
-    ]
+      'WCAG 2.1 AA Standards',
+    ],
   }
 }
 
@@ -473,7 +472,7 @@ export function createAccessibleLoading(loadingText = 'Loading content') {
     role: 'status',
     'aria-live': 'polite',
     'aria-label': loadingText,
-    'data-loading-text': loadingText
+    'data-loading-text': loadingText,
   }
 }
 
@@ -491,5 +490,5 @@ export const AccessibilityUtils = {
   createAccessibleLoading,
   KeyboardNavigation,
   focusManager,
-  VETERAN_ACCESSIBILITY_CONSIDERATIONS
+  VETERAN_ACCESSIBILITY_CONSIDERATIONS,
 }

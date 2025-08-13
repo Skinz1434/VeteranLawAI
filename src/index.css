@@ -8,16 +8,22 @@
     box-sizing: border-box;
   }
   
+  :root {
+    --font-sans: 'Sora', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+  
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     @apply bg-slate-950 text-slate-100 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+  h1 { @apply tracking-tight; }
+  h2 { @apply tracking-tight; }
+  h3 { @apply tracking-tight; }
 
 /* Respect prefers-reduced-motion to smooth out interactions for sensitive users */
 @media (prefers-reduced-motion: reduce) {
@@ -98,6 +104,10 @@
   .gradient-text-secondary {
     @apply bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-600 bg-clip-text text-transparent;
   }
+
+  /* Hero typography scale */
+  .display-hero { @apply text-5xl md:text-6xl lg:text-7xl font-bold; }
+  .display-subtitle { @apply text-xl md:text-2xl text-slate-300; }
   
   /* Premium button styles */
   .btn-premium {

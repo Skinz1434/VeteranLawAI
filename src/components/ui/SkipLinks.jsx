@@ -2,7 +2,7 @@
  * @fileoverview Skip Links Component for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Provides keyboard navigation skip links for accessibility compliance.
  * Essential for screen reader users and keyboard-only navigation.
  */
@@ -19,16 +19,16 @@ const SkipLinks = () => {
     { id: 'main-content', text: 'Skip to main content' },
     { id: 'navigation', text: 'Skip to navigation' },
     { id: 'search', text: 'Skip to search' },
-    { id: 'footer', text: 'Skip to footer' }
+    { id: 'footer', text: 'Skip to footer' },
   ]
 
-  const handleSkipClick = (targetId) => {
+  const handleSkipClick = targetId => {
     const targetElement = document.getElementById(targetId)
     if (targetElement) {
       targetElement.focus()
-      targetElement.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       })
     }
   }
@@ -39,15 +39,15 @@ const SkipLinks = () => {
         <motion.a
           key={link.id}
           href={`#${link.id}`}
-          onClick={(e) => {
+          onClick={e => {
             e.preventDefault()
             handleSkipClick(link.id)
           }}
-          onFocus={(e) => {
+          onFocus={e => {
             // Make visible when focused
             e.target.classList.remove('sr-only')
           }}
-          onBlur={(e) => {
+          onBlur={e => {
             // Hide when focus leaves
             e.target.classList.add('sr-only')
           }}
@@ -58,7 +58,7 @@ const SkipLinks = () => {
           {link.text}
         </motion.a>
       ))}
-      
+
       <style jsx>{`
         .sr-only {
           position: absolute !important;
@@ -71,7 +71,7 @@ const SkipLinks = () => {
           white-space: nowrap !important;
           border: 0 !important;
         }
-        
+
         .sr-only-focusable:focus,
         .sr-only-focusable:active,
         .sr-only-focusable:focus-within {
@@ -84,7 +84,7 @@ const SkipLinks = () => {
           clip: auto !important;
           white-space: normal !important;
         }
-        
+
         .focus\\:not-sr-only:focus {
           position: static !important;
           width: auto !important;

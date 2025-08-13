@@ -27,9 +27,7 @@ export default function Tooltip({ content, side = 'top', className = '', childre
       onFocus={() => setOpen(true)}
       onBlur={() => setOpen(false)}
     >
-      <div aria-describedby={open ? id : undefined}>
-        {children}
-      </div>
+      <div aria-describedby={open ? id : undefined}>{children}</div>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -51,5 +49,3 @@ export default function Tooltip({ content, side = 'top', className = '', childre
     </div>
   )
 }
-
-

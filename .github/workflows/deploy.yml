@@ -2,102 +2,184 @@ name: Deploy to Vercel
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
-  build-and-test:
+  # Test and Build Job
+  test-and-build:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
-    - name: Setup Node.js
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
+    
     - name: Install dependencies
       run: npm ci
-      
-    - name: Run build
+    
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Run type checking
+      run: npm run typecheck
+    
+    - name: Run tests
+      run: npm run test:coverage
+    
+    - name: Build application
       run: npm run build
-      
-    - name: Check build artifacts
-      run: |
-        ls -la dist/
-        echo "Build completed successfully"
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-files
+        path: dist/
+        retention-days: 1
 
-  deploy-preview:
-    needs: build-and-test
+  # Deploy to Vercel (only on main/master push)
+  deploy:
+    needs: test-and-build
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+    
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20.x'
         cache: 'npm'
-        
+    
     - name: Install dependencies
       run: npm ci
-      
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-files
+        path: dist/
+    
     - name: Install Vercel CLI
       run: npm install --global vercel@latest
-      
-    - name: Pull Vercel Environment Information
-      run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      
-    - name: Build Project Artifacts
-      run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      
-    - name: Deploy Project Artifacts to Vercel
-      run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+    
+    - name: Deploy to Vercel
+      run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    
+    - name: Comment PR with deployment info
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const deploymentUrl = process.env.VERCEL_URL || 'https://veteranlawai-platform.vercel.app';
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚀 **Deployment Successful!**
+          
+          Your changes have been deployed to Vercel.
+          
+          **Preview URL:** ${deploymentUrl}
+          **Status:** ✅ Live
+          
+          The deployment will be automatically updated on the main branch.`
+          });
 
-  deploy-production:
-    needs: build-and-test
+  # Security and Quality Checks
+  security:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+    
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20.x'
         cache: 'npm'
-        
+    
     - name: Install dependencies
       run: npm ci
-      
-    - name: Install Vercel CLI
-      run: npm install --global vercel@latest
-      
-    - name: Pull Vercel Environment Information
-      run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      
-    - name: Build Project Artifacts
-      run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      
-    - name: Deploy Project Artifacts to Vercel
-      run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-      
-    - name: Deployment Success Notification
+    
+    - name: Run security audit
+      run: npm audit --audit-level moderate
+    
+    - name: Check for known vulnerabilities
+      run: npm audit --audit-level high
+    
+    - name: Run ESLint security rules
+      run: npm run lint:security
+
+  # Performance and Accessibility Testing
+  performance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build application
+      run: npm run build
+    
+    - name: Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          http://localhost:4173/
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+        configPath: './.lighthouserc.json'
+    
+    - name: Check bundle size
       run: |
-        echo "🚀 VeteranLawAI Platform deployed successfully to production!"
-        echo "✅ All accessibility features active"
-        echo "🔒 Security headers configured"
-        echo "📊 Performance optimizations enabled"
+        npm install -g bundlesize
+        bundlesize
+
+  # Notifications
+  notify:
+    needs: [deploy, security, performance]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Notify on success
+      if: needs.deploy.result == 'success' && needs.security.result == 'success' && needs.performance.result == 'success'
+      run: |
+        echo "🎉 All checks passed! Deployment successful."
+        # Add notification logic here (Slack, Discord, email, etc.)
+    
+    - name: Notify on failure
+      if: needs.deploy.result == 'failure' || needs.security.result == 'failure' || needs.performance.result == 'failure'
+      run: |
+        echo "❌ Some checks failed. Please review the logs."
+        # Add notification logic here (Slack, Discord, email, etc.)

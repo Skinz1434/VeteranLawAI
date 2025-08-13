@@ -24,9 +24,17 @@ export function Tabs({ value, onValueChange, children, className = '' }: TabsPro
   )
 }
 
-export function TabsList({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+export function TabsList({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   return (
-    <div className={`flex bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-white/10 p-2 ${className}`}>
+    <div
+      className={`flex bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-white/10 p-2 ${className}`}
+    >
       {children}
     </div>
   )
@@ -41,7 +49,14 @@ type TabsTriggerProps = {
   gradient?: string
 }
 
-export function TabsTrigger({ value, children, icon: Icon, label, description, gradient = 'from-cyan-500 to-blue-600' }: TabsTriggerProps) {
+export function TabsTrigger({
+  value,
+  children,
+  icon: Icon,
+  label,
+  description,
+  gradient = 'from-cyan-500 to-blue-600',
+}: TabsTriggerProps) {
   const ctx = useContext(TabsContext)
   if (!ctx) throw new Error('TabsTrigger must be used within Tabs')
   const isActive = ctx.value === value
@@ -52,13 +67,19 @@ export function TabsTrigger({ value, children, icon: Icon, label, description, g
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={`flex-1 flex flex-col items-center space-y-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 group ${
-        isActive ? `bg-gradient-to-r ${gradient} text-white shadow-2xl shadow-cyan-500/20` : 'text-slate-300 hover:text-white hover:bg-white/5'
+        isActive
+          ? `bg-gradient-to-r ${gradient} text-white shadow-2xl shadow-cyan-500/20`
+          : 'text-slate-300 hover:text-white hover:bg-white/5'
       }`}
     >
       {Icon ? (
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-          isActive ? 'bg-white/20 shadow-lg' : `bg-gradient-to-br ${gradient} opacity-60 group-hover:opacity-100`
-        }`}>
+        <div
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+            isActive
+              ? 'bg-white/20 shadow-lg'
+              : `bg-gradient-to-br ${gradient} opacity-60 group-hover:opacity-100`
+          }`}
+        >
           <Icon className="h-6 w-6" />
         </div>
       ) : null}
@@ -71,7 +92,15 @@ export function TabsTrigger({ value, children, icon: Icon, label, description, g
   )
 }
 
-export function TabsContent({ value, children, className = '' }: { value: string; children: React.ReactNode; className?: string }) {
+export function TabsContent({
+  value,
+  children,
+  className = '',
+}: {
+  value: string
+  children: React.ReactNode
+  className?: string
+}) {
   const ctx = useContext(TabsContext)
   if (!ctx) throw new Error('TabsContent must be used within Tabs')
   const isActive = ctx.value === value
@@ -85,5 +114,3 @@ export default {
   TabsTrigger,
   TabsContent,
 }
-
-
