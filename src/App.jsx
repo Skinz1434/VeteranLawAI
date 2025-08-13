@@ -20,7 +20,7 @@ import { SimpleAuthProvider as AuthProvider, useAuth } from './contexts/SimpleAu
 // Components
 import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui'
 import WelcomeModal from './components/modals/WelcomeModal'
-import LoginModal from './components/modals/SimpleLoginModal'
+import LoginModal from './components/modals/QuickLoginModal'
 import Layout from './components/layout/Layout'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SkipLinks from './components/ui/SkipLinks'
@@ -78,7 +78,6 @@ function AppContent() {
           setShowLoginModal(false)
           setAutoDemo(false)
         }}
-        autoDemo={autoDemo}
       />
       <Routes>
         <Route
