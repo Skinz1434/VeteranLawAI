@@ -99,6 +99,57 @@ export const AuthProvider = ({ children }) => {
   const login = async () => {
     setLoading(true)
     try {
+      // Check if demo mode is enabled
+      const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+      
+      if (isDemoMode) {
+        // Create demo user
+        const demoUser = {
+          uid: 'demo-user-123',
+          email: 'demo@veteranlawai.com',
+          displayName: 'Demo Attorney',
+          photoURL: 'https://ui-avatars.com/api/?name=Demo+Attorney&background=0ea5e9&color=fff',
+        }
+        
+        const demoProfile = {
+          uid: 'demo-user-123',
+          email: 'demo@veteranlawai.com',
+          displayName: 'Demo Attorney',
+          photoURL: 'https://ui-avatars.com/api/?name=Demo+Attorney&background=0ea5e9&color=fff',
+          role: 'attorney',
+          plan: 'enterprise',
+          firm: 'Demo Law Firm',
+          barNumber: 'DEMO123456',
+          specialties: ['VA Disability Claims', 'Veterans Law'],
+          joinedDate: new Date().toISOString(),
+          lastSignIn: new Date().toISOString(),
+          casesHandled: 247,
+          successRate: 94.2,
+          totalAwarded: 4200000,
+          preferences: {
+            theme: 'dark',
+            notifications: true,
+            autoSave: true,
+          },
+          googleDrive: {
+            connected: false,
+            folderId: null,
+            permissions: ['read', 'write'],
+          },
+        }
+        
+        // Set demo user
+        setTimeout(() => {
+          setUser(demoUser)
+          setUserProfile(demoProfile)
+          setIsAuthenticated(true)
+          setLoading(false)
+        }, 1000) // Simulate loading
+        
+        return { success: true }
+      }
+      
+      // Normal Firebase login
       const result = await signInWithGoogle()
       if (result.success) {
         // Auth state change will be handled by the listener above
@@ -116,8 +167,18 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true)
     try {
-      await signOutUser()
-      // Auth state change will be handled by the listener above
+      const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+      
+      if (isDemoMode) {
+        // Demo logout
+        setUser(null)
+        setUserProfile(null)
+        setIsAuthenticated(false)
+      } else {
+        // Firebase logout
+        await signOutUser()
+        // Auth state change will be handled by the listener above
+      }
     } catch (error) {
       console.error('Logout error:', error)
     } finally {

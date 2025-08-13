@@ -78,6 +78,8 @@ const LoginModal = ({ isOpen, onClose, autoDemo = false }) => {
     },
   ]
 
+  const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" className="max-w-4xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -94,6 +96,13 @@ const LoginModal = ({ isOpen, onClose, autoDemo = false }) => {
             <p className="text-slate-400 text-lg">
               The professional AI platform for VA disability claims attorneys
             </p>
+            {isDemoMode && (
+              <div className="mt-3 px-3 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+                <p className="text-yellow-400 text-sm font-medium">
+                  🎮 Demo Mode Active - No Firebase configuration required
+                </p>
+              </div>
+            )}
           </div>
 
           {error && (
