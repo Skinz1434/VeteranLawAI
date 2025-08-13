@@ -48,6 +48,30 @@ Professional AI-powered legal platform for VA disability claims attorneys. Built
 
 ## 🚀 Quick Start
 
+### Firebase Setup
+
+1. **Create a Firebase Project**
+   - Go to [Firebase Console](https://console.firebase.google.com)
+   - Create a new project or select existing
+   - Enable Authentication and select Google as a sign-in provider
+   - Enable Firestore Database
+   - Enable Storage
+
+2. **Configure Environment Variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.local.example .env.local
+   
+   # Add your Firebase configuration to .env.local
+   ```
+
+3. **Get Firebase Configuration**
+   - In Firebase Console, go to Project Settings
+   - Scroll to "Your apps" and click on the web app
+   - Copy the configuration values to your `.env.local` file
+
+### Local Development
+
 ### 1. Clone the Repository
 
 ```bash
