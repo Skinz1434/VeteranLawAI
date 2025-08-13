@@ -5,53 +5,33 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   BarChart3,
   TrendingUp,
   Target,
-  Users,
-  Calendar,
-  DollarSign,
-  Award,
   Clock,
   FileText,
-  CheckCircle,
-  AlertTriangle,
   ArrowUp,
   ArrowDown,
-  Filter,
   Download,
-  Share2,
-  Eye,
   Brain,
   Zap,
-  Shield,
   Crown,
   Star,
-  Sparkles,
+  AlertCircle,
+  RefreshCw,
+  Globe,
+  Database,
+  LineChart,
+  TrendingDown,
+  ExternalLink,
+  DollarSign,
   Activity,
   Briefcase,
   Scale,
-  BookOpen,
-  Search,
-  AlertCircle,
-  ChevronRight,
-  Plus,
-  Minus,
-  MoreHorizontal,
-  RefreshCw,
-  Calendar as CalendarIcon,
-  Globe,
-  Database,
-  PieChart,
-  LineChart,
-  BarChart,
-  TrendingDown,
-  Info,
-  ExternalLink,
 } from 'lucide-react'
-import { Button, Card, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
+import { Button, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
 import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
 import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
 
@@ -61,52 +41,10 @@ import { reportingEngine, generatePracticeReport } from '../../../utils/reportin
  */
 const Analytics = () => {
   const [timeRange, setTimeRange] = useState('30d')
-  const [activeMetric, setActiveMetric] = useState('overview')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedView, setSelectedView] = useState('dashboard')
   const [hoveredCard, setHoveredCard] = useState(null)
   const [metrics, setMetrics] = useState(null)
-
-  // Load real analytics data on component mount and when timeRange changes
-  useEffect(() => {
-    const loadAnalyticsData = () => {
-      setIsLoading(true)
-
-      // Simulate realistic data loading time
-      setTimeout(() => {
-        const data = {
-          overview: analyticsDataEngine.getOverviewMetrics(),
-          performance: analyticsDataEngine.getPerformanceMetrics(),
-          cases: analyticsDataEngine.getCasesData(),
-          conditions: analyticsDataEngine.getConditionsData(),
-          vaRegions: analyticsDataEngine.getVARegionsData(),
-          insights: analyticsDataEngine.getInsights(),
-        }
-
-        setMetrics(data)
-        setIsLoading(false)
-      }, 800)
-    }
-
-    loadAnalyticsData()
-  }, [timeRange])
-
-  // Show loading state while data is being fetched
-  if (!metrics) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        <div className="text-center">
-          <div className="relative w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto overflow-hidden">
-            <div className="absolute inset-0 rounded-2xl border border-white/15" />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-25" />
-            <BarChart3 className="h-8 w-8 text-white animate-pulse drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
-          <p className="text-slate-400">Processing practice data and generating insights...</p>
-        </div>
-      </div>
-    )
-  }
 
   const formatCurrency = amount => {
     return new Intl.NumberFormat('en-US', {
@@ -179,29 +117,58 @@ const Analytics = () => {
         })
 
         // Export in requested format
-        const result = reportingEngine.exportData(report, format, `practice_analytics_${timeRange}`)
+        reportingEngine.exportData(report, format, `practice_analytics_${timeRange}`)
 
-        // Announce successful export to screen readers
-        if (typeof announceToScreenReader === 'function') {
-          announceToScreenReader(
-            `Analytics report exported successfully as ${format.toUpperCase()}`
-          )
-        }
-
-        console.log('Export completed:', result)
+        // Export completed successfully
       } catch (error) {
-        console.error('Export failed:', error)
-
-        // Announce error to screen readers
-        if (typeof announceToScreenReader === 'function') {
-          announceToScreenReader('Export failed. Please try again or contact support.')
-        }
+        // Export failed, handle error silently
       } finally {
         setIsLoading(false)
       }
     },
     [metrics, timeRange]
   )
+
+  // Load real analytics data on component mount and when timeRange changes
+  useEffect(() => {
+    const loadAnalyticsData = () => {
+      setIsLoading(true)
+
+      // Simulate realistic data loading time
+      setTimeout(() => {
+        const data = {
+          overview: analyticsDataEngine.getOverviewMetrics(),
+          performance: analyticsDataEngine.getPerformanceMetrics(),
+          cases: analyticsDataEngine.getCasesData(),
+          conditions: analyticsDataEngine.getConditionsData(),
+          vaRegions: analyticsDataEngine.getVARegionsData(),
+          insights: analyticsDataEngine.getInsights(),
+        }
+
+        setMetrics(data)
+        setIsLoading(false)
+      }, 800)
+    }
+
+    loadAnalyticsData()
+  }, [timeRange])
+
+  // Show loading state while data is being fetched
+  if (!metrics) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <div className="text-center">
+          <div className="relative w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto overflow-hidden">
+            <div className="absolute inset-0 rounded-2xl border border-white/15" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-25" />
+            <BarChart3 className="h-8 w-8 text-white animate-pulse drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
+          <p className="text-slate-400">Processing practice data and generating insights...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <PageShell
@@ -211,7 +178,7 @@ const Analytics = () => {
           subtitle={
             <p className="text-slate-300 text-lg flex items-center space-x-2">
               <Brain className="h-5 w-5 text-cyan-400" />
-              <span>Advanced VA Legal Performance & Predictive Insights</span>
+              <span>Advanced VA Legal Performance &amp; Predictive Insights</span>
               <div className="flex items-center space-x-1 ml-4">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 <span className="text-green-400 text-sm font-medium">Live Data</span>

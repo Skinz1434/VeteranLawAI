@@ -9,12 +9,10 @@ import {
   Search,
   BarChart3,
   User,
-  LogOut,
-  Settings,
   ChevronRight,
   Activity,
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 // Contexts
 import AuthProvider, { useAuth } from './contexts/AuthContext'
@@ -39,7 +37,7 @@ const CaseResearch = lazy(() => import('./components/tools/CaseResearch'))
 const Analytics = lazy(() => import('./components/tools/Analytics'))
 
 // Accessibility utilities
-import { announceToScreenReader, focusManager } from './utils/accessibility'
+// import { announceToScreenReader } from './utils/accessibility'
 
 function App() {
   return (
@@ -54,7 +52,7 @@ function App() {
 }
 
 function AppContent() {
-  const { user, userProfile, isAuthenticated, logout, loading } = useAuth()
+  const { user, isAuthenticated, loading } = useAuth()
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [autoDemo, setAutoDemo] = useState(false)
@@ -400,7 +398,6 @@ function LandingPage({ onLogin, onDemo }) {
 
 function Dashboard() {
   const { user, userProfile, logout } = useAuth()
-  const [showUserMenu, setShowUserMenu] = useState(false)
   const [hoveredTool, setHoveredTool] = useState(null)
 
   const tools = [
@@ -522,7 +519,7 @@ function Dashboard() {
             </div>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Your AI-powered command center for VA disability claims is ready.
-              <span className="text-cyan-400 font-medium">Here's what's happening today.</span>
+              <span className="text-cyan-400 font-medium">Here&apos;s what&apos;s happening today.</span>
             </p>
 
             {/* Floating stats pills */}
@@ -822,35 +819,7 @@ function Dashboard() {
   )
 }
 
-function ToolPage({ title }) {
-  return (
-    <PageShell
-      header={
-        <SectionHeader
-          title={title}
-          subtitle={
-            <span className="text-slate-300">
-              This enhanced tool is ready for professional use with advanced AI capabilities.
-            </span>
-          }
-          icon={FileText}
-          gradient="from-cyan-500 via-blue-500 to-purple-600"
-        />
-      }
-    >
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-700/50 text-center">
-          <div className="flex gap-4 justify-center">
-            <Link to="/" className="focus-ring">
-              <Button variant="outline">← Back to Dashboard</Button>
-            </Link>
-            <Button>Launch Tool</Button>
-          </div>
-        </div>
-      </div>
-    </PageShell>
-  )
-}
+// ToolPage component removed - no longer used
 
 function HealthPage() {
   return (
