@@ -12,14 +12,15 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
       subtitle: `Hello ${userName}! Ready to revolutionize your VA legal practice?`,
       content: (
         <div className="text-center">
-          <IconTile 
-            icon={Scale} 
-            gradient="from-cyan-500 to-blue-600" 
-            size="xl" 
+          <IconTile
+            icon={Scale}
+            gradient="from-cyan-500 to-blue-600"
+            size="xl"
             className="mx-auto mb-6"
           />
           <p className="text-slate-300 text-lg mb-6">
-            You now have access to the most advanced AI-powered legal platform designed specifically for VA disability claims attorneys.
+            You now have access to the most advanced AI-powered legal platform designed specifically
+            for VA disability claims attorneys.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-slate-700/30 rounded-xl p-4">
@@ -39,7 +40,7 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
       title: 'Powerful AI Tools',
@@ -47,12 +48,36 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
       content: (
         <div className="space-y-4">
           {[
-            { icon: '📷', title: 'Camera OCR', desc: 'Digitize VA forms and medical records instantly with 99% accuracy' },
-            { icon: '📚', title: 'Legal Knowledge Base', desc: '14,500+ VA regulations, procedures, and case precedents at your fingertips' },
-            { icon: '📝', title: 'Claim Guidance', desc: 'AI-powered step-by-step assistance for complex disability claims' },
-            { icon: '🎙️', title: 'Audio Transcription', desc: 'Professional transcription optimized for legal terminology' },
-            { icon: '🔍', title: 'Case Research', desc: 'Find relevant precedents in seconds with AI-powered search' },
-            { icon: '📊', title: 'Analytics Dashboard', desc: 'Track success rates and performance metrics in real-time' }
+            {
+              icon: '📷',
+              title: 'Camera OCR',
+              desc: 'Digitize VA forms and medical records instantly with 99% accuracy',
+            },
+            {
+              icon: '📚',
+              title: 'Legal Knowledge Base',
+              desc: '14,500+ VA regulations, procedures, and case precedents at your fingertips',
+            },
+            {
+              icon: '📝',
+              title: 'Claim Guidance',
+              desc: 'AI-powered step-by-step assistance for complex disability claims',
+            },
+            {
+              icon: '🎙️',
+              title: 'Audio Transcription',
+              desc: 'Professional transcription optimized for legal terminology',
+            },
+            {
+              icon: '🔍',
+              title: 'Case Research',
+              desc: 'Find relevant precedents in seconds with AI-powered search',
+            },
+            {
+              icon: '📊',
+              title: 'Analytics Dashboard',
+              desc: 'Track success rates and performance metrics in real-time',
+            },
           ].map((tool, index) => (
             <motion.div
               key={tool.title}
@@ -70,7 +95,7 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
             </motion.div>
           ))}
         </div>
-      )
+      ),
     },
     {
       title: 'Getting Started',
@@ -84,7 +109,7 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
                 'Upload your first VA form using Camera OCR',
                 'Search the Legal Knowledge Base',
                 'Try the Claim Guidance wizard',
-                'Explore the Analytics dashboard'
+                'Explore the Analytics dashboard',
               ].map((item, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <div className="w-6 h-6 bg-cyan-500/20 border border-cyan-500/30 rounded-full flex items-center justify-center">
@@ -111,8 +136,8 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
             <p className="text-cyan-400 text-sm">support@veteranlawai.com | 1-800-VET-LAWS</p>
           </div>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   const handleNext = () => {
@@ -150,7 +175,9 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-slate-400">Step {currentStep + 1} of {steps.length}</span>
+            <span className="text-sm text-slate-400">
+              Step {currentStep + 1} of {steps.length}
+            </span>
             <button
               onClick={handleSkip}
               className="text-sm text-slate-400 hover:text-slate-300 transition-colors"
@@ -159,7 +186,7 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
             </button>
           </div>
           <div className="w-full bg-slate-700 rounded-full h-2">
-            <div 
+            <div
               className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
@@ -197,10 +224,10 @@ const WelcomeModal = ({ isOpen, onClose, userName = 'User' }) => {
               <div
                 key={index}
                 className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentStep 
-                    ? 'bg-cyan-500' 
-                    : index < currentStep 
-                      ? 'bg-green-400' 
+                  index === currentStep
+                    ? 'bg-cyan-500'
+                    : index < currentStep
+                      ? 'bg-green-400'
                       : 'bg-slate-600'
                 }`}
               />

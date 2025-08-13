@@ -2,7 +2,7 @@
  * @fileoverview VA Form Generation Utility
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Generates populated VA forms based on claim data
  */
 
@@ -21,26 +21,34 @@ export class VAFormGenerator {
           'disabilityInformation',
           'treatmentHistory',
           'employment',
-          'directDeposit'
+          'directDeposit',
         ],
         requiredFields: [
-          'ssn', 'firstName', 'lastName', 'dateOfBirth',
-          'serviceNumber', 'branch', 'activeDutyStart', 'activeDutyEnd',
-          'conditions', 'currentAddress', 'phoneNumber'
-        ]
+          'ssn',
+          'firstName',
+          'lastName',
+          'dateOfBirth',
+          'serviceNumber',
+          'branch',
+          'activeDutyStart',
+          'activeDutyEnd',
+          'conditions',
+          'currentAddress',
+          'phoneNumber',
+        ],
       },
       '21-4142': {
         name: 'Authorization to Release Medical Records',
-        sections: [
-          'veteranInformation',
-          'medicalProviders',
-          'conditionsTreated',
-          'authorization'
-        ],
+        sections: ['veteranInformation', 'medicalProviders', 'conditionsTreated', 'authorization'],
         requiredFields: [
-          'ssn', 'firstName', 'lastName', 'dateOfBirth',
-          'providerName', 'providerAddress', 'treatmentDates'
-        ]
+          'ssn',
+          'firstName',
+          'lastName',
+          'dateOfBirth',
+          'providerName',
+          'providerAddress',
+          'treatmentDates',
+        ],
       },
       '21-0781': {
         name: 'Statement in Support of Claim for PTSD',
@@ -49,24 +57,22 @@ export class VAFormGenerator {
           'stressorInformation',
           'combatInformation',
           'unitInformation',
-          'treatmentInformation'
+          'treatmentInformation',
         ],
         requiredFields: [
-          'ssn', 'firstName', 'lastName',
-          'stressorDescription', 'stressorDate', 'stressorLocation'
-        ]
+          'ssn',
+          'firstName',
+          'lastName',
+          'stressorDescription',
+          'stressorDate',
+          'stressorLocation',
+        ],
       },
       '21-4138': {
         name: 'Statement in Support of Claim',
-        sections: [
-          'veteranInformation',
-          'statementDetails'
-        ],
-        requiredFields: [
-          'ssn', 'firstName', 'lastName',
-          'statement'
-        ]
-      }
+        sections: ['veteranInformation', 'statementDetails'],
+        requiredFields: ['ssn', 'firstName', 'lastName', 'statement'],
+      },
     }
   }
 
@@ -86,7 +92,7 @@ export class VAFormGenerator {
       formType,
       formName: template.name,
       generatedDate: new Date().toISOString(),
-      sections: {}
+      sections: {},
     }
 
     // Generate each section
@@ -118,57 +124,61 @@ export class VAFormGenerator {
             street: claimData.veteran?.address?.street || '',
             city: claimData.veteran?.address?.city || '',
             state: claimData.veteran?.address?.state || '',
-            zipCode: claimData.veteran?.address?.zipCode || ''
+            zipCode: claimData.veteran?.address?.zipCode || '',
           },
           phoneNumber: claimData.veteran?.phoneNumber || '',
-          email: claimData.veteran?.email || ''
+          email: claimData.veteran?.email || '',
         }
 
       case 'militaryService':
         return {
           serviceNumber: claimData.military?.serviceNumber || '',
           branch: claimData.military?.branch || '',
-          activeDutyPeriods: claimData.military?.servicePeriods?.map(period => ({
-            startDate: period.startDate,
-            endDate: period.endDate,
-            serviceType: period.serviceType || 'Active Duty',
-            branch: period.branch || claimData.military?.branch
-          })) || [],
+          activeDutyPeriods:
+            claimData.military?.servicePeriods?.map(period => ({
+              startDate: period.startDate,
+              endDate: period.endDate,
+              serviceType: period.serviceType || 'Active Duty',
+              branch: period.branch || claimData.military?.branch,
+            })) || [],
           combatService: claimData.military?.combatService || false,
-          specialCircumstances: claimData.military?.specialCircumstances || []
+          specialCircumstances: claimData.military?.specialCircumstances || [],
         }
 
       case 'disabilityInformation':
         return {
-          claimedConditions: claimData.conditions?.map(condition => ({
-            name: condition.name,
-            diagnosticCode: condition.diagnosticCode,
-            dateDiagnosed: condition.dateDiagnosed || '',
-            treatedDuringService: condition.treatedDuringService || false,
-            currentlyBeingTreated: condition.currentlyBeingTreated || true,
-            medications: condition.medications || [],
-            functionalImpact: condition.functionalImpact || '',
-            serviceConnection: condition.serviceConnection || 'direct'
-          })) || [],
+          claimedConditions:
+            claimData.conditions?.map(condition => ({
+              name: condition.name,
+              diagnosticCode: condition.diagnosticCode,
+              dateDiagnosed: condition.dateDiagnosed || '',
+              treatedDuringService: condition.treatedDuringService || false,
+              currentlyBeingTreated: condition.currentlyBeingTreated || true,
+              medications: condition.medications || [],
+              functionalImpact: condition.functionalImpact || '',
+              serviceConnection: condition.serviceConnection || 'direct',
+            })) || [],
           secondaryConditions: claimData.secondaryConditions || [],
-          unemployability: claimData.unemployability || false
+          unemployability: claimData.unemployability || false,
         }
 
       case 'treatmentHistory':
         return {
-          vaFacilities: claimData.treatment?.vaFacilities?.map(facility => ({
-            name: facility.name,
-            location: facility.location,
-            treatmentDates: facility.treatmentDates,
-            conditionsTreated: facility.conditionsTreated
-          })) || [],
-          privateFacilities: claimData.treatment?.privateFacilities?.map(facility => ({
-            providerName: facility.providerName,
-            providerAddress: facility.providerAddress,
-            phoneNumber: facility.phoneNumber,
-            treatmentDates: facility.treatmentDates,
-            conditionsTreated: facility.conditionsTreated
-          })) || []
+          vaFacilities:
+            claimData.treatment?.vaFacilities?.map(facility => ({
+              name: facility.name,
+              location: facility.location,
+              treatmentDates: facility.treatmentDates,
+              conditionsTreated: facility.conditionsTreated,
+            })) || [],
+          privateFacilities:
+            claimData.treatment?.privateFacilities?.map(facility => ({
+              providerName: facility.providerName,
+              providerAddress: facility.providerAddress,
+              phoneNumber: facility.phoneNumber,
+              treatmentDates: facility.treatmentDates,
+              conditionsTreated: facility.conditionsTreated,
+            })) || [],
         }
 
       case 'employment':
@@ -178,19 +188,20 @@ export class VAFormGenerator {
           occupation: claimData.employment?.occupation || '',
           monthlyIncome: claimData.employment?.monthlyIncome || 0,
           missedWorkDays: claimData.employment?.missedWorkDays || 0,
-          accommodations: claimData.employment?.accommodations || []
+          accommodations: claimData.employment?.accommodations || [],
         }
 
       case 'stressorInformation':
         return {
-          stressors: claimData.stressors?.map(stressor => ({
-            description: stressor.description,
-            date: stressor.date,
-            location: stressor.location,
-            unit: stressor.unit,
-            witnesses: stressor.witnesses || [],
-            documentation: stressor.documentation || ''
-          })) || []
+          stressors:
+            claimData.stressors?.map(stressor => ({
+              description: stressor.description,
+              date: stressor.date,
+              location: stressor.location,
+              unit: stressor.unit,
+              witnesses: stressor.witnesses || [],
+              documentation: stressor.documentation || '',
+            })) || [],
         }
 
       default:
@@ -225,9 +236,9 @@ export class VAFormGenerator {
       missingFields,
       warnings,
       completeness: Math.round(
-        ((template.requiredFields.length - missingFields.length) / 
-         template.requiredFields.length) * 100
-      )
+        ((template.requiredFields.length - missingFields.length) / template.requiredFields.length) *
+          100
+      ),
     }
   }
 
@@ -251,16 +262,16 @@ export class VAFormGenerator {
    */
   generateStatement(claimData) {
     const { conditions, veteran, military } = claimData
-    
+
     let statement = `I, ${veteran.firstName} ${veteran.lastName}, hereby submit this statement in support of my claim for VA disability compensation.\n\n`
-    
+
     statement += `Military Service:\n`
     statement += `I served in the ${military.branch} from ${military.servicePeriods[0].startDate} to ${military.servicePeriods[0].endDate}.`
     if (military.combatService) {
       statement += ` During my service, I was deployed to a combat zone.`
     }
     statement += `\n\n`
-    
+
     statement += `Claimed Conditions:\n`
     conditions.forEach(condition => {
       statement += `\n${condition.name}:\n`
@@ -268,9 +279,9 @@ export class VAFormGenerator {
       statement += `${condition.description || ''} `
       statement += `This condition has significantly impacted my daily life and ability to work.\n`
     })
-    
+
     statement += `\nI certify that the statements made herein are true and correct to the best of my knowledge and belief.\n`
-    
+
     return statement
   }
 
@@ -281,13 +292,13 @@ export class VAFormGenerator {
     switch (format) {
       case 'json':
         return JSON.stringify(formData, null, 2)
-        
+
       case 'text':
         return this.formatAsText(formData)
-        
+
       case 'html':
         return this.formatAsHTML(formData)
-        
+
       default:
         throw new Error(`Unsupported export format: ${format}`)
     }
@@ -300,13 +311,13 @@ export class VAFormGenerator {
     let text = `VA Form ${formData.formType}: ${formData.formName}\n`
     text += `Generated: ${new Date(formData.generatedDate).toLocaleDateString()}\n`
     text += `${'='.repeat(50)}\n\n`
-    
+
     Object.entries(formData.sections).forEach(([sectionName, sectionData]) => {
       text += `${this.formatSectionName(sectionName)}:\n`
       text += `${'-'.repeat(30)}\n`
       text += this.formatSectionData(sectionData) + '\n\n'
     })
-    
+
     return text
   }
 
@@ -320,7 +331,7 @@ export class VAFormGenerator {
         <p>Generated: ${new Date(formData.generatedDate).toLocaleDateString()}</p>
         <hr>
     `
-    
+
     Object.entries(formData.sections).forEach(([sectionName, sectionData]) => {
       html += `
         <section class="form-section">
@@ -329,9 +340,9 @@ export class VAFormGenerator {
         </section>
       `
     })
-    
+
     html += `</div>`
-    
+
     return html
   }
 
@@ -350,10 +361,10 @@ export class VAFormGenerator {
    */
   formatSectionData(data, indent = '') {
     let text = ''
-    
+
     Object.entries(data).forEach(([key, value]) => {
       const formattedKey = this.formatSectionName(key)
-      
+
       if (Array.isArray(value)) {
         text += `${indent}${formattedKey}:\n`
         value.forEach((item, index) => {
@@ -366,7 +377,7 @@ export class VAFormGenerator {
         text += `${indent}${formattedKey}: ${value || 'Not provided'}\n`
       }
     })
-    
+
     return text
   }
 
@@ -375,11 +386,11 @@ export class VAFormGenerator {
    */
   formatSectionDataHTML(data) {
     let html = '<dl class="form-data">'
-    
+
     Object.entries(data).forEach(([key, value]) => {
       const formattedKey = this.formatSectionName(key)
       html += `<dt>${formattedKey}</dt>`
-      
+
       if (Array.isArray(value)) {
         html += '<dd><ul>'
         value.forEach(item => {
@@ -392,7 +403,7 @@ export class VAFormGenerator {
         html += `<dd>${value || '<em>Not provided</em>'}</dd>`
       }
     })
-    
+
     html += '</dl>'
     return html
   }
@@ -402,7 +413,7 @@ export class VAFormGenerator {
    */
   generateDBQRecommendations(conditions) {
     const recommendations = []
-    
+
     conditions.forEach(condition => {
       const dbq = this.getDBQForCondition(condition)
       if (dbq) {
@@ -411,11 +422,11 @@ export class VAFormGenerator {
           dbqName: dbq.name,
           dbqNumber: dbq.number,
           requiredExams: dbq.requiredExams,
-          keyQuestions: dbq.keyQuestions
+          keyQuestions: dbq.keyQuestions,
         })
       }
     })
-    
+
     return recommendations
   }
 
@@ -424,39 +435,39 @@ export class VAFormGenerator {
    */
   getDBQForCondition(condition) {
     const dbqMap = {
-      'ptsd': {
+      ptsd: {
         name: 'PTSD DBQ',
         number: 'VA Form 21-0960P-3',
         requiredExams: ['Mental health evaluation'],
         keyQuestions: [
           'Frequency and severity of symptoms',
           'Impact on occupational functioning',
-          'Impact on social functioning'
-        ]
+          'Impact on social functioning',
+        ],
       },
-      'back_pain': {
+      back_pain: {
         name: 'Back (Thoracolumbar Spine) DBQ',
         number: 'VA Form 21-0960M-14',
         requiredExams: ['Range of motion testing', 'Neurological exam'],
         keyQuestions: [
           'Range of motion measurements',
           'Pain on motion',
-          'Additional limitation after repetitive use'
-        ]
+          'Additional limitation after repetitive use',
+        ],
       },
-      'hearing_loss': {
+      hearing_loss: {
         name: 'Hearing Loss and Tinnitus DBQ',
         number: 'VA Form 21-0960N-1',
         requiredExams: ['Audiometric testing', 'Maryland CNC test'],
         keyQuestions: [
           'Pure tone thresholds',
           'Speech discrimination scores',
-          'Impact on daily communication'
-        ]
-      }
+          'Impact on daily communication',
+        ],
+      },
       // Add more DBQ mappings as needed
     }
-    
+
     return dbqMap[condition.id]
   }
 }

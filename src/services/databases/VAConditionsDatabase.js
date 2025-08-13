@@ -2,7 +2,7 @@
  * @fileoverview Comprehensive VA Disability Conditions Database
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * This database contains real VA disability conditions with accurate rating schedules,
  * diagnostic codes, success rates, and evidence requirements based on VA regulations.
  */
@@ -17,7 +17,7 @@ export class VAConditionsDatabase {
   initializeConditions() {
     return {
       // Mental Health Conditions
-      'ptsd': {
+      ptsd: {
         id: 'ptsd',
         name: 'Post-Traumatic Stress Disorder (PTSD)',
         category: 'Mental Health',
@@ -29,14 +29,14 @@ export class VAConditionsDatabase {
           'Negative changes in thoughts and mood',
           'Changes in physical and emotional reactions',
           'Hypervigilance',
-          'Sleep disturbances'
+          'Sleep disturbances',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'stressor_statement',
           'nexus_opinion',
           'buddy_statements',
-          'treatment_records'
+          'treatment_records',
         ],
         successRate: 0.71,
         averageRating: 50,
@@ -44,10 +44,10 @@ export class VAConditionsDatabase {
         specialConsiderations: [
           'Combat veterans have presumptive stressor verification',
           'MST (Military Sexual Trauma) cases have special evidence rules',
-          'Personal assault cases may use alternative evidence sources'
-        ]
+          'Personal assault cases may use alternative evidence sources',
+        ],
       },
-      'major_depression': {
+      major_depression: {
         id: 'major_depression',
         name: 'Major Depressive Disorder',
         category: 'Mental Health',
@@ -61,19 +61,19 @@ export class VAConditionsDatabase {
           'Fatigue or loss of energy',
           'Feelings of worthlessness',
           'Difficulty concentrating',
-          'Recurrent thoughts of death'
+          'Recurrent thoughts of death',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'treatment_records',
           'nexus_opinion',
-          'functional_impact_statement'
+          'functional_impact_statement',
         ],
         successRate: 0.68,
         averageRating: 50,
-        processingTimeDays: 120
+        processingTimeDays: 120,
       },
-      'anxiety': {
+      anxiety: {
         id: 'anxiety',
         name: 'Generalized Anxiety Disorder',
         category: 'Mental Health',
@@ -86,20 +86,16 @@ export class VAConditionsDatabase {
           'Difficulty concentrating',
           'Irritability',
           'Muscle tension',
-          'Sleep disturbance'
+          'Sleep disturbance',
         ],
-        requiredEvidence: [
-          'current_diagnosis',
-          'treatment_records',
-          'nexus_opinion'
-        ],
+        requiredEvidence: ['current_diagnosis', 'treatment_records', 'nexus_opinion'],
         successRate: 0.65,
         averageRating: 30,
-        processingTimeDays: 115
+        processingTimeDays: 115,
       },
 
       // Musculoskeletal Conditions
-      'back_pain': {
+      back_pain: {
         id: 'back_pain',
         name: 'Lumbar Spine Condition',
         category: 'Musculoskeletal',
@@ -110,14 +106,14 @@ export class VAConditionsDatabase {
           'Limited range of motion',
           'Muscle spasms',
           'Radiating pain (sciatica)',
-          'Numbness or tingling'
+          'Numbness or tingling',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'xray_mri_results',
           'range_of_motion_testing',
           'service_treatment_records',
-          'nexus_opinion'
+          'nexus_opinion',
         ],
         successRate: 0.62,
         averageRating: 20,
@@ -125,10 +121,10 @@ export class VAConditionsDatabase {
         specialConsiderations: [
           'Rating based on range of motion measurements',
           'Additional ratings for neurological symptoms',
-          'Incapacitating episodes can increase rating'
-        ]
+          'Incapacitating episodes can increase rating',
+        ],
       },
-      'knee_condition': {
+      knee_condition: {
         id: 'knee_condition',
         name: 'Knee Condition',
         category: 'Musculoskeletal',
@@ -139,19 +135,19 @@ export class VAConditionsDatabase {
           'Swelling',
           'Instability',
           'Limited range of motion',
-          'Clicking or popping'
+          'Clicking or popping',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'xray_mri_results',
           'range_of_motion_testing',
-          'stability_testing'
+          'stability_testing',
         ],
         successRate: 0.64,
         averageRating: 10,
-        processingTimeDays: 105
+        processingTimeDays: 105,
       },
-      'shoulder_condition': {
+      shoulder_condition: {
         id: 'shoulder_condition',
         name: 'Shoulder Condition',
         category: 'Musculoskeletal',
@@ -162,20 +158,16 @@ export class VAConditionsDatabase {
           'Limited range of motion',
           'Weakness',
           'Instability',
-          'Difficulty with overhead activities'
+          'Difficulty with overhead activities',
         ],
-        requiredEvidence: [
-          'current_diagnosis',
-          'xray_mri_results',
-          'range_of_motion_testing'
-        ],
+        requiredEvidence: ['current_diagnosis', 'xray_mri_results', 'range_of_motion_testing'],
         successRate: 0.61,
         averageRating: 20,
-        processingTimeDays: 108
+        processingTimeDays: 108,
       },
 
       // Neurological Conditions
-      'tbi': {
+      tbi: {
         id: 'tbi',
         name: 'Traumatic Brain Injury (TBI)',
         category: 'Neurological',
@@ -188,14 +180,14 @@ export class VAConditionsDatabase {
           'Dizziness',
           'Sleep disturbances',
           'Mood changes',
-          'Sensitivity to light/sound'
+          'Sensitivity to light/sound',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'neurological_testing',
           'service_treatment_records',
           'incident_documentation',
-          'cognitive_assessment'
+          'cognitive_assessment',
         ],
         successRate: 0.58,
         averageRating: 50,
@@ -203,10 +195,10 @@ export class VAConditionsDatabase {
         specialConsiderations: [
           'Facets of TBI rated separately',
           'Cognitive impairment evaluation required',
-          'May overlap with mental health conditions'
-        ]
+          'May overlap with mental health conditions',
+        ],
       },
-      'migraines': {
+      migraines: {
         id: 'migraines',
         name: 'Migraine Headaches',
         category: 'Neurological',
@@ -217,19 +209,19 @@ export class VAConditionsDatabase {
           'Nausea/vomiting',
           'Sensitivity to light and sound',
           'Visual disturbances',
-          'Prostrating attacks'
+          'Prostrating attacks',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'headache_log',
           'treatment_records',
-          'lay_statements'
+          'lay_statements',
         ],
         successRate: 0.55,
         averageRating: 30,
-        processingTimeDays: 100
+        processingTimeDays: 100,
       },
-      'peripheral_neuropathy': {
+      peripheral_neuropathy: {
         id: 'peripheral_neuropathy',
         name: 'Peripheral Neuropathy',
         category: 'Neurological',
@@ -240,20 +232,16 @@ export class VAConditionsDatabase {
           'Burning pain',
           'Muscle weakness',
           'Loss of reflexes',
-          'Balance problems'
+          'Balance problems',
         ],
-        requiredEvidence: [
-          'current_diagnosis',
-          'emg_nerve_conduction',
-          'neurological_exam'
-        ],
+        requiredEvidence: ['current_diagnosis', 'emg_nerve_conduction', 'neurological_exam'],
         successRate: 0.53,
         averageRating: 20,
-        processingTimeDays: 115
+        processingTimeDays: 115,
       },
 
       // Respiratory Conditions
-      'sleep_apnea': {
+      sleep_apnea: {
         id: 'sleep_apnea',
         name: 'Sleep Apnea',
         category: 'Respiratory',
@@ -264,13 +252,13 @@ export class VAConditionsDatabase {
           'Witnessed breathing interruptions',
           'Daytime fatigue',
           'Morning headaches',
-          'Difficulty concentrating'
+          'Difficulty concentrating',
         ],
         requiredEvidence: [
           'sleep_study',
           'cpap_prescription',
           'nexus_opinion',
-          'weight_gain_documentation'
+          'weight_gain_documentation',
         ],
         successRate: 0.48,
         averageRating: 50,
@@ -278,10 +266,10 @@ export class VAConditionsDatabase {
         specialConsiderations: [
           'Requires CPAP use for 50% rating',
           'Often secondary to PTSD or other conditions',
-          'Weight gain connection important'
-        ]
+          'Weight gain connection important',
+        ],
       },
-      'asthma': {
+      asthma: {
         id: 'asthma',
         name: 'Asthma',
         category: 'Respiratory',
@@ -292,21 +280,21 @@ export class VAConditionsDatabase {
           'Wheezing',
           'Chest tightness',
           'Coughing',
-          'Exercise limitations'
+          'Exercise limitations',
         ],
         requiredEvidence: [
           'current_diagnosis',
           'pulmonary_function_test',
           'treatment_records',
-          'medication_list'
+          'medication_list',
         ],
         successRate: 0.52,
         averageRating: 30,
-        processingTimeDays: 95
+        processingTimeDays: 95,
       },
 
       // Cardiovascular Conditions
-      'hypertension': {
+      hypertension: {
         id: 'hypertension',
         name: 'Hypertension',
         category: 'Cardiovascular',
@@ -317,18 +305,14 @@ export class VAConditionsDatabase {
           'Headaches',
           'Dizziness',
           'Chest pain',
-          'Shortness of breath'
+          'Shortness of breath',
         ],
-        requiredEvidence: [
-          'blood_pressure_readings',
-          'medication_records',
-          'treatment_records'
-        ],
+        requiredEvidence: ['blood_pressure_readings', 'medication_records', 'treatment_records'],
         successRate: 0.45,
         averageRating: 10,
-        processingTimeDays: 90
+        processingTimeDays: 90,
       },
-      'heart_disease': {
+      heart_disease: {
         id: 'heart_disease',
         name: 'Ischemic Heart Disease',
         category: 'Cardiovascular',
@@ -339,21 +323,21 @@ export class VAConditionsDatabase {
           'Shortness of breath',
           'Fatigue',
           'Exercise limitations',
-          'Irregular heartbeat'
+          'Irregular heartbeat',
         ],
         requiredEvidence: [
           'cardiac_testing',
           'stress_test',
           'treatment_records',
-          'mets_level_testing'
+          'mets_level_testing',
         ],
         successRate: 0.51,
         averageRating: 30,
-        processingTimeDays: 120
+        processingTimeDays: 120,
       },
 
       // Auditory Conditions
-      'hearing_loss': {
+      hearing_loss: {
         id: 'hearing_loss',
         name: 'Hearing Loss',
         category: 'Auditory',
@@ -363,23 +347,19 @@ export class VAConditionsDatabase {
           'Difficulty hearing conversations',
           'Asking for repetition',
           'Turning up volume',
-          'Difficulty in noisy environments'
+          'Difficulty in noisy environments',
         ],
-        requiredEvidence: [
-          'audiometric_testing',
-          'service_noise_exposure',
-          'maryland_cnc_test'
-        ],
+        requiredEvidence: ['audiometric_testing', 'service_noise_exposure', 'maryland_cnc_test'],
         successRate: 0.72,
         averageRating: 10,
         processingTimeDays: 85,
         specialConsiderations: [
           'Based on speech discrimination scores',
           'Maryland CNC test required',
-          'MOS noise exposure helpful'
-        ]
+          'MOS noise exposure helpful',
+        ],
       },
-      'tinnitus': {
+      tinnitus: {
         id: 'tinnitus',
         name: 'Tinnitus',
         category: 'Auditory',
@@ -390,25 +370,21 @@ export class VAConditionsDatabase {
           'Buzzing sounds',
           'Hissing or clicking',
           'Concentration difficulties',
-          'Sleep disturbances'
+          'Sleep disturbances',
         ],
-        requiredEvidence: [
-          'current_diagnosis',
-          'service_noise_exposure',
-          'lay_statement'
-        ],
+        requiredEvidence: ['current_diagnosis', 'service_noise_exposure', 'lay_statement'],
         successRate: 0.81,
         averageRating: 10,
         processingTimeDays: 75,
         specialConsiderations: [
           'Maximum 10% rating',
           'Often granted with hearing loss',
-          'Subjective condition'
-        ]
+          'Subjective condition',
+        ],
       },
 
       // Skin Conditions
-      'eczema': {
+      eczema: {
         id: 'eczema',
         name: 'Eczema/Dermatitis',
         category: 'Skin',
@@ -419,44 +395,38 @@ export class VAConditionsDatabase {
           'Red patches',
           'Dry, scaly skin',
           'Skin thickening',
-          'Cracking or bleeding'
+          'Cracking or bleeding',
         ],
         requiredEvidence: [
           'dermatology_records',
           'photographs',
           'treatment_records',
-          'body_surface_area'
+          'body_surface_area',
         ],
         successRate: 0.49,
         averageRating: 30,
-        processingTimeDays: 95
+        processingTimeDays: 95,
       },
 
       // Gastrointestinal Conditions
-      'ibs': {
+      ibs: {
         id: 'ibs',
         name: 'Irritable Bowel Syndrome',
         category: 'Gastrointestinal',
         diagnosticCode: '7319',
         description: 'Functional bowel disorder',
-        commonSymptoms: [
-          'Abdominal pain',
-          'Bloating',
-          'Diarrhea',
-          'Constipation',
-          'Urgency'
-        ],
+        commonSymptoms: ['Abdominal pain', 'Bloating', 'Diarrhea', 'Constipation', 'Urgency'],
         requiredEvidence: [
           'gi_specialist_records',
           'colonoscopy_results',
           'food_diary',
-          'treatment_records'
+          'treatment_records',
         ],
         successRate: 0.46,
         averageRating: 10,
-        processingTimeDays: 100
+        processingTimeDays: 100,
       },
-      'gerd': {
+      gerd: {
         id: 'gerd',
         name: 'GERD',
         category: 'Gastrointestinal',
@@ -467,177 +437,172 @@ export class VAConditionsDatabase {
           'Acid reflux',
           'Chest pain',
           'Difficulty swallowing',
-          'Chronic cough'
+          'Chronic cough',
         ],
-        requiredEvidence: [
-          'endoscopy_results',
-          'treatment_records',
-          'medication_list'
-        ],
+        requiredEvidence: ['endoscopy_results', 'treatment_records', 'medication_list'],
         successRate: 0.44,
         averageRating: 10,
-        processingTimeDays: 95
-      }
+        processingTimeDays: 95,
+      },
     }
   }
 
   initializeEvidenceTypes() {
     return {
-      'current_diagnosis': {
+      current_diagnosis: {
         name: 'Current Diagnosis',
         description: 'Recent diagnosis from qualified medical provider',
         importance: 'critical',
-        tips: 'Ensure diagnosis is within last 12 months and uses proper ICD codes'
+        tips: 'Ensure diagnosis is within last 12 months and uses proper ICD codes',
       },
-      'nexus_opinion': {
+      nexus_opinion: {
         name: 'Medical Nexus Opinion',
         description: 'Medical opinion connecting condition to military service',
         importance: 'critical',
-        tips: 'Should use "at least as likely as not" language (50% or greater probability)'
+        tips: 'Should use "at least as likely as not" language (50% or greater probability)',
       },
-      'service_treatment_records': {
+      service_treatment_records: {
         name: 'Service Treatment Records (STRs)',
         description: 'Medical records from active duty service',
         importance: 'high',
-        tips: 'Request complete records including sick call slips and deployment health assessments'
+        tips: 'Request complete records including sick call slips and deployment health assessments',
       },
-      'treatment_records': {
+      treatment_records: {
         name: 'Ongoing Treatment Records',
         description: 'VA and private treatment showing continuity of care',
         importance: 'high',
-        tips: 'Include all treatment from discharge to present'
+        tips: 'Include all treatment from discharge to present',
       },
-      'buddy_statements': {
+      buddy_statements: {
         name: 'Buddy/Lay Statements',
         description: 'Statements from fellow service members or family',
         importance: 'moderate',
-        tips: 'Should describe observed symptoms and changes in behavior'
+        tips: 'Should describe observed symptoms and changes in behavior',
       },
-      'stressor_statement': {
+      stressor_statement: {
         name: 'Stressor Statement',
         description: 'Detailed description of traumatic event(s)',
         importance: 'critical',
-        tips: 'Include specific dates, locations, units, and personnel when possible'
+        tips: 'Include specific dates, locations, units, and personnel when possible',
       },
-      'sleep_study': {
+      sleep_study: {
         name: 'Sleep Study Results',
         description: 'Polysomnography showing AHI levels',
         importance: 'critical',
-        tips: 'Must show AHI of 5+ for diagnosis, 15+ for higher ratings'
+        tips: 'Must show AHI of 5+ for diagnosis, 15+ for higher ratings',
       },
-      'audiometric_testing': {
+      audiometric_testing: {
         name: 'Audiometric Test Results',
         description: 'Hearing test with pure tone thresholds',
         importance: 'critical',
-        tips: 'Must include Maryland CNC speech discrimination scores'
+        tips: 'Must include Maryland CNC speech discrimination scores',
       },
-      'range_of_motion_testing': {
+      range_of_motion_testing: {
         name: 'Range of Motion Measurements',
         description: 'Goniometer measurements of joint movement',
         importance: 'critical',
-        tips: 'Should include pain points and repetitive motion testing'
+        tips: 'Should include pain points and repetitive motion testing',
       },
-      'xray_mri_results': {
+      xray_mri_results: {
         name: 'Imaging Results',
         description: 'X-rays, MRI, or CT scan results',
         importance: 'high',
-        tips: 'Recent imaging preferred, should show objective findings'
+        tips: 'Recent imaging preferred, should show objective findings',
       },
-      'functional_impact_statement': {
+      functional_impact_statement: {
         name: 'Functional Impact Statement',
         description: 'Description of how condition affects daily life',
         importance: 'high',
-        tips: 'Include work limitations, social impact, and activities of daily living'
+        tips: 'Include work limitations, social impact, and activities of daily living',
       },
-      'cpap_prescription': {
+      cpap_prescription: {
         name: 'CPAP Prescription',
         description: 'Prescription for continuous positive airway pressure device',
         importance: 'critical',
-        tips: 'Required for 50% rating for sleep apnea'
+        tips: 'Required for 50% rating for sleep apnea',
       },
-      'blood_pressure_readings': {
+      blood_pressure_readings: {
         name: 'Blood Pressure Log',
         description: 'Multiple BP readings over time',
         importance: 'high',
-        tips: 'Should show readings over at least 3 separate visits'
+        tips: 'Should show readings over at least 3 separate visits',
       },
-      'headache_log': {
+      headache_log: {
         name: 'Headache Diary',
         description: 'Documentation of headache frequency and severity',
         importance: 'high',
-        tips: 'Track prostrating episodes requiring rest'
+        tips: 'Track prostrating episodes requiring rest',
       },
-      'emg_nerve_conduction': {
+      emg_nerve_conduction: {
         name: 'EMG/Nerve Conduction Study',
         description: 'Electrodiagnostic testing for nerve damage',
         importance: 'high',
-        tips: 'Should identify specific nerves affected'
+        tips: 'Should identify specific nerves affected',
       },
-      'medication_list': {
+      medication_list: {
         name: 'Current Medications',
         description: 'List of all medications for the condition',
         importance: 'moderate',
-        tips: 'Include dosages and duration of use'
-      }
+        tips: 'Include dosages and duration of use',
+      },
     }
   }
 
   initializeRatingSchedule() {
     return {
-      'mental_health': {
+      mental_health: {
         0: 'No diagnosis or symptoms',
         10: 'Occupational and social impairment due to mild symptoms',
         30: 'Occasional decrease in work efficiency with intermittent symptoms',
         50: 'Reduced reliability and productivity',
         70: 'Deficiencies in most areas (work, family, thinking, mood)',
-        100: 'Total occupational and social impairment'
+        100: 'Total occupational and social impairment',
       },
-      'musculoskeletal': {
+      musculoskeletal: {
         0: 'Full range of motion without pain',
         10: 'Painful motion or slight limitation',
         20: 'Moderate limitation of motion',
         30: 'Severe limitation of motion',
         40: 'Favorable ankylosis',
         50: 'Unfavorable ankylosis',
-        60: 'Extremely unfavorable ankylosis'
+        60: 'Extremely unfavorable ankylosis',
       },
-      'respiratory': {
+      respiratory: {
         0: 'FEV-1 of 71% or more predicted',
         10: 'FEV-1 of 56 to 70% predicted',
         30: 'FEV-1 of 40 to 55% predicted',
         60: 'FEV-1 less than 40% predicted',
-        100: 'Requires outpatient oxygen therapy'
+        100: 'Requires outpatient oxygen therapy',
       },
-      'neurological': {
-        'mild': 10,
-        'moderate': 30,
-        'severe': 70,
-        'complete': 100
+      neurological: {
+        mild: 10,
+        moderate: 30,
+        severe: 70,
+        complete: 100,
       },
-      'skin': {
+      skin: {
         0: 'Less than 5% of body/exposed areas',
         10: '5-20% of body or exposed areas',
         30: '20-40% of body',
-        60: 'More than 40% of body'
-      }
+        60: 'More than 40% of body',
+      },
     }
   }
 
   // Search and filter methods
   searchConditions(query) {
     const searchTerm = query.toLowerCase()
-    return Object.values(this.conditions).filter(condition => 
-      condition.name.toLowerCase().includes(searchTerm) ||
-      condition.description.toLowerCase().includes(searchTerm) ||
-      condition.category.toLowerCase().includes(searchTerm) ||
-      condition.commonSymptoms.some(symptom => symptom.toLowerCase().includes(searchTerm))
+    return Object.values(this.conditions).filter(
+      condition =>
+        condition.name.toLowerCase().includes(searchTerm) ||
+        condition.description.toLowerCase().includes(searchTerm) ||
+        condition.category.toLowerCase().includes(searchTerm) ||
+        condition.commonSymptoms.some(symptom => symptom.toLowerCase().includes(searchTerm))
     )
   }
 
   getConditionsByCategory(category) {
-    return Object.values(this.conditions).filter(condition => 
-      condition.category === category
-    )
+    return Object.values(this.conditions).filter(condition => condition.category === category)
   }
 
   getConditionById(id) {
@@ -647,35 +612,33 @@ export class VAConditionsDatabase {
   getEvidenceRequirements(conditionId) {
     const condition = this.conditions[conditionId]
     if (!condition) return []
-    
+
     return condition.requiredEvidence.map(evidenceId => ({
       ...this.evidenceTypes[evidenceId],
-      id: evidenceId
+      id: evidenceId,
     }))
   }
 
   calculateSuccessProbability(conditionId, providedEvidence = []) {
     const condition = this.conditions[conditionId]
     if (!condition) return 0
-    
+
     const baseRate = condition.successRate
     const requiredEvidence = condition.requiredEvidence
-    const criticalEvidence = requiredEvidence.filter(e => 
-      this.evidenceTypes[e]?.importance === 'critical'
+    const criticalEvidence = requiredEvidence.filter(
+      e => this.evidenceTypes[e]?.importance === 'critical'
     )
-    
+
     // Calculate evidence completeness
-    const criticalComplete = criticalEvidence.filter(e => 
-      providedEvidence.includes(e)
-    ).length / criticalEvidence.length
-    
-    const totalComplete = requiredEvidence.filter(e => 
-      providedEvidence.includes(e)
-    ).length / requiredEvidence.length
-    
+    const criticalComplete =
+      criticalEvidence.filter(e => providedEvidence.includes(e)).length / criticalEvidence.length
+
+    const totalComplete =
+      requiredEvidence.filter(e => providedEvidence.includes(e)).length / requiredEvidence.length
+
     // Weighted calculation
     const probability = baseRate * (0.6 * criticalComplete + 0.4 * totalComplete)
-    
+
     return Math.round(probability * 100)
   }
 
@@ -686,12 +649,12 @@ export class VAConditionsDatabase {
 
   getAverageProcessingTime(conditionIds = []) {
     if (conditionIds.length === 0) return 0
-    
+
     const totalDays = conditionIds.reduce((sum, id) => {
       const condition = this.conditions[id]
       return sum + (condition?.processingTimeDays || 0)
     }, 0)
-    
+
     return Math.round(totalDays / conditionIds.length)
   }
 
@@ -699,54 +662,57 @@ export class VAConditionsDatabase {
     // VA combined rating calculation
     if (ratings.length === 0) return 0
     if (ratings.length === 1) return ratings[0]
-    
+
     // Sort ratings in descending order
     const sortedRatings = [...ratings].sort((a, b) => b - a)
-    
+
     // Apply VA combined rating formula
     let combined = sortedRatings[0]
     for (let i = 1; i < sortedRatings.length; i++) {
       const remaining = 100 - combined
-      combined = combined + (sortedRatings[i] * remaining / 100)
+      combined = combined + (sortedRatings[i] * remaining) / 100
     }
-    
+
     // Round to nearest 10
     return Math.round(combined / 10) * 10
   }
 
   getRecommendedStrategy(conditionIds = []) {
     const conditions = conditionIds.map(id => this.conditions[id]).filter(Boolean)
-    
+
     if (conditions.length === 0) return null
-    
+
     // Analyze conditions for strategic recommendations
     const hasHighSuccessRate = conditions.some(c => c.successRate > 0.7)
     const hasMentalHealth = conditions.some(c => c.category === 'Mental Health')
-    const averageRating = conditions.reduce((sum, c) => sum + c.averageRating, 0) / conditions.length
-    
+    const averageRating =
+      conditions.reduce((sum, c) => sum + c.averageRating, 0) / conditions.length
+
     const recommendations = []
-    
+
     if (hasHighSuccessRate) {
       recommendations.push({
         type: 'positive',
-        message: 'You have conditions with high success rates. File these first to establish service connection.'
+        message:
+          'You have conditions with high success rates. File these first to establish service connection.',
       })
     }
-    
+
     if (hasMentalHealth) {
       recommendations.push({
         type: 'info',
-        message: 'Mental health conditions often have secondary conditions. Consider sleep apnea, GERD, and hypertension.'
+        message:
+          'Mental health conditions often have secondary conditions. Consider sleep apnea, GERD, and hypertension.',
       })
     }
-    
+
     if (averageRating >= 50) {
       recommendations.push({
         type: 'strategy',
-        message: 'With high potential ratings, consider applying for TDIU if unable to work.'
+        message: 'With high potential ratings, consider applying for TDIU if unable to work.',
       })
     }
-    
+
     return recommendations
   }
 }

@@ -12,7 +12,16 @@ type SectionHeaderProps = {
   glossy?: boolean
 }
 
-export default function SectionHeader({ title, subtitle, icon: Icon, gradient = 'from-cyan-500 via-blue-500 to-purple-600', badge, actions, className = '', glossy = true }: SectionHeaderProps) {
+export default function SectionHeader({
+  title,
+  subtitle,
+  icon: Icon,
+  gradient = 'from-cyan-500 via-blue-500 to-purple-600',
+  badge,
+  actions,
+  className = '',
+  glossy = true,
+}: SectionHeaderProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -23,7 +32,9 @@ export default function SectionHeader({ title, subtitle, icon: Icon, gradient = 
         <div className="flex items-center space-x-4">
           {Icon && (
             <div className="relative">
-              <div className={`relative w-16 h-16 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden`}>
+              <div
+                className={`relative w-16 h-16 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden`}
+              >
                 {glossy && <div className="absolute inset-0 rounded-2xl border border-white/15" />}
                 {glossy && (
                   <>
@@ -41,28 +52,18 @@ export default function SectionHeader({ title, subtitle, icon: Icon, gradient = 
                 )}
                 <Icon className="h-8 w-8 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
               </div>
-              {badge && (
-                <div className="absolute -top-1 -right-1">{badge}</div>
-              )}
+              {badge && <div className="absolute -top-1 -right-1">{badge}</div>}
             </div>
           )}
           <div>
             <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-300 bg-clip-text text-transparent mb-2">
               {title}
             </h1>
-            {subtitle && (
-              <div className="text-slate-300 text-lg">
-                {subtitle}
-              </div>
-            )}
+            {subtitle && <div className="text-slate-300 text-lg">{subtitle}</div>}
           </div>
         </div>
-        {actions && (
-          <div className="flex items-center space-x-3">{actions}</div>
-        )}
+        {actions && <div className="flex items-center space-x-3">{actions}</div>}
       </div>
     </motion.div>
   )
 }
-
-

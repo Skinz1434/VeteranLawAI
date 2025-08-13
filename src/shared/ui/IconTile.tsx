@@ -9,7 +9,13 @@ type IconTileProps = {
   glossy?: boolean
 }
 
-export default function IconTile({ icon: Icon, gradient = 'from-cyan-500 via-blue-500 to-purple-600', size = 'md', className = '', glossy = true }: IconTileProps) {
+export default function IconTile({
+  icon: Icon,
+  gradient = 'from-cyan-500 via-blue-500 to-purple-600',
+  size = 'md',
+  className = '',
+  glossy = true,
+}: IconTileProps) {
   const dimensions = {
     sm: { box: 'w-10 h-10 rounded-xl', icon: 'h-5 w-5', radius: 'rounded-xl' },
     md: { box: 'w-16 h-16 rounded-2xl', icon: 'h-8 w-8', radius: 'rounded-2xl' },
@@ -17,11 +23,15 @@ export default function IconTile({ icon: Icon, gradient = 'from-cyan-500 via-blu
   }[size]
 
   return (
-    <div className={`relative bg-gradient-to-br ${gradient} ${dimensions.box} flex items-center justify-center shadow-2xl overflow-hidden ${className}`}> 
+    <div
+      className={`relative bg-gradient-to-br ${gradient} ${dimensions.box} flex items-center justify-center shadow-2xl overflow-hidden ${className}`}
+    >
       {glossy && <div className={`absolute inset-0 ${dimensions.radius} border border-white/15`} />}
       {glossy && (
         <>
-          <div className={`absolute inset-0 ${dimensions.radius} bg-gradient-to-b from-white/35 via-transparent to-transparent opacity-25`} />
+          <div
+            className={`absolute inset-0 ${dimensions.radius} bg-gradient-to-b from-white/35 via-transparent to-transparent opacity-25`}
+          />
           <motion.div
             aria-hidden
             className="absolute -inset-8 rotate-12"
@@ -37,5 +47,3 @@ export default function IconTile({ icon: Icon, gradient = 'from-cyan-500 via-blu
     </div>
   )
 }
-
-

@@ -5,16 +5,16 @@
  */
 
 import { useCallback, useEffect, useRef } from 'react'
-import { 
-  useRecordingState, 
-  useRecordingActions, 
+import {
+  useRecordingState,
+  useRecordingActions,
   useTranscriptionActions,
-  useConfigurationState 
+  useConfigurationState,
 } from '../stores/audioTranscriptionStore'
-import { 
-  startRealTimeTranscription, 
+import {
+  startRealTimeTranscription,
   stopRealTimeTranscription,
-  initializeSpeechService 
+  initializeSpeechService,
 } from '../services/speechToTextService'
 import { announceToScreenReader } from '../utils/accessibility'
 
@@ -26,12 +26,12 @@ export interface UseAudioRecordingReturn {
   realTimeTranscript: string
   interimTranscript: string
   currentSpeaker: string
-  
+
   // Actions
   startRecording: () => Promise<void>
   stopRecording: () => void
   toggleRecording: () => Promise<void>
-  
+
   // Utils
   formatRecordingTime: (seconds: number) => string
 }
@@ -41,7 +41,7 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
   const recordingActions = useRecordingActions()
   const { addTranscript } = useTranscriptionActions()
   const { qualitySettings, languageModel, speakerCount } = useConfigurationState()
-  
+
   // Refs for audio handling
   const audioChunksRef = useRef<Blob[]>([])
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -57,9 +57,9 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
           continuous: true,
           interimResults: true,
           language: 'en-US',
-          quality: qualitySettings
+          quality: qualitySettings,
         })
-        
+
         if (result.success) {
           announceToScreenReader(`Speech service initialized with ${result.provider}`)
         }
@@ -68,7 +68,7 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
         announceToScreenReader('Speech service initialization failed')
       }
     }
-    
+
     initializeService()
   }, [qualitySettings, languageModel])
 
@@ -98,13 +98,13 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
 
     const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount)
     analyserRef.current.getByteFrequencyData(dataArray)
-    
+
     // Calculate average audio level
     const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length
     const normalizedLevel = average / 255
-    
+
     recordingActions.updateAudioLevel(normalizedLevel)
-    
+
     if (recordingState.isRecording) {
       animationFrameRef.current = requestAnimationFrame(monitorAudioLevel)
     }
@@ -120,7 +120,7 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
           noiseSuppression: true,
           sampleRate: qualitySettings === 'ultra' ? 48000 : 44100,
           channelCount: 2,
-        }
+        },
       })
 
       recordingActions.setStream(stream)
@@ -134,15 +134,13 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
 
       // Set up media recorder
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') 
-          ? 'audio/webm' 
-          : 'audio/mp4'
+        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4',
       })
 
       recordingActions.setMediaRecorder(mediaRecorder)
-      
+
       // Handle data available
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data)
         }
@@ -150,10 +148,10 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
 
       // Handle recording stop
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { 
-          type: 'audio/webm' 
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/webm',
         })
-        
+
         // Create transcript from recording
         const transcript = {
           id: `rec-${Date.now()}`,
@@ -168,9 +166,9 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
           summary: 'Audio recording completed',
           keyFindings: [],
           transcript: recordingState.realTimeTranscript || 'Transcript processing...',
-          audioUrl: URL.createObjectURL(audioBlob)
+          audioUrl: URL.createObjectURL(audioBlob),
         }
-        
+
         addTranscript(transcript)
         audioChunksRef.current = [] // Clear chunks
       }
@@ -187,29 +185,28 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
           recordingActions.setCurrentSpeaker(speaker)
         },
         speakerCount,
-        quality: qualitySettings
+        quality: qualitySettings,
       })
 
       // Start recording
       mediaRecorder.start(1000) // Collect data every second
       recordingActions.startRecording()
       monitorAudioLevel()
-      
+
       announceToScreenReader('Recording started')
-      
     } catch (error) {
       console.error('Error starting recording:', error)
       announceToScreenReader('Failed to start recording. Please check microphone permissions.')
       throw error
     }
   }, [
-    qualitySettings, 
-    speakerCount, 
-    recordingActions, 
-    addTranscript, 
+    qualitySettings,
+    speakerCount,
+    recordingActions,
+    addTranscript,
     recordingState.recordingTime,
     recordingState.realTimeTranscript,
-    monitorAudioLevel
+    monitorAudioLevel,
   ])
 
   // Stop recording function
@@ -217,39 +214,45 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
     try {
       // Stop real-time transcription
       stopRealTimeTranscription()
-      
+
       // Stop media recorder
       if (recordingState.mediaRecorder && recordingState.mediaRecorder.state !== 'inactive') {
         recordingState.mediaRecorder.stop()
       }
-      
+
       // Stop monitoring
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
         animationFrameRef.current = null
       }
-      
+
       // Cleanup audio context
       if (audioContextRef.current) {
         audioContextRef.current.close()
         audioContextRef.current = null
       }
-      
+
       // Stop stream
       if (recordingState.stream) {
         recordingState.stream.getTracks().forEach(track => track.stop())
       }
-      
+
       // Update state
       recordingActions.stopRecording()
-      
-      announceToScreenReader(`Recording stopped. Duration: ${formatRecordingTime(recordingState.recordingTime)}`)
-      
+
+      announceToScreenReader(
+        `Recording stopped. Duration: ${formatRecordingTime(recordingState.recordingTime)}`
+      )
     } catch (error) {
       console.error('Error stopping recording:', error)
       announceToScreenReader('Error stopping recording')
     }
-  }, [recordingState.mediaRecorder, recordingState.stream, recordingState.recordingTime, recordingActions])
+  }, [
+    recordingState.mediaRecorder,
+    recordingState.stream,
+    recordingState.recordingTime,
+    recordingActions,
+  ])
 
   // Toggle recording function
   const toggleRecording = useCallback(async () => {
@@ -295,12 +298,12 @@ export const useAudioRecording = (): UseAudioRecordingReturn => {
     realTimeTranscript: recordingState.realTimeTranscript,
     interimTranscript: recordingState.interimTranscript,
     currentSpeaker: recordingState.currentSpeaker,
-    
+
     // Actions
     startRecording,
     stopRecording,
     toggleRecording,
-    
+
     // Utils
     formatRecordingTime,
   }

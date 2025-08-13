@@ -2,21 +2,21 @@
  * @fileoverview Loading States and Progress Indicators for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Comprehensive loading components with accessibility support for veterans.
  * Includes visual indicators, screen reader announcements, and cognitive accessibility features.
  */
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Loader2, 
-  BarChart3, 
-  FileText, 
-  Search, 
-  Brain, 
-  Scale, 
-  Mic, 
+import {
+  Loader2,
+  BarChart3,
+  FileText,
+  Search,
+  Brain,
+  Scale,
+  Mic,
   Camera,
   CheckCircle,
   Clock,
@@ -25,24 +25,24 @@ import {
   Database,
   Globe,
   Activity,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react'
 
 /**
  * Primary Loading Spinner with accessibility features
  */
-export const LoadingSpinner = ({ 
-  size = 'medium', 
-  color = 'cyan', 
+export const LoadingSpinner = ({
+  size = 'medium',
+  color = 'cyan',
   label = 'Loading content',
   showLabel = true,
-  className = '' 
+  className = '',
 }) => {
   const sizeClasses = {
     small: 'w-4 h-4',
     medium: 'w-8 h-8',
     large: 'w-12 h-12',
-    xlarge: 'w-16 h-16'
+    xlarge: 'w-16 h-16',
   }
 
   const colorClasses = {
@@ -50,14 +50,14 @@ export const LoadingSpinner = ({
     blue: 'text-blue-400',
     green: 'text-green-400',
     purple: 'text-purple-400',
-    white: 'text-white'
+    white: 'text-white',
   }
 
   return (
     <div className={`flex flex-col items-center justify-center space-y-3 ${className}`}>
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         className={`${sizeClasses[size]} ${colorClasses[color]}`}
         role="progressbar"
         aria-label={label}
@@ -65,11 +65,7 @@ export const LoadingSpinner = ({
       >
         <Loader2 className="w-full h-full" />
       </motion.div>
-      {showLabel && (
-        <div className="text-slate-300 text-sm font-medium text-center">
-          {label}
-        </div>
-      )}
+      {showLabel && <div className="text-slate-300 text-sm font-medium text-center">{label}</div>}
       <div className="sr-only" aria-live="polite">
         Loading in progress. Please wait.
       </div>
@@ -90,8 +86,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Processing practice data...',
         'Analyzing case outcomes...',
         'Generating insights...',
-        'Calculating success rates...'
-      ]
+        'Calculating success rates...',
+      ],
     },
     'case-search': {
       icon: Search,
@@ -101,8 +97,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Searching legal databases...',
         'Analyzing case precedents...',
         'Reviewing court decisions...',
-        'Compiling results...'
-      ]
+        'Compiling results...',
+      ],
     },
     'legal-knowledge': {
       icon: FileText,
@@ -112,8 +108,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Accessing legal documents...',
         'Searching knowledge base...',
         'Processing regulations...',
-        'Compiling information...'
-      ]
+        'Compiling information...',
+      ],
     },
     'claim-guidance': {
       icon: Scale,
@@ -123,8 +119,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Analyzing claim conditions...',
         'Reviewing VA criteria...',
         'Calculating success probability...',
-        'Generating recommendations...'
-      ]
+        'Generating recommendations...',
+      ],
     },
     'audio-transcription': {
       icon: Mic,
@@ -134,8 +130,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Processing audio file...',
         'Converting speech to text...',
         'Analyzing content...',
-        'Finalizing transcription...'
-      ]
+        'Finalizing transcription...',
+      ],
     },
     'camera-ocr': {
       icon: Camera,
@@ -145,9 +141,9 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
         'Processing image...',
         'Extracting text content...',
         'Analyzing document structure...',
-        'Finalizing extraction...'
-      ]
-    }
+        'Finalizing extraction...',
+      ],
+    },
   }
 
   const config = toolConfigs[tool] || toolConfigs.analytics
@@ -158,17 +154,19 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
     <div className={`flex flex-col items-center justify-center space-y-6 p-8 ${className}`}>
       {/* Animated icon with glow effect */}
       <div className="relative">
-        <div className={`absolute inset-0 bg-gradient-to-r ${config.bgGlow} rounded-full blur-2xl animate-pulse`} />
+        <div
+          className={`absolute inset-0 bg-gradient-to-r ${config.bgGlow} rounded-full blur-2xl animate-pulse`}
+        />
         <motion.div
           className={`relative w-20 h-20 bg-gradient-to-br ${config.color} rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden`}
           animate={{
             scale: [1, 1.1, 1],
-            rotate: [0, 5, -5, 0]
+            rotate: [0, 5, -5, 0],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         >
           <div className="absolute inset-0 rounded-2xl border border-white/15" />
@@ -179,12 +177,8 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
 
       {/* Loading message */}
       <div className="text-center space-y-2">
-        <div className="text-xl font-bold text-white">
-          {currentMessage}
-        </div>
-        <div className="text-slate-400">
-          This may take a few moments
-        </div>
+        <div className="text-xl font-bold text-white">{currentMessage}</div>
+        <div className="text-slate-400">This may take a few moments</div>
       </div>
 
       {/* Progress bar if provided */}
@@ -199,7 +193,7 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
               className={`h-full bg-gradient-to-r ${config.color} rounded-full`}
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             />
           </div>
         </div>
@@ -216,19 +210,14 @@ export const ToolLoadingState = ({ tool, message, progress = null, className = '
 /**
  * Skeleton loader for content placeholders
  */
-export const SkeletonLoader = ({ 
-  type = 'text', 
-  count = 1, 
-  className = '',
-  animate = true 
-}) => {
+export const SkeletonLoader = ({ type = 'text', count = 1, className = '', animate = true }) => {
   const skeletonVariants = {
     text: 'h-4 bg-slate-700/50 rounded',
     title: 'h-6 bg-slate-700/50 rounded',
     card: 'h-32 bg-slate-700/50 rounded-xl',
     avatar: 'w-12 h-12 bg-slate-700/50 rounded-full',
     button: 'h-10 w-24 bg-slate-700/50 rounded-lg',
-    metric: 'h-20 bg-slate-700/50 rounded-2xl'
+    metric: 'h-20 bg-slate-700/50 rounded-2xl',
   }
 
   const skeletonClass = skeletonVariants[type] || skeletonVariants.text
@@ -239,14 +228,18 @@ export const SkeletonLoader = ({
         <motion.div
           key={index}
           className={skeletonClass}
-          animate={animate ? {
-            opacity: [0.3, 0.6, 0.3]
-          } : {}}
+          animate={
+            animate
+              ? {
+                  opacity: [0.3, 0.6, 0.3],
+                }
+              : {}
+          }
           transition={{
             duration: 1.5,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: index * 0.1
+            ease: 'easeInOut',
+            delay: index * 0.1,
           }}
         />
       ))}
@@ -257,16 +250,12 @@ export const SkeletonLoader = ({
 /**
  * Data processing progress indicator
  */
-export const DataProcessingIndicator = ({ 
-  stages = [], 
-  currentStage = 0, 
-  className = '' 
-}) => {
+export const DataProcessingIndicator = ({ stages = [], currentStage = 0, className = '' }) => {
   const defaultStages = [
     { name: 'Initializing', icon: RefreshCw },
     { name: 'Processing Data', icon: Database },
     { name: 'Analyzing Results', icon: Brain },
-    { name: 'Finalizing', icon: CheckCircle }
+    { name: 'Finalizing', icon: CheckCircle },
   ]
 
   const processStages = stages.length > 0 ? stages : defaultStages
@@ -274,12 +263,8 @@ export const DataProcessingIndicator = ({
   return (
     <div className={`space-y-6 ${className}`}>
       <div className="text-center">
-        <div className="text-xl font-bold text-white mb-2">
-          Processing Request
-        </div>
-        <div className="text-slate-400">
-          {processStages[currentStage]?.name || 'Processing...'}
-        </div>
+        <div className="text-xl font-bold text-white mb-2">Processing Request</div>
+        <div className="text-slate-400">{processStages[currentStage]?.name || 'Processing...'}</div>
       </div>
 
       <div className="flex items-center justify-between max-w-md mx-auto">
@@ -296,21 +281,25 @@ export const DataProcessingIndicator = ({
                   isCompleted
                     ? 'bg-green-500 border-green-500 text-white'
                     : isActive
-                    ? 'bg-cyan-500 border-cyan-500 text-white'
-                    : 'bg-slate-700 border-slate-600 text-slate-400'
+                      ? 'bg-cyan-500 border-cyan-500 text-white'
+                      : 'bg-slate-700 border-slate-600 text-slate-400'
                 }`}
-                animate={isActive ? {
-                  scale: [1, 1.1, 1],
-                  boxShadow: [
-                    '0 0 0 0 rgba(6, 182, 212, 0)',
-                    '0 0 0 10px rgba(6, 182, 212, 0.1)',
-                    '0 0 0 0 rgba(6, 182, 212, 0)'
-                  ]
-                } : {}}
+                animate={
+                  isActive
+                    ? {
+                        scale: [1, 1.1, 1],
+                        boxShadow: [
+                          '0 0 0 0 rgba(6, 182, 212, 0)',
+                          '0 0 0 10px rgba(6, 182, 212, 0.1)',
+                          '0 0 0 0 rgba(6, 182, 212, 0)',
+                        ],
+                      }
+                    : {}
+                }
                 transition={{
                   duration: 2,
                   repeat: isActive ? Infinity : 0,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
               >
                 {isCompleted ? (
@@ -319,12 +308,12 @@ export const DataProcessingIndicator = ({
                   <Icon className={`h-6 w-6 ${isActive ? 'animate-pulse' : ''}`} />
                 )}
               </motion.div>
-              
-              <div className={`text-xs font-medium text-center ${
-                isCompleted ? 'text-green-400' : 
-                isActive ? 'text-cyan-400' : 
-                'text-slate-500'
-              }`}>
+
+              <div
+                className={`text-xs font-medium text-center ${
+                  isCompleted ? 'text-green-400' : isActive ? 'text-cyan-400' : 'text-slate-500'
+                }`}
+              >
                 {stage.name}
               </div>
             </div>
@@ -339,7 +328,7 @@ export const DataProcessingIndicator = ({
           className="absolute top-6 left-6 h-0.5 bg-gradient-to-r from-green-500 to-cyan-500"
           initial={{ width: 0 }}
           animate={{ width: `${(currentStage / (processStages.length - 1)) * 100}%` }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
         />
       </div>
 
@@ -353,27 +342,23 @@ export const DataProcessingIndicator = ({
 /**
  * Inline loading state for buttons and small components
  */
-export const InlineLoader = ({ 
-  size = 'small', 
-  color = 'white', 
-  className = '' 
-}) => {
+export const InlineLoader = ({ size = 'small', color = 'white', className = '' }) => {
   const sizeClasses = {
     small: 'w-4 h-4',
     medium: 'w-5 h-5',
-    large: 'w-6 h-6'
+    large: 'w-6 h-6',
   }
 
   const colorClasses = {
     white: 'text-white',
     cyan: 'text-cyan-400',
-    slate: 'text-slate-400'
+    slate: 'text-slate-400',
   }
 
   return (
     <motion.div
       animate={{ rotate: 360 }}
-      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
       className={`${sizeClasses[size]} ${colorClasses[color]} ${className}`}
       role="progressbar"
       aria-label="Loading"
@@ -386,12 +371,12 @@ export const InlineLoader = ({
 /**
  * Full-page loading overlay
  */
-export const LoadingOverlay = ({ 
-  isVisible, 
-  message = 'Loading...', 
+export const LoadingOverlay = ({
+  isVisible,
+  message = 'Loading...',
   tool = null,
   onCancel = null,
-  className = '' 
+  className = '',
 }) => {
   return (
     <AnimatePresence>
@@ -416,7 +401,7 @@ export const LoadingOverlay = ({
                 <div className="text-white font-medium">{message}</div>
               </div>
             )}
-            
+
             {onCancel && (
               <div className="mt-6 text-center">
                 <button
@@ -437,40 +422,38 @@ export const LoadingOverlay = ({
 /**
  * Progress bar component for file uploads and downloads
  */
-export const ProgressBar = ({ 
-  progress = 0, 
-  label = 'Progress', 
+export const ProgressBar = ({
+  progress = 0,
+  label = 'Progress',
   showPercentage = true,
   color = 'cyan',
-  className = '' 
+  className = '',
 }) => {
   const colorClasses = {
     cyan: 'from-cyan-500 to-blue-600',
     green: 'from-green-500 to-emerald-600',
     purple: 'from-purple-500 to-indigo-600',
-    orange: 'from-orange-500 to-red-600'
+    orange: 'from-orange-500 to-red-600',
   }
 
   return (
     <div className={`space-y-2 ${className}`}>
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium text-slate-300">{label}</span>
-        {showPercentage && (
-          <span className="text-sm text-slate-400">{Math.round(progress)}%</span>
-        )}
+        {showPercentage && <span className="text-sm text-slate-400">{Math.round(progress)}%</span>}
       </div>
-      
+
       <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
         <motion.div
           className={`h-full bg-gradient-to-r ${colorClasses[color]} rounded-full relative`}
           initial={{ width: 0 }}
           animate={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           <div className="absolute inset-0 bg-white/20 animate-pulse" />
         </motion.div>
       </div>
-      
+
       <div className="sr-only" aria-live="polite">
         {label}: {Math.round(progress)}% complete
       </div>
@@ -485,5 +468,5 @@ export default {
   DataProcessingIndicator,
   InlineLoader,
   LoadingOverlay,
-  ProgressBar
+  ProgressBar,
 }

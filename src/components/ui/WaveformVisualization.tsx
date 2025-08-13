@@ -11,42 +11,44 @@ interface WaveformVisualizationProps {
 }
 
 // Memoized individual bar component for performance
-const WaveformBar = React.memo(({ 
-  height, 
-  index, 
-  isRecording, 
-  animated = true 
-}: { 
-  height: number
-  index: number
-  isRecording: boolean
-  animated: boolean
-}) => {
-  const baseHeight = 8
-  const maxHeight = 80
-  const animatedHeight = isRecording ? Math.max(baseHeight, height) : baseHeight
-  
-  if (!animated) {
+const WaveformBar = React.memo(
+  ({
+    height,
+    index,
+    isRecording,
+    animated = true,
+  }: {
+    height: number
+    index: number
+    isRecording: boolean
+    animated: boolean
+  }) => {
+    const baseHeight = 8
+    const maxHeight = 80
+    const animatedHeight = isRecording ? Math.max(baseHeight, height) : baseHeight
+
+    if (!animated) {
+      return (
+        <div
+          className="w-1 bg-gradient-to-t from-emerald-600 to-green-400 rounded-full transition-all duration-75"
+          style={{ height: `${animatedHeight}px` }}
+        />
+      )
+    }
+
     return (
-      <div 
-        className="w-1 bg-gradient-to-t from-emerald-600 to-green-400 rounded-full transition-all duration-75"
-        style={{ height: `${animatedHeight}px` }}
+      <motion.div
+        className="w-1 bg-gradient-to-t from-emerald-600 to-green-400 rounded-full"
+        animate={{ height: `${animatedHeight}px` }}
+        transition={{
+          duration: 0.1,
+          ease: 'easeOut',
+          delay: index * 0.01, // Slight stagger for visual effect
+        }}
       />
     )
   }
-
-  return (
-    <motion.div
-      className="w-1 bg-gradient-to-t from-emerald-600 to-green-400 rounded-full"
-      animate={{ height: `${animatedHeight}px` }}
-      transition={{ 
-        duration: 0.1, 
-        ease: "easeOut",
-        delay: index * 0.01 // Slight stagger for visual effect
-      }}
-    />
-  )
-})
+)
 
 WaveformBar.displayName = 'WaveformBar'
 
@@ -56,25 +58,23 @@ const WaveformVisualization: React.FC<WaveformVisualizationProps> = ({
   barCount = 40,
   height = 80,
   className = '',
-  animated = true
+  animated = true,
 }) => {
   const rafRef = useRef<number>()
-  const [barHeights, setBarHeights] = React.useState<number[]>(() => 
-    new Array(barCount).fill(8)
-  )
+  const [barHeights, setBarHeights] = React.useState<number[]>(() => new Array(barCount).fill(8))
 
   // Generate realistic waveform heights based on audio level
   const generateWaveformHeights = useMemo(() => {
     return (level: number) => {
       return Array.from({ length: barCount }, (_, i) => {
         if (!isRecording) return 8
-        
+
         // Create a more natural waveform pattern
         const centerDistance = Math.abs(i - barCount / 2) / (barCount / 2)
         const baseVariation = Math.sin((i / barCount) * Math.PI * 4) * 0.3 + 0.7
         const centerEffect = 1 - centerDistance * 0.3
         const randomVariation = Math.random() * 0.4 + 0.8
-        
+
         const combinedEffect = level * baseVariation * centerEffect * randomVariation
         return Math.max(8, Math.min(height, combinedEffect * height))
       })
@@ -103,24 +103,21 @@ const WaveformVisualization: React.FC<WaveformVisualizationProps> = ({
   }, [audioLevel, isRecording, generateWaveformHeights])
 
   // Render bars using the memoized component
-  const bars = useMemo(() => 
-    barHeights.map((barHeight, index) => (
-      <WaveformBar
-        key={index}
-        height={barHeight}
-        index={index}
-        isRecording={isRecording}
-        animated={animated}
-      />
-    )), 
+  const bars = useMemo(
+    () =>
+      barHeights.map((barHeight, index) => (
+        <WaveformBar
+          key={index}
+          height={barHeight}
+          index={index}
+          isRecording={isRecording}
+          animated={animated}
+        />
+      )),
     [barHeights, isRecording, animated]
   )
 
-  return (
-    <div className={`flex items-center justify-center space-x-1 ${className}`}>
-      {bars}
-    </div>
-  )
+  return <div className={`flex items-center justify-center space-x-1 ${className}`}>{bars}</div>
 }
 
 // Additional hook for managing audio visualization state
@@ -134,11 +131,11 @@ export const useAudioVisualization = (audioContext?: AudioContext, analyser?: An
     const updateAudioLevel = () => {
       const dataArray = new Uint8Array(analyser.frequencyBinCount)
       analyser.getByteFrequencyData(dataArray)
-      
+
       // Calculate average audio level
       const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length
       setAudioLevel(average / 255)
-      
+
       rafRef.current = requestAnimationFrame(updateAudioLevel)
     }
 

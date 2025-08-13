@@ -2,7 +2,7 @@
  * @fileoverview Comprehensive Document Database for VeteranLawAI Legal Knowledge Base
  * @author VeteranLawAI Platform
  * @version 2.0.0
- * 
+ *
  * Contains 14,500+ VA legal documents, regulations, case precedents, and procedures
  * Production-ready database for VA disability attorneys and legal professionals
  */
@@ -20,33 +20,33 @@ export class DocumentDatabase {
     return [
       // COMPREHENSIVE VA REGULATIONS (38 CFR) - 300+ entries
       ...this.getVARegulations(),
-      
+
       // CASE LAW PRECEDENTS - 200+ entries
       ...this.getCaseLawPrecedents(),
-      
+
       // VA MANUALS AND PROCEDURES - 150+ entries
       ...this.getVAManualsAndProcedures(),
-      
+
       // FORMS AND DOCUMENTS - 100+ entries
       ...this.getFormsAndDocuments(),
-      
+
       // RATING SCHEDULES - 200+ entries
       ...this.getRatingSchedules(),
-      
+
       // MEDICAL EVIDENCE REQUIREMENTS - 150+ entries
       ...this.getMedicalEvidenceRequirements(),
-      
+
       // SERVICE CONNECTION GUIDANCE - 100+ entries
       ...this.getServiceConnectionGuidance(),
-      
+
       // APPEALS AND HEARINGS - 75+ entries
       ...this.getAppealsAndHearings(),
-      
+
       // SPECIAL POPULATIONS - 50+ entries
       ...this.getSpecialPopulations(),
-      
+
       // PRACTICE GUIDES - 100+ entries
-      ...this.getPracticeGuides()
+      ...this.getPracticeGuides(),
     ]
   }
 
@@ -59,7 +59,8 @@ export class DocumentDatabase {
         type: 'regulation',
         category: 'Mental Health',
         subcategory: 'Rating Schedule',
-        summary: 'Comprehensive rating criteria for mental health conditions including PTSD, depression, anxiety, and other psychiatric disabilities',
+        summary:
+          'Comprehensive rating criteria for mental health conditions including PTSD, depression, anxiety, and other psychiatric disabilities',
         content: `38 CFR 4.130 provides the rating schedule for mental disorders. The regulation establishes general rating criteria based on occupational and social impairment levels:
 
 100% Rating: Total occupational and social impairment, due to such symptoms as: gross impairment in thought processes or communication; persistent delusions or hallucinations; grossly inappropriate behavior; persistent danger of hurting self or others; intermittent inability to perform activities of daily living (including maintenance of minimal personal hygiene); disorientation to time or place; memory loss for names of close relatives, own occupation, or own name.
@@ -75,7 +76,17 @@ export class DocumentDatabase {
 0% Rating: A mental condition has been formally diagnosed, but symptoms are not severe enough either to interfere with occupational and social functioning or to require continuous medication.
 
 Note: The percentage ratings represent as far as can practicably be determined the average impairment in earning capacity resulting from such diseases and injuries and their residual conditions in civil occupations.`,
-        keywords: ['mental health', 'PTSD', 'depression', 'anxiety', 'rating schedule', 'diagnostic code', 'occupational impairment', 'social impairment', 'GAF score'],
+        keywords: [
+          'mental health',
+          'PTSD',
+          'depression',
+          'anxiety',
+          'rating schedule',
+          'diagnostic code',
+          'occupational impairment',
+          'social impairment',
+          'GAF score',
+        ],
         lastUpdated: '2024-01-15',
         section: '38 CFR 4.130',
         citationFormat: '38 C.F.R. § 4.130',
@@ -85,16 +96,17 @@ Note: The percentage ratings represent as far as can practicably be determined t
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 4.125', '38 CFR 4.129', '38 CFR 3.321'],
         caseReferences: ['Vazquez-Claudio v. Shinseki', 'Mauerhan v. Principi'],
-        tags: ['high-priority', 'frequently-cited', 'rating-criteria']
+        tags: ['high-priority', 'frequently-cited', 'rating-criteria'],
       },
-      
+
       {
         id: 'reg-38cfr-4125',
         title: '38 CFR 4.125 - Diagnosis of Mental Disorders',
         type: 'regulation',
         category: 'Mental Health',
         subcategory: 'Diagnosis',
-        summary: 'Requirements for diagnosis and evaluation of mental disorders for VA disability purposes',
+        summary:
+          'Requirements for diagnosis and evaluation of mental disorders for VA disability purposes',
         content: `38 CFR 4.125 establishes the criteria for diagnosis of mental disorders:
 
 (a) All diagnoses of mental disorders, for compensation and pension purposes, must conform to the fourth edition of the American Psychiatric Association's Diagnostic and Statistical Manual of Mental Disorders (DSM-IV) (incorporated by reference, see § 4.18).
@@ -104,7 +116,14 @@ Note: The percentage ratings represent as far as can practicably be determined t
 (c) When evaluating a mental disorder, the rating agency shall consider the frequency, severity, and duration of psychiatric symptoms, the length of remissions, and the veteran's capacity for adjustment during periods of remission. The rating agency shall assign an evaluation based on all the evidence of record that bears on occupational and social impairment rather than solely on the examiner's assessment of the level of disability at the moment of the examination.
 
 (d) When a single disability has been diagnosed both as a physical condition and as a mental disorder, the rating agency shall evaluate it using a single diagnostic code. If the mental and physical aspects are severable and distinct, separate evaluations may be assigned.`,
-        keywords: ['mental disorder diagnosis', 'DSM-IV', 'diagnostic criteria', 'psychiatric evaluation', 'rating agency', 'occupational impairment'],
+        keywords: [
+          'mental disorder diagnosis',
+          'DSM-IV',
+          'diagnostic criteria',
+          'psychiatric evaluation',
+          'rating agency',
+          'occupational impairment',
+        ],
         lastUpdated: '2023-11-20',
         section: '38 CFR 4.125',
         citationFormat: '38 C.F.R. § 4.125',
@@ -113,7 +132,7 @@ Note: The percentage ratings represent as far as can practicably be determined t
         effectiveDate: '2008-10-14',
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 4.130', '38 CFR 4.18', '38 CFR 3.321'],
-        tags: ['diagnosis-requirements', 'DSM-criteria', 'evaluation-standards']
+        tags: ['diagnosis-requirements', 'DSM-criteria', 'evaluation-standards'],
       },
 
       {
@@ -142,7 +161,14 @@ Key Elements for Service Connection:
 3. Medical Nexus: Medical opinion linking the current disability to the in-service event
 
 The regulation emphasizes that all three elements must be present. The nexus requirement is critical and typically requires medical opinion evidence from a qualified physician.`,
-        keywords: ['service connection', 'current disability', 'in-service event', 'medical nexus', 'aggravation', 'willful misconduct'],
+        keywords: [
+          'service connection',
+          'current disability',
+          'in-service event',
+          'medical nexus',
+          'aggravation',
+          'willful misconduct',
+        ],
         lastUpdated: '2024-02-01',
         section: '38 CFR 3.321',
         citationFormat: '38 C.F.R. § 3.321',
@@ -152,7 +178,7 @@ The regulation emphasizes that all three elements must be present. The nexus req
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 3.303', '38 CFR 3.304', '38 CFR 4.1'],
         caseReferences: ['Caluza v. Brown', 'Shedden v. Principi', 'Hickson v. West'],
-        tags: ['fundamental-requirement', 'three-prong-test', 'high-priority']
+        tags: ['fundamental-requirement', 'three-prong-test', 'high-priority'],
       },
 
       {
@@ -161,7 +187,8 @@ The regulation emphasizes that all three elements must be present. The nexus req
         type: 'regulation',
         category: 'Service Connection',
         subcategory: 'Principles',
-        summary: 'Core principles governing service connection determinations including continuity of symptomatology',
+        summary:
+          'Core principles governing service connection determinations including continuity of symptomatology',
         content: `38 CFR 3.303 establishes key principles for service connection:
 
 (a) Service connection connotes many factors but basically it is that the facts, established by evidence, show that a particular injury or disease resulting in disability was incurred coincident with service in the Armed Forces, or if preexisting such service, was aggravated therein.
@@ -177,7 +204,13 @@ Continuity of Symptomatology Doctrine:
 - Requires continuous manifestation of symptoms from service to present
 - Breaks in treatment do not necessarily break continuity
 - Lay testimony can establish continuity in some cases`,
-        keywords: ['service connection principles', 'continuity of symptomatology', 'chronic disease', 'presumptive service connection', 'aggravation'],
+        keywords: [
+          'service connection principles',
+          'continuity of symptomatology',
+          'chronic disease',
+          'presumptive service connection',
+          'aggravation',
+        ],
         lastUpdated: '2023-09-15',
         section: '38 CFR 3.303',
         citationFormat: '38 C.F.R. § 3.303',
@@ -187,7 +220,7 @@ Continuity of Symptomatology Doctrine:
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 3.307', '38 CFR 3.309', '38 CFR 3.321'],
         caseReferences: ['Savage v. Gober', 'Maxson v. Gober', 'Hickson v. West'],
-        tags: ['continuity-doctrine', 'chronic-conditions', 'presumptive-service-connection']
+        tags: ['continuity-doctrine', 'chronic-conditions', 'presumptive-service-connection'],
       },
 
       // Musculoskeletal Regulations
@@ -197,7 +230,8 @@ Continuity of Symptomatology Doctrine:
         type: 'regulation',
         category: 'Musculoskeletal',
         subcategory: 'Rating Schedule',
-        summary: 'Rating criteria for musculoskeletal disabilities including spine, joints, and extremities',
+        summary:
+          'Rating criteria for musculoskeletal disabilities including spine, joints, and extremities',
         content: `38 CFR 4.71a provides rating criteria for musculoskeletal system disabilities:
 
 SPINE AND BACK CONDITIONS:
@@ -227,7 +261,16 @@ Knee Conditions (Diagnostic Code 5260):
 
 Shoulder Conditions (Diagnostic Code 5201):
 - Limitation of motion: Arm can be raised from side only to 25 degrees (40%), 45 degrees (30%), 90 degrees (20%), shoulder level (10%)`,
-        keywords: ['musculoskeletal', 'spine', 'back injury', 'joint conditions', 'range of motion', 'ankylosis', 'cervical spine', 'lumbar spine'],
+        keywords: [
+          'musculoskeletal',
+          'spine',
+          'back injury',
+          'joint conditions',
+          'range of motion',
+          'ankylosis',
+          'cervical spine',
+          'lumbar spine',
+        ],
         lastUpdated: '2024-01-10',
         section: '38 CFR 4.71a',
         citationFormat: '38 C.F.R. § 4.71a',
@@ -236,7 +279,7 @@ Shoulder Conditions (Diagnostic Code 5201):
         effectiveDate: '2003-09-23',
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 4.40', '38 CFR 4.45', '38 CFR 4.59'],
-        tags: ['musculoskeletal-ratings', 'range-of-motion', 'spine-conditions']
+        tags: ['musculoskeletal-ratings', 'range-of-motion', 'spine-conditions'],
       },
 
       // Cardiovascular Regulations
@@ -272,7 +315,16 @@ MITRAL VALVE PROLAPSE (Diagnostic Code 7015):
 - Rate based on associated symptoms and functional impairment
 - Consider arrhythmias, chest pain, and exercise intolerance
 - May warrant rating if associated with mitral regurgitation`,
-        keywords: ['cardiovascular', 'heart disease', 'hypertension', 'cardiac', 'METs', 'ejection fraction', 'congestive heart failure', 'angina'],
+        keywords: [
+          'cardiovascular',
+          'heart disease',
+          'hypertension',
+          'cardiac',
+          'METs',
+          'ejection fraction',
+          'congestive heart failure',
+          'angina',
+        ],
         lastUpdated: '2023-12-05',
         section: '38 CFR 4.104',
         citationFormat: '38 C.F.R. § 4.104',
@@ -281,7 +333,7 @@ MITRAL VALVE PROLAPSE (Diagnostic Code 7015):
         effectiveDate: '2021-01-19',
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 4.97', '38 CFR 4.100'],
-        tags: ['cardiovascular-ratings', 'heart-conditions', 'hypertension']
+        tags: ['cardiovascular-ratings', 'heart-conditions', 'hypertension'],
       },
 
       // Respiratory Regulations
@@ -291,7 +343,8 @@ MITRAL VALVE PROLAPSE (Diagnostic Code 7015):
         type: 'regulation',
         category: 'Respiratory',
         subcategory: 'Rating Schedule',
-        summary: 'Rating criteria for respiratory conditions including asthma, COPD, and sleep apnea',
+        summary:
+          'Rating criteria for respiratory conditions including asthma, COPD, and sleep apnea',
         content: `38 CFR 4.97 provides rating criteria for respiratory disabilities:
 
 ASTHMA (Diagnostic Code 6602):
@@ -318,7 +371,17 @@ Pulmonary Function Test Considerations:
 - Testing should be performed when condition is stable
 - Consider functional impairment beyond test values
 - Cor pulmonale may warrant separate rating under cardiac conditions`,
-        keywords: ['respiratory', 'asthma', 'COPD', 'sleep apnea', 'FEV1', 'pulmonary function', 'breathing', 'oxygen therapy', 'CPAP'],
+        keywords: [
+          'respiratory',
+          'asthma',
+          'COPD',
+          'sleep apnea',
+          'FEV1',
+          'pulmonary function',
+          'breathing',
+          'oxygen therapy',
+          'CPAP',
+        ],
         lastUpdated: '2024-01-25',
         section: '38 CFR 4.97',
         citationFormat: '38 C.F.R. § 4.97',
@@ -327,7 +390,7 @@ Pulmonary Function Test Considerations:
         effectiveDate: '2008-10-14',
         legalAuthority: 'Congressional Authorization',
         relatedRegulations: ['38 CFR 4.96', '38 CFR 4.104'],
-        tags: ['respiratory-ratings', 'pulmonary-function', 'sleep-disorders']
+        tags: ['respiratory-ratings', 'pulmonary-function', 'sleep-disorders'],
       },
 
       // Add more comprehensive regulations continuing the pattern...
@@ -346,7 +409,8 @@ Pulmonary Function Test Considerations:
         subcategory: 'Elements Required',
         court: 'Court of Appeals for Veterans Claims',
         citation: '7 Vet.App. 498 (1995)',
-        summary: 'Landmark case establishing the three elements required for service connection: current disability, in-service event, and medical nexus',
+        summary:
+          'Landmark case establishing the three elements required for service connection: current disability, in-service event, and medical nexus',
         content: `Caluza v. Brown, 7 Vet.App. 498 (1995), established the fundamental three-element framework for service connection that remains the cornerstone of VA disability law:
 
 HOLDING: To establish service connection for a claimed disability, a claimant must demonstrate: (1) the existence of a present disability; (2) in-service incurrence or aggravation of a disease or injury; and (3) a causal relationship between the present disability and the disease or injury incurred or aggravated during service.
@@ -372,7 +436,14 @@ PRACTICE TIPS:
 - Ensure medical nexus opinions address the specific in-service event
 - Consider whether lay testimony can establish the in-service element
 - Remember that presumptive service connection can satisfy the nexus element`,
-        keywords: ['service connection', 'Caluza elements', 'current disability', 'in-service event', 'medical nexus', 'three-prong test'],
+        keywords: [
+          'service connection',
+          'Caluza elements',
+          'current disability',
+          'in-service event',
+          'medical nexus',
+          'three-prong test',
+        ],
         lastUpdated: '2024-01-20',
         section: 'Service Connection Law',
         citationFormat: 'Caluza v. Brown, 7 Vet.App. 498 (1995)',
@@ -382,7 +453,7 @@ PRACTICE TIPS:
         judges: ['Holdaway, Chief Judge', 'Kramer, Judge', 'Steinberg, Judge'],
         relatedCases: ['Shedden v. Principi', 'Hickson v. West', 'Jandreau v. Nicholson'],
         legalPrinciples: ['three-element test', 'medical nexus requirement', 'competent evidence'],
-        tags: ['landmark-case', 'service-connection-framework', 'foundational-precedent']
+        tags: ['landmark-case', 'service-connection-framework', 'foundational-precedent'],
       },
 
       {
@@ -393,7 +464,8 @@ PRACTICE TIPS:
         subcategory: 'Lay Testimony',
         court: 'Court of Appeals for Veterans Claims',
         citation: '12 Vet.App. 247 (1999)',
-        summary: 'Established principles for when lay evidence can establish in-service events and medical conditions',
+        summary:
+          'Established principles for when lay evidence can establish in-service events and medical conditions',
         content: `Hickson v. West, 12 Vet.App. 247 (1999), clarified when lay evidence can be used to establish in-service events and medical conditions:
 
 HOLDING: Lay evidence is competent and sufficient to establish the presence of observable symptomatology, where the layperson is competent to identify the medical condition, injury, or symptom, and the condition, injury, or symptom is simple enough that a lay person would be competent to identify it.
@@ -433,7 +505,14 @@ PRACTICE APPLICATIONS:
 - Ensure lay witnesses testify only within their competence
 - Corroborate lay testimony with medical evidence when possible
 - Address credibility factors in legal arguments`,
-        keywords: ['lay evidence', 'competent testimony', 'in-service events', 'observable symptoms', 'medical expertise', 'credibility'],
+        keywords: [
+          'lay evidence',
+          'competent testimony',
+          'in-service events',
+          'observable symptoms',
+          'medical expertise',
+          'credibility',
+        ],
         lastUpdated: '2023-11-15',
         section: 'Evidence Law',
         citationFormat: 'Hickson v. West, 12 Vet.App. 247 (1999)',
@@ -443,7 +522,7 @@ PRACTICE APPLICATIONS:
         judges: ['Holdaway, Chief Judge', 'Kramer, Judge', 'Ivers, Judge'],
         relatedCases: ['Jandreau v. Nicholson', 'Barr v. Nicholson', 'Buchanan v. Nicholson'],
         legalPrinciples: ['lay competence', 'observable symptoms', 'credibility assessment'],
-        tags: ['evidence-standards', 'lay-testimony', 'competence-doctrine']
+        tags: ['evidence-standards', 'lay-testimony', 'competence-doctrine'],
       },
 
       {
@@ -454,7 +533,8 @@ PRACTICE APPLICATIONS:
         subcategory: 'Continuity Doctrine',
         court: 'Court of Appeals for Veterans Claims',
         citation: '11 Vet.App. 234 (1998)',
-        summary: 'Clarified application of continuity of symptomatology doctrine for service connection',
+        summary:
+          'Clarified application of continuity of symptomatology doctrine for service connection',
         content: `Shedden v. Principi, 11 Vet.App. 234 (1998), established important principles regarding continuity of symptomatology:
 
 HOLDING: When a veteran has a disease or injury in service, manifests symptoms after service, and medical evidence establishes that the current symptoms or condition is related to the disease or injury incurred in service, service connection is warranted even without medical evidence of continuity of symptomatology.
@@ -498,7 +578,13 @@ STRATEGIC CONSIDERATIONS:
 
 IMPACT ON PRACTICE:
 This decision clarified that continuity of symptomatology is a tool for establishing service connection, not an absolute requirement in all cases. It emphasized the flexibility available in proving service connection when adequate medical evidence exists.`,
-        keywords: ['continuity of symptomatology', 'service connection', 'medical nexus', 'chronic conditions', 'alternative theories'],
+        keywords: [
+          'continuity of symptomatology',
+          'service connection',
+          'medical nexus',
+          'chronic conditions',
+          'alternative theories',
+        ],
         lastUpdated: '2023-10-30',
         section: 'Service Connection Law',
         citationFormat: 'Shedden v. Principi, 11 Vet.App. 234 (1998)',
@@ -507,8 +593,12 @@ This decision clarified that continuity of symptomatology is a tool for establis
         decisionDate: '1998-08-13',
         judges: ['Holdaway, Chief Judge', 'Kramer, Judge', 'Steinberg, Judge'],
         relatedCases: ['Savage v. Gober', 'Maxson v. Gober', 'Caluza v. Brown'],
-        legalPrinciples: ['continuity doctrine', 'alternative service connection theories', 'medical nexus'],
-        tags: ['continuity-doctrine', 'service-connection-alternatives', 'chronic-conditions']
+        legalPrinciples: [
+          'continuity doctrine',
+          'alternative service connection theories',
+          'medical nexus',
+        ],
+        tags: ['continuity-doctrine', 'service-connection-alternatives', 'chronic-conditions'],
       },
 
       // Federal Circuit Cases
@@ -520,7 +610,8 @@ This decision clarified that continuity of symptomatology is a tool for establis
         subcategory: 'Class Action',
         court: 'US District Court Northern District of California',
         citation: 'No. C-86-6160 TEH (N.D. Cal.)',
-        summary: 'Landmark Agent Orange class action resulting in presumptive service connection for Vietnam veterans',
+        summary:
+          'Landmark Agent Orange class action resulting in presumptive service connection for Vietnam veterans',
         content: `The Nehmer case established presumptive service connection for diseases associated with Agent Orange exposure for Vietnam veterans:
 
 BACKGROUND:
@@ -576,18 +667,26 @@ PRACTICE TIPS:
 - Check current list of presumptive diseases
 - File claims for newly added diseases even if previously denied
 - Consider secondary service connection for conditions caused by presumptive diseases`,
-        keywords: ['Agent Orange', 'Nehmer', 'presumptive service connection', 'Vietnam veterans', 'environmental exposure', 'class action'],
+        keywords: [
+          'Agent Orange',
+          'Nehmer',
+          'presumptive service connection',
+          'Vietnam veterans',
+          'environmental exposure',
+          'class action',
+        ],
         lastUpdated: '2024-02-10',
         section: 'Environmental Exposure',
-        citationFormat: 'Disabled American Veterans v. Secretary of Veterans Affairs, No. C-86-6160 TEH (N.D. Cal.)',
+        citationFormat:
+          'Disabled American Veterans v. Secretary of Veterans Affairs, No. C-86-6160 TEH (N.D. Cal.)',
         relevanceScore: 0.97,
         practiceArea: 'Environmental Exposure',
         decisionDate: '1991-05-03',
         settlementDate: '1991-05-03',
         relatedLegislation: ['Agent Orange Act of 1991', 'Veterans Health Care Act'],
         coveredPopulations: ['Vietnam veterans', 'Korean DMZ veterans', 'Blue Water Navy veterans'],
-        tags: ['agent-orange', 'presumptive-conditions', 'class-action', 'environmental-exposure']
-      }
+        tags: ['agent-orange', 'presumptive-conditions', 'class-action', 'environmental-exposure'],
+      },
 
       // Continue with more case law entries...
       // This represents a small sample of the 200+ cases that would be included
@@ -603,7 +702,8 @@ PRACTICE TIPS:
         type: 'manual',
         category: 'Claims Processing',
         subcategory: 'Rating Process',
-        summary: 'Comprehensive overview of VA rating process including general principles and procedures',
+        summary:
+          'Comprehensive overview of VA rating process including general principles and procedures',
         content: `M21-1 Part IV, Subpart i, Chapter 1 provides foundational guidance on the VA rating process:
 
 A. GENERAL RATING PRINCIPLES
@@ -674,7 +774,14 @@ PRACTICE IMPLICATIONS:
 - Understanding VA's internal processes helps in claim development
 - Quality review standards indicate areas of VA focus
 - Special considerations may apply to complex cases`,
-        keywords: ['rating process', 'M21-1 manual', 'disability evaluation', 'reasonable doubt', 'combined ratings', 'effective dates'],
+        keywords: [
+          'rating process',
+          'M21-1 manual',
+          'disability evaluation',
+          'reasonable doubt',
+          'combined ratings',
+          'effective dates',
+        ],
         lastUpdated: '2024-01-15',
         section: 'M21-1 Part IV, Subpart i, Chapter 1',
         citationFormat: 'M21-1, Part IV, Subpart i, Ch. 1',
@@ -682,7 +789,7 @@ PRACTICE IMPLICATIONS:
         practiceArea: 'Claims Processing',
         effectiveDate: '2023-06-15',
         relatedSections: ['M21-1 Part IV, Subpart ii', 'M21-1 Part III, Subpart iv'],
-        tags: ['rating-procedures', 'claims-processing', 'quality-standards']
+        tags: ['rating-procedures', 'claims-processing', 'quality-standards'],
       },
 
       {
@@ -691,7 +798,8 @@ PRACTICE IMPLICATIONS:
         type: 'manual',
         category: 'Rating Guidance',
         subcategory: 'Musculoskeletal',
-        summary: 'Detailed guidance on rating spinal conditions including range of motion measurements',
+        summary:
+          'Detailed guidance on rating spinal conditions including range of motion measurements',
         content: `M21-1 Part IV, Subpart ii, Chapter 2 provides specific guidance for rating spinal conditions:
 
 A. GENERAL PRINCIPLES FOR SPINAL RATINGS
@@ -774,7 +882,15 @@ COMMON RATING ERRORS:
 - Failing to measure all planes of motion
 - Not considering incapacitating episodes
 - Inadequate documentation of pain and functional limitations`,
-        keywords: ['spinal conditions', 'range of motion', 'functional impairment', 'cervical spine', 'lumbar spine', 'radiculopathy', 'ankylosis'],
+        keywords: [
+          'spinal conditions',
+          'range of motion',
+          'functional impairment',
+          'cervical spine',
+          'lumbar spine',
+          'radiculopathy',
+          'ankylosis',
+        ],
         lastUpdated: '2023-12-20',
         section: 'M21-1 Part IV, Subpart ii, Chapter 2',
         citationFormat: 'M21-1, Part IV, Subpart ii, Ch. 2',
@@ -782,8 +898,8 @@ COMMON RATING ERRORS:
         practiceArea: 'Musculoskeletal Ratings',
         effectiveDate: '2023-03-15',
         relatedSections: ['M21-1 Part IV, Subpart ii, Ch. 1', '38 CFR 4.71a'],
-        tags: ['spinal-ratings', 'range-of-motion', 'functional-assessment']
-      }
+        tags: ['spinal-ratings', 'range-of-motion', 'functional-assessment'],
+      },
 
       // Continue with more manual entries...
       // This represents a sample of the 150+ manual sections that would be included
@@ -795,7 +911,8 @@ COMMON RATING ERRORS:
       // VA Forms
       {
         id: 'form-21-526ez',
-        title: 'VA Form 21-526EZ - Application for Disability Compensation and Related Compensation Benefits',
+        title:
+          'VA Form 21-526EZ - Application for Disability Compensation and Related Compensation Benefits',
         type: 'form',
         category: 'Disability Claims',
         subcategory: 'Initial Claims',
@@ -867,7 +984,14 @@ PRACTICE TIPS:
 - Use specific medical terminology
 - Include detailed statements of symptoms and functional impact
 - File claims for all potentially service-connected conditions`,
-        keywords: ['disability compensation', 'initial claim', 'VA form', 'application', 'service connection', 'C&P examination'],
+        keywords: [
+          'disability compensation',
+          'initial claim',
+          'VA form',
+          'application',
+          'service connection',
+          'C&P examination',
+        ],
         lastUpdated: '2024-02-01',
         section: 'VA Forms',
         citationFormat: 'VA Form 21-526EZ',
@@ -878,7 +1002,7 @@ PRACTICE TIPS:
         expirationDate: '2026-12-31',
         filingMethods: ['online', 'mail', 'in-person', 'representative'],
         relatedForms: ['VA Form 21-4138', 'VA Form 21-0781', 'VA Form 21-8940'],
-        tags: ['primary-form', 'disability-claims', 'initial-application']
+        tags: ['primary-form', 'disability-claims', 'initial-application'],
       },
 
       {
@@ -887,7 +1011,8 @@ PRACTICE TIPS:
         type: 'form',
         category: 'Supporting Evidence',
         subcategory: 'Statements',
-        summary: 'Standard form for providing additional information and statements in support of VA claims',
+        summary:
+          'Standard form for providing additional information and statements in support of VA claims',
         content: `VA Form 21-4138 allows veterans to provide additional information in support of their claims:
 
 PURPOSE:
@@ -955,7 +1080,13 @@ COMMON USES BY PRACTITIONERS:
 - Family member observations
 - Employer statements about work limitations
 - Medical provider summaries`,
-        keywords: ['statement in support', 'lay evidence', 'supplemental information', 'VA correspondence', 'claim support'],
+        keywords: [
+          'statement in support',
+          'lay evidence',
+          'supplemental information',
+          'VA correspondence',
+          'claim support',
+        ],
         lastUpdated: '2023-11-30',
         section: 'VA Forms',
         citationFormat: 'VA Form 21-4138',
@@ -966,8 +1097,8 @@ COMMON USES BY PRACTITIONERS:
         expirationDate: '2025-06-30',
         filingMethods: ['online', 'mail', 'fax', 'in-person'],
         relatedForms: ['VA Form 21-526EZ', 'VA Form 21-0995', 'VA Form 21-0996'],
-        tags: ['supporting-evidence', 'lay-statements', 'supplemental-claims']
-      }
+        tags: ['supporting-evidence', 'lay-statements', 'supplemental-claims'],
+      },
 
       // Continue with more forms and documents...
       // This represents a sample of the 100+ forms that would be included
@@ -1065,7 +1196,14 @@ Secondary Conditions:
 - Substance abuse may be secondary
 - Physical conditions may be secondary (headaches, GI problems)
 - Consider separate ratings for distinct secondary conditions`,
-        keywords: ['PTSD', 'post-traumatic stress', 'mental health rating', 'combat stressor', 'occupational impairment', 'diagnostic code 9411'],
+        keywords: [
+          'PTSD',
+          'post-traumatic stress',
+          'mental health rating',
+          'combat stressor',
+          'occupational impairment',
+          'diagnostic code 9411',
+        ],
         lastUpdated: '2024-01-10',
         section: '38 CFR 4.130',
         citationFormat: '38 C.F.R. § 4.130, Diagnostic Code 9411',
@@ -1076,7 +1214,7 @@ Secondary Conditions:
         ratingLevels: ['0%', '10%', '30%', '50%', '70%', '100%'],
         relatedCodes: ['9412', '9413', '9434', '9435'],
         specialConsiderations: ['combat stressor', 'MST', 'personal assault', 'temporary ratings'],
-        tags: ['PTSD-rating', 'mental-health', 'combat-related', 'high-priority']
+        tags: ['PTSD-rating', 'mental-health', 'combat-related', 'high-priority'],
       },
 
       {
@@ -1167,7 +1305,14 @@ PRACTICE CONSIDERATIONS:
 - Consider impact on employment
 - Evaluate for individual unemployability
 - Address pain management and treatment compliance`,
-        keywords: ['degenerative arthritis', 'joint conditions', 'limitation of motion', 'DJD', 'osteoarthritis', 'bilateral factor'],
+        keywords: [
+          'degenerative arthritis',
+          'joint conditions',
+          'limitation of motion',
+          'DJD',
+          'osteoarthritis',
+          'bilateral factor',
+        ],
         lastUpdated: '2023-12-15',
         section: '38 CFR 4.71a',
         citationFormat: '38 C.F.R. § 4.71a, Diagnostic Code 5242',
@@ -1177,8 +1322,8 @@ PRACTICE CONSIDERATIONS:
         bodySystem: 'Musculoskeletal System',
         applicableJoints: ['knee', 'hip', 'shoulder', 'ankle', 'elbow', 'wrist'],
         relatedCodes: ['5260', '5261', '5250', '5200'],
-        tags: ['arthritis-rating', 'joint-conditions', 'musculoskeletal']
-      }
+        tags: ['arthritis-rating', 'joint-conditions', 'musculoskeletal'],
+      },
 
       // Continue with more detailed rating schedule entries...
       // This represents a sample of the 200+ rating schedule entries that would be included
@@ -1194,7 +1339,8 @@ PRACTICE CONSIDERATIONS:
         type: 'medical_evidence',
         category: 'Examinations',
         subcategory: 'Mental Health',
-        summary: 'Comprehensive requirements for VA Compensation and Pension examinations for mental health conditions',
+        summary:
+          'Comprehensive requirements for VA Compensation and Pension examinations for mental health conditions',
         content: `C&P EXAMINATION REQUIREMENTS - MENTAL HEALTH CONDITIONS
 
 PURPOSE:
@@ -1338,17 +1484,29 @@ COMMON DEFICIENCIES:
 - Insufficient medical opinion rationale
 - Failure to address all claimed conditions
 - Poor documentation of severity`,
-        keywords: ['C&P examination', 'mental health', 'psychiatric evaluation', 'functional assessment', 'medical opinion', 'DSM-5'],
+        keywords: [
+          'C&P examination',
+          'mental health',
+          'psychiatric evaluation',
+          'functional assessment',
+          'medical opinion',
+          'DSM-5',
+        ],
         lastUpdated: '2024-01-20',
         section: 'Medical Evidence',
         citationFormat: 'VA C&P Examination Protocol - Mental Health',
         relevanceScore: 0.96,
         practiceArea: 'Medical Evidence',
         examinationType: 'C&P Mental Health',
-        requiredComponents: ['clinical interview', 'mental status exam', 'functional assessment', 'medical opinion'],
+        requiredComponents: [
+          'clinical interview',
+          'mental status exam',
+          'functional assessment',
+          'medical opinion',
+        ],
         relatedProtocols: ['PTSD examination', 'depression examination', 'anxiety examination'],
-        tags: ['CP-examination', 'mental-health-evidence', 'psychiatric-evaluation']
-      }
+        tags: ['CP-examination', 'mental-health-evidence', 'psychiatric-evaluation'],
+      },
 
       // Continue with more medical evidence requirements...
       // This represents a sample of the 150+ medical evidence entries that would be included
@@ -1364,7 +1522,8 @@ COMMON DEFICIENCIES:
         type: 'guidance',
         category: 'Service Connection',
         subcategory: 'Medical Nexus',
-        summary: 'Comprehensive guide for obtaining and utilizing medical nexus opinions in service connection claims',
+        summary:
+          'Comprehensive guide for obtaining and utilizing medical nexus opinions in service connection claims',
         content: `MEDICAL NEXUS OPINIONS - BEST PRACTICES GUIDE
 
 PURPOSE:
@@ -1515,17 +1674,33 @@ Challenging Negative C&P Opinions:
 - Obtain independent medical examination
 - Request new C&P examination if warranted
 - Use medical literature to support position`,
-        keywords: ['medical nexus', 'service connection', 'medical opinion', 'causation', 'factual predicate', 'at least as likely as not'],
+        keywords: [
+          'medical nexus',
+          'service connection',
+          'medical opinion',
+          'causation',
+          'factual predicate',
+          'at least as likely as not',
+        ],
         lastUpdated: '2024-02-05',
         section: 'Service Connection Practice',
         citationFormat: 'VA Service Connection Practice Guide - Medical Nexus',
         relevanceScore: 0.98,
         practiceArea: 'Service Connection',
         targetAudience: 'VA practitioners',
-        keyPrinciples: ['adequate factual basis', 'clear reasoning', 'probability language', 'specialist expertise'],
-        relatedGuidance: ['C&P examination guide', 'secondary service connection', 'aggravation claims'],
-        tags: ['medical-nexus', 'service-connection-practice', 'medical-opinions']
-      }
+        keyPrinciples: [
+          'adequate factual basis',
+          'clear reasoning',
+          'probability language',
+          'specialist expertise',
+        ],
+        relatedGuidance: [
+          'C&P examination guide',
+          'secondary service connection',
+          'aggravation claims',
+        ],
+        tags: ['medical-nexus', 'service-connection-practice', 'medical-opinions'],
+      },
 
       // Continue with more service connection guidance...
       // This represents a sample of the 100+ service connection guidance entries that would be included
@@ -1541,7 +1716,8 @@ Challenging Negative C&P Opinions:
         type: 'guidance',
         category: 'Appeals',
         subcategory: 'AMA Process',
-        summary: 'Comprehensive overview of the modernized VA appeals process under the Appeals Modernization Act',
+        summary:
+          'Comprehensive overview of the modernized VA appeals process under the Appeals Modernization Act',
         content: `APPEALS MODERNIZATION ACT (AMA) - COMPLETE GUIDE
 
 OVERVIEW:
@@ -1706,7 +1882,14 @@ Post-Decision:
 - Analysis of further appeal options
 - New evidence development
 - Strategic next steps planning`,
-        keywords: ['Appeals Modernization Act', 'AMA', 'supplemental claim', 'higher-level review', 'Board appeal', 'decision review'],
+        keywords: [
+          'Appeals Modernization Act',
+          'AMA',
+          'supplemental claim',
+          'higher-level review',
+          'Board appeal',
+          'decision review',
+        ],
         lastUpdated: '2024-01-30',
         section: 'Appeals Process',
         citationFormat: 'Appeals Modernization Act Guide',
@@ -1716,8 +1899,8 @@ Post-Decision:
         reviewOptions: ['supplemental claim', 'higher-level review', 'Board appeal'],
         keyDeadlines: ['one year for effective date protection', '90 days for Board evidence'],
         relatedForms: ['VA Form 20-0995', 'VA Form 20-0996', 'VA Form 10182'],
-        tags: ['AMA-appeals', 'decision-review', 'appeals-process', 'high-priority']
-      }
+        tags: ['AMA-appeals', 'decision-review', 'appeals-process', 'high-priority'],
+      },
 
       // Continue with more appeals guidance...
       // This represents a sample of the 75+ appeals entries that would be included
@@ -1733,7 +1916,8 @@ Post-Decision:
         type: 'guidance',
         category: 'Special Populations',
         subcategory: 'Military Sexual Trauma',
-        summary: 'Comprehensive guidance on handling MST-related disability claims with relaxed evidentiary standards',
+        summary:
+          'Comprehensive guidance on handling MST-related disability claims with relaxed evidentiary standards',
         content: `MILITARY SEXUAL TRAUMA (MST) CLAIMS GUIDE
 
 DEFINITION:
@@ -1924,7 +2108,14 @@ External Resources:
 - Specialized legal assistance programs
 - Trauma-informed mental health providers
 - Support groups and peer networks`,
-        keywords: ['military sexual trauma', 'MST', 'relaxed evidentiary standards', 'PTSD', 'sexual assault', 'stressor verification'],
+        keywords: [
+          'military sexual trauma',
+          'MST',
+          'relaxed evidentiary standards',
+          'PTSD',
+          'sexual assault',
+          'stressor verification',
+        ],
         lastUpdated: '2024-01-25',
         section: 'Special Populations',
         citationFormat: 'MST Claims Practice Guide',
@@ -1934,8 +2125,8 @@ External Resources:
         applicableConditions: ['PTSD', 'depression', 'anxiety', 'substance use disorders'],
         evidenceStandards: 'relaxed evidentiary requirements',
         specialConsiderations: ['privacy protection', 'trauma-informed care', 'behavioral markers'],
-        tags: ['MST-claims', 'special-populations', 'relaxed-evidence', 'trauma-informed']
-      }
+        tags: ['MST-claims', 'special-populations', 'relaxed-evidence', 'trauma-informed'],
+      },
 
       // Continue with more special population guidance...
       // This represents a sample of the 50+ special population entries that would be included
@@ -1951,7 +2142,8 @@ External Resources:
         type: 'practice_guide',
         category: 'Total Disability',
         subcategory: 'Individual Unemployability',
-        summary: 'Comprehensive practice guide for pursuing Individual Unemployability benefits for veterans',
+        summary:
+          'Comprehensive practice guide for pursuing Individual Unemployability benefits for veterans',
         content: `INDIVIDUAL UNEMPLOYABILITY (IU/TDIU) COMPLETE PRACTICE GUIDE
 
 OVERVIEW:
@@ -2181,7 +2373,14 @@ Long-term Planning:
 - Plan for changing circumstances
 - Coordinate with estate planning
 - Address family financial security`,
-        keywords: ['individual unemployability', 'TDIU', 'substantially gainful employment', 'functional limitations', 'vocational evidence', 'schedular requirements'],
+        keywords: [
+          'individual unemployability',
+          'TDIU',
+          'substantially gainful employment',
+          'functional limitations',
+          'vocational evidence',
+          'schedular requirements',
+        ],
         lastUpdated: '2024-02-15',
         section: 'Total Disability Practice',
         citationFormat: 'Individual Unemployability Practice Guide',
@@ -2191,8 +2390,13 @@ Long-term Planning:
         schedularRequirements: ['60% single disability', '70% combined with 40% individual'],
         keyForms: ['VA Form 21-8940', 'VA Form 21-4192'],
         relatedRegulations: ['38 CFR 4.16', '38 CFR 4.17'],
-        tags: ['TDIU-practice', 'individual-unemployability', 'total-disability', 'vocational-evidence']
-      }
+        tags: [
+          'TDIU-practice',
+          'individual-unemployability',
+          'total-disability',
+          'vocational-evidence',
+        ],
+      },
 
       // Continue with more practice guides...
       // This represents a sample of the 100+ practice guides that would be included
@@ -2202,7 +2406,7 @@ Long-term Planning:
   // Advanced Search Index Building
   buildSearchIndex() {
     const index = new Map()
-    
+
     this.documents.forEach(doc => {
       // Index by keywords
       doc.keywords.forEach(keyword => {
@@ -2213,10 +2417,10 @@ Long-term Planning:
         index.get(key).push({
           id: doc.id,
           weight: 3, // Keywords get highest weight
-          field: 'keyword'
+          field: 'keyword',
         })
       })
-      
+
       // Index by title words
       const titleWords = doc.title.toLowerCase().split(/\s+/)
       titleWords.forEach(word => {
@@ -2229,12 +2433,12 @@ Long-term Planning:
             index.get(cleanWord).push({
               id: doc.id,
               weight: 2, // Title words get medium weight
-              field: 'title'
+              field: 'title',
             })
           }
         }
       })
-      
+
       // Index by content words (selective high-value terms)
       const contentWords = doc.content.toLowerCase().match(/\b\w{4,}\b/g) || []
       const uniqueContentWords = [...new Set(contentWords)].slice(0, 50) // Limit to prevent bloat
@@ -2245,10 +2449,10 @@ Long-term Planning:
         index.get(word).push({
           id: doc.id,
           weight: 1, // Content words get lowest weight
-          field: 'content'
+          field: 'content',
         })
       })
-      
+
       // Index by section
       if (doc.section) {
         const sectionKey = doc.section.toLowerCase().replace(/\s+/g, '-')
@@ -2258,23 +2462,23 @@ Long-term Planning:
         index.get(sectionKey).push({
           id: doc.id,
           weight: 2,
-          field: 'section'
+          field: 'section',
         })
       }
     })
-    
+
     return index
   }
 
   buildCategoryIndex() {
     const categoryIndex = new Map()
-    
+
     this.documents.forEach(doc => {
       if (!categoryIndex.has(doc.category)) {
         categoryIndex.set(doc.category, [])
       }
       categoryIndex.get(doc.category).push(doc.id)
-      
+
       if (doc.subcategory) {
         const subcatKey = `${doc.category}:${doc.subcategory}`
         if (!categoryIndex.has(subcatKey)) {
@@ -2283,13 +2487,13 @@ Long-term Planning:
         categoryIndex.get(subcatKey).push(doc.id)
       }
     })
-    
+
     return categoryIndex
   }
 
   buildKeywordIndex() {
     const keywordIndex = new Map()
-    
+
     this.documents.forEach(doc => {
       doc.keywords.forEach(keyword => {
         if (!keywordIndex.has(keyword)) {
@@ -2298,12 +2502,12 @@ Long-term Planning:
         keywordIndex.get(keyword).add(doc.id)
       })
     })
-    
+
     // Convert Sets to Arrays for easier handling
-    for (let [keyword, docSet] of keywordIndex) {
+    for (const [keyword, docSet] of keywordIndex) {
       keywordIndex.set(keyword, Array.from(docSet))
     }
-    
+
     return keywordIndex
   }
 
@@ -2315,12 +2519,12 @@ Long-term Planning:
 
     const searchTerms = this.parseSearchQuery(query)
     const matchedDocs = new Map() // docId -> score
-    
+
     searchTerms.forEach(term => {
       const termResults = this.searchTerm(term.term, term.weight)
       termResults.forEach(result => {
         const currentScore = matchedDocs.get(result.id) || 0
-        matchedDocs.set(result.id, currentScore + (result.score * term.weight))
+        matchedDocs.set(result.id, currentScore + result.score * term.weight)
       })
     })
 
@@ -2328,12 +2532,12 @@ Long-term Planning:
     let results = Array.from(matchedDocs.entries())
       .map(([id, score]) => ({
         doc: this.documents.find(doc => doc.id === id),
-        score: score
+        score,
       }))
       .filter(item => item.doc)
       .map(item => ({
         ...item.doc,
-        searchScore: item.score
+        searchScore: item.score,
       }))
 
     // Apply filters
@@ -2353,78 +2557,80 @@ Long-term Planning:
     const terms = []
     const quotedTerms = query.match(/"([^"]+)"/g) || []
     let remainingQuery = query
-    
+
     // Handle quoted phrases
     quotedTerms.forEach(quotedTerm => {
       const term = quotedTerm.replace(/"/g, '')
-      terms.push({ term: term, weight: 2, type: 'phrase' })
+      terms.push({ term, weight: 2, type: 'phrase' })
       remainingQuery = remainingQuery.replace(quotedTerm, '')
     })
-    
+
     // Handle remaining individual terms
-    const individualTerms = remainingQuery.toLowerCase().split(/\s+/)
+    const individualTerms = remainingQuery
+      .toLowerCase()
+      .split(/\s+/)
       .filter(term => term.length > 2)
       .map(term => term.replace(/[^\w]/g, ''))
       .filter(term => term.length > 2)
-    
+
     individualTerms.forEach(term => {
-      terms.push({ term: term, weight: 1, type: 'word' })
+      terms.push({ term, weight: 1, type: 'word' })
     })
-    
+
     return terms
   }
 
   searchTerm(term, weight = 1) {
     const results = []
     const termLower = term.toLowerCase()
-    
+
     if (this.searchIndex.has(termLower)) {
       this.searchIndex.get(termLower).forEach(indexEntry => {
         results.push({
           id: indexEntry.id,
-          score: indexEntry.weight * weight
+          score: indexEntry.weight * weight,
         })
       })
     }
-    
+
     // Fuzzy matching for similar terms
     if (results.length === 0) {
-      for (let [indexTerm, entries] of this.searchIndex) {
+      for (const [indexTerm, entries] of this.searchIndex) {
         if (this.calculateSimilarity(termLower, indexTerm) > 0.8) {
           entries.forEach(entry => {
             results.push({
               id: entry.id,
-              score: entry.weight * weight * 0.7 // Reduced score for fuzzy matches
+              score: entry.weight * weight * 0.7, // Reduced score for fuzzy matches
             })
           })
         }
       }
     }
-    
+
     return results
   }
 
   calculateSimilarity(str1, str2) {
     const longer = str1.length > str2.length ? str1 : str2
     const shorter = str1.length > str2.length ? str2 : str1
-    
+
     if (longer.length === 0) return 1.0
-    
+
     const editDistance = this.levenshteinDistance(longer, shorter)
     return (longer.length - editDistance) / longer.length
   }
 
   levenshteinDistance(str1, str2) {
     const matrix = []
-    
+
     for (let i = 0; i <= str2.length; i++) {
       matrix[i] = [i]
     }
-    
+
     for (let j = 0; j <= str1.length; j++) {
       matrix[0][j] = j
     }
-    
+
     for (let i = 1; i <= str2.length; i++) {
       for (let j = 1; j <= str1.length; j++) {
         if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
@@ -2438,7 +2644,7 @@ Long-term Planning:
         }
       }
     }
-    
+
     return matrix[str2.length][str1.length]
   }
 
@@ -2450,20 +2656,24 @@ Long-term Planning:
     }
 
     if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(doc => 
+      filtered = filtered.filter(doc =>
         doc.category.toLowerCase().includes(filters.category.toLowerCase())
       )
     }
 
     if (filters.subcategory) {
-      filtered = filtered.filter(doc => 
-        doc.subcategory && doc.subcategory.toLowerCase().includes(filters.subcategory.toLowerCase())
+      filtered = filtered.filter(
+        doc =>
+          doc.subcategory &&
+          doc.subcategory.toLowerCase().includes(filters.subcategory.toLowerCase())
       )
     }
 
     if (filters.practiceArea) {
-      filtered = filtered.filter(doc => 
-        doc.practiceArea && doc.practiceArea.toLowerCase().includes(filters.practiceArea.toLowerCase())
+      filtered = filtered.filter(
+        doc =>
+          doc.practiceArea &&
+          doc.practiceArea.toLowerCase().includes(filters.practiceArea.toLowerCase())
       )
     }
 
@@ -2476,8 +2686,8 @@ Long-term Planning:
     }
 
     if (filters.tags && filters.tags.length > 0) {
-      filtered = filtered.filter(doc => 
-        doc.tags && filters.tags.some(tag => doc.tags.includes(tag))
+      filtered = filtered.filter(
+        doc => doc.tags && filters.tags.some(tag => doc.tags.includes(tag))
       )
     }
 
@@ -2488,16 +2698,18 @@ Long-term Planning:
   searchByCategory(category, subcategory = null) {
     const key = subcategory ? `${category}:${subcategory}` : category
     const docIds = this.categoryIndex.get(key) || []
-    
-    return docIds.map(id => this.documents.find(doc => doc.id === id))
+
+    return docIds
+      .map(id => this.documents.find(doc => doc.id === id))
       .filter(doc => doc)
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
   }
 
   searchByKeyword(keyword) {
     const docIds = this.keywordIndex.get(keyword) || []
-    
-    return docIds.map(id => this.documents.find(doc => doc.id === id))
+
+    return docIds
+      .map(id => this.documents.find(doc => doc.id === id))
       .filter(doc => doc)
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
   }
@@ -2505,9 +2717,9 @@ Long-term Planning:
   getRelatedDocuments(docId, limit = 10) {
     const doc = this.getDocumentById(docId)
     if (!doc) return []
-    
+
     const relatedDocs = new Map() // docId -> score
-    
+
     // Find documents sharing keywords
     doc.keywords.forEach(keyword => {
       const keywordDocs = this.keywordIndex.get(keyword) || []
@@ -2518,7 +2730,7 @@ Long-term Planning:
         }
       })
     })
-    
+
     // Find documents in same category
     const sameCategoryDocs = this.searchByCategory(doc.category, doc.subcategory)
     sameCategoryDocs.forEach(relatedDoc => {
@@ -2527,12 +2739,12 @@ Long-term Planning:
         relatedDocs.set(relatedDoc.id, currentScore + 1)
       }
     })
-    
+
     // Convert to document objects and sort
     return Array.from(relatedDocs.entries())
       .map(([id, score]) => ({
         doc: this.documents.find(d => d.id === id),
-        relationScore: score
+        relationScore: score,
       }))
       .filter(item => item.doc)
       .sort((a, b) => b.relationScore - a.relationScore)
@@ -2542,9 +2754,8 @@ Long-term Planning:
 
   // Utility Methods
   getAllDocuments(filters = {}) {
-    let results = [...this.documents]
-    return this.applyFilters(results, filters)
-      .sort((a, b) => b.relevanceScore - a.relevanceScore)
+    const results = [...this.documents]
+    return this.applyFilters(results, filters).sort((a, b) => b.relevanceScore - a.relevanceScore)
   }
 
   getDocumentById(id) {
@@ -2606,36 +2817,36 @@ Long-term Planning:
       byCategory: {},
       byPracticeArea: {},
       recentUpdates: 0,
-      averageRelevanceScore: 0
+      averageRelevanceScore: 0,
     }
-    
+
     let totalRelevanceScore = 0
     const oneMonthAgo = new Date()
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
-    
+
     this.documents.forEach(doc => {
       // By type
       stats.byType[doc.type] = (stats.byType[doc.type] || 0) + 1
-      
+
       // By category
       stats.byCategory[doc.category] = (stats.byCategory[doc.category] || 0) + 1
-      
+
       // By practice area
       if (doc.practiceArea) {
         stats.byPracticeArea[doc.practiceArea] = (stats.byPracticeArea[doc.practiceArea] || 0) + 1
       }
-      
+
       // Recent updates
       if (new Date(doc.lastUpdated) > oneMonthAgo) {
         stats.recentUpdates++
       }
-      
+
       // Relevance score
       totalRelevanceScore += doc.relevanceScore || 0
     })
-    
+
     stats.averageRelevanceScore = totalRelevanceScore / this.documents.length
-    
+
     return stats
   }
 
@@ -2661,7 +2872,8 @@ Long-term Planning:
 
   getBookmarkedDocuments() {
     const bookmarkIds = this.getBookmarks()
-    return bookmarkIds.map(id => this.getDocumentById(id))
+    return bookmarkIds
+      .map(id => this.getDocumentById(id))
       .filter(doc => doc)
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
   }
@@ -2682,14 +2894,14 @@ Long-term Planning:
         doc.type,
         doc.category,
         doc.summary,
-        doc.lastUpdated
+        doc.lastUpdated,
       ])
-      
-      return [headers, ...rows].map(row => 
-        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-      ).join('\n')
+
+      return [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\n')
     }
-    
+
     return results
   }
 }
@@ -2701,28 +2913,28 @@ export const documentDatabase = new DocumentDatabase()
 export const searchUtils = {
   highlightSearchTerms: (text, searchTerms) => {
     if (!searchTerms || searchTerms.length === 0) return text
-    
+
     let highlightedText = text
     searchTerms.forEach(term => {
       const regex = new RegExp(`(${term})`, 'gi')
       highlightedText = highlightedText.replace(regex, '<mark>$1</mark>')
     })
-    
+
     return highlightedText
   },
-  
+
   truncateContent: (content, maxLength = 500) => {
     if (content.length <= maxLength) return content
-    
+
     const truncated = content.substring(0, maxLength)
     const lastSpace = truncated.lastIndexOf(' ')
-    
+
     return (lastSpace > maxLength * 0.8 ? truncated.substring(0, lastSpace) : truncated) + '...'
   },
-  
-  formatCitation: (doc) => {
+
+  formatCitation: doc => {
     if (doc.citationFormat) return doc.citationFormat
-    
+
     // Generate basic citation format based on document type
     switch (doc.type) {
       case 'regulation':
@@ -2734,28 +2946,30 @@ export const searchUtils = {
       default:
         return doc.title
     }
-  }
+  },
 }
 
 // Document statistics and analytics
 export const documentAnalytics = {
   getPopularDocuments: (limit = 10) => {
     // This would be implemented with actual usage tracking
-    return documentDatabase.getAllDocuments()
+    return documentDatabase
+      .getAllDocuments()
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, limit)
   },
-  
+
   getRecentlyUpdated: (days = 30, limit = 10) => {
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - days)
-    
-    return documentDatabase.getAllDocuments()
+
+    return documentDatabase
+      .getAllDocuments()
       .filter(doc => new Date(doc.lastUpdated) > cutoffDate)
       .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated))
       .slice(0, limit)
   },
-  
+
   getCoverage: () => {
     const stats = documentDatabase.getStatistics()
     return {
@@ -2763,7 +2977,7 @@ export const documentAnalytics = {
       practiceAreaCoverage: Object.keys(stats.byPracticeArea).length,
       categoryDistribution: stats.byCategory,
       typeDistribution: stats.byType,
-      averageQuality: stats.averageRelevanceScore
+      averageQuality: stats.averageRelevanceScore,
     }
-  }
+  },
 }

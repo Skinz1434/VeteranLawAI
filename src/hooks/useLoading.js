@@ -2,7 +2,7 @@
  * @fileoverview Loading State Management Hook for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Centralized loading state management with accessibility features.
  * Provides consistent loading experiences across all platform tools.
  */
@@ -44,7 +44,7 @@ export function useLoading(initialState = false) {
     setIsLoading(false)
     setLoadingMessage('')
     setProgress(100)
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
@@ -60,7 +60,7 @@ export function useLoading(initialState = false) {
    */
   const setLoadingProgress = useCallback((newProgress, message = null) => {
     setProgress(Math.min(100, Math.max(0, newProgress)))
-    
+
     if (message) {
       setLoadingMessage(message)
     }
@@ -73,7 +73,7 @@ export function useLoading(initialState = false) {
     setError(errorMessage)
     setIsLoading(false)
     setProgress(0)
-    
+
     if (announceToUser) {
       announceToScreenReader(`Error: ${errorMessage}`)
     }
@@ -84,7 +84,7 @@ export function useLoading(initialState = false) {
    */
   const updateMessage = useCallback((message, announceToUser = false) => {
     setLoadingMessage(message)
-    
+
     if (announceToUser) {
       announceToScreenReader(message)
     }
@@ -93,15 +93,18 @@ export function useLoading(initialState = false) {
   /**
    * Set a timeout to automatically stop loading
    */
-  const setLoadingTimeout = useCallback((timeoutMs, timeoutMessage = 'Operation timed out') => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-    
-    timeoutRef.current = setTimeout(() => {
-      setLoadingError(timeoutMessage)
-    }, timeoutMs)
-  }, [setLoadingError])
+  const setLoadingTimeout = useCallback(
+    (timeoutMs, timeoutMessage = 'Operation timed out') => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setLoadingError(timeoutMessage)
+      }, timeoutMs)
+    },
+    [setLoadingError]
+  )
 
   /**
    * Get loading duration in milliseconds
@@ -119,7 +122,7 @@ export function useLoading(initialState = false) {
     setLoadingMessage('')
     setProgress(0)
     setError(null)
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
@@ -147,7 +150,7 @@ export function useLoading(initialState = false) {
     updateMessage,
     setLoadingTimeout,
     getLoadingDuration,
-    resetLoading
+    resetLoading,
   }
 }
 
@@ -158,67 +161,76 @@ export function useMultiStageLoading(stages = []) {
   const [currentStage, setCurrentStage] = useState(0)
   const [stageProgress, setStageProgress] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
-  const { 
-    isLoading, 
-    loadingMessage, 
+  const {
+    isLoading,
+    loadingMessage,
     error,
-    startLoading, 
-    stopLoading, 
+    startLoading,
+    stopLoading,
     setLoadingError,
-    resetLoading 
+    resetLoading,
   } = useLoading()
 
   /**
    * Start the multi-stage process
    */
-  const startStages = useCallback((initialMessage = 'Starting process...') => {
-    setCurrentStage(0)
-    setStageProgress(0)
-    setIsCompleted(false)
-    startLoading(initialMessage)
-  }, [startLoading])
+  const startStages = useCallback(
+    (initialMessage = 'Starting process...') => {
+      setCurrentStage(0)
+      setStageProgress(0)
+      setIsCompleted(false)
+      startLoading(initialMessage)
+    },
+    [startLoading]
+  )
 
   /**
    * Advance to the next stage
    */
-  const nextStage = useCallback((message = null) => {
-    if (currentStage < stages.length - 1) {
-      const newStage = currentStage + 1
-      setCurrentStage(newStage)
-      setStageProgress(0)
-      
-      const stageMessage = message || stages[newStage]?.name || `Stage ${newStage + 1}`
-      announceToScreenReader(stageMessage)
-    }
-  }, [currentStage, stages])
+  const nextStage = useCallback(
+    (message = null) => {
+      if (currentStage < stages.length - 1) {
+        const newStage = currentStage + 1
+        setCurrentStage(newStage)
+        setStageProgress(0)
+
+        const stageMessage = message || stages[newStage]?.name || `Stage ${newStage + 1}`
+        announceToScreenReader(stageMessage)
+      }
+    },
+    [currentStage, stages]
+  )
 
   /**
    * Update progress within current stage
    */
-  const updateStageProgress = useCallback((progress) => {
+  const updateStageProgress = useCallback(progress => {
     setStageProgress(Math.min(100, Math.max(0, progress)))
   }, [])
 
   /**
    * Complete all stages
    */
-  const completeStages = useCallback((successMessage = 'Process completed successfully') => {
-    setCurrentStage(stages.length - 1)
-    setStageProgress(100)
-    setIsCompleted(true)
-    stopLoading(successMessage)
-  }, [stages.length, stopLoading])
+  const completeStages = useCallback(
+    (successMessage = 'Process completed successfully') => {
+      setCurrentStage(stages.length - 1)
+      setStageProgress(100)
+      setIsCompleted(true)
+      stopLoading(successMessage)
+    },
+    [stages.length, stopLoading]
+  )
 
   /**
    * Get overall progress (0-100)
    */
   const getOverallProgress = useCallback(() => {
     if (stages.length === 0) return 0
-    
+
     const completedStages = currentStage
     const currentStageProgress = stageProgress / 100
     const totalProgress = (completedStages + currentStageProgress) / stages.length
-    
+
     return Math.round(totalProgress * 100)
   }, [currentStage, stageProgress, stages.length])
 
@@ -245,7 +257,7 @@ export function useMultiStageLoading(stages = []) {
     updateStageProgress,
     completeStages,
     setLoadingError,
-    resetStages
+    resetStages,
   }
 }
 
@@ -260,13 +272,13 @@ export function useDebouncedLoading(delay = 300) {
 
   const startLoading = useCallback(() => {
     setIsLoading(true)
-    
+
     // Clear any existing hide timeout
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current)
       hideTimeoutRef.current = null
     }
-    
+
     // Show loading after delay to prevent flickering
     if (!showLoading) {
       timeoutRef.current = setTimeout(() => {
@@ -279,13 +291,13 @@ export function useDebouncedLoading(delay = 300) {
 
   const stopLoading = useCallback(() => {
     setIsLoading(false)
-    
+
     // Clear show timeout if still pending
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
     }
-    
+
     // Hide loading immediately if operation was fast
     // Or after a brief delay to show completion
     if (showLoading) {
@@ -311,7 +323,7 @@ export function useDebouncedLoading(delay = 300) {
     isLoading,
     showLoading,
     startLoading,
-    stopLoading
+    stopLoading,
   }
 }
 
@@ -338,7 +350,7 @@ export function useFileProgress() {
   const updateProgress = useCallback((newProgress, rate = 0) => {
     setProgress(Math.min(100, Math.max(0, newProgress)))
     setTransferRate(rate)
-    
+
     if (rate > 0 && newProgress < 100) {
       const remaining = (100 - newProgress) / rate
       setEstimatedTimeRemaining(remaining)
@@ -361,7 +373,7 @@ export function useFileProgress() {
     setEstimatedTimeRemaining(0)
   }, [])
 
-  const formatFileSize = useCallback((bytes) => {
+  const formatFileSize = useCallback(bytes => {
     if (bytes === 0) return '0 Bytes'
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
@@ -369,7 +381,7 @@ export function useFileProgress() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }, [])
 
-  const formatTime = useCallback((seconds) => {
+  const formatTime = useCallback(seconds => {
     if (seconds < 60) return `${Math.round(seconds)}s`
     if (seconds < 3600) return `${Math.round(seconds / 60)}m`
     return `${Math.round(seconds / 3600)}h`
@@ -385,6 +397,6 @@ export function useFileProgress() {
     startProgress,
     updateProgress,
     completeProgress,
-    resetProgress
+    resetProgress,
   }
 }

@@ -2,10 +2,10 @@
  * @fileoverview Data Export and Reporting Utilities for VeteranLawAI Platform
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Comprehensive reporting and data export functionality for veteran law practice management.
  * Supports multiple formats and veteran-specific reporting requirements.
- * 
+ *
  * Features:
  * - PDF report generation
  * - Excel/CSV data export
@@ -39,36 +39,36 @@ export class ReportingEngine {
         description: 'Comprehensive practice performance analysis',
         sections: ['overview', 'conditions', 'regions', 'trends', 'recommendations'],
         clientFacing: false,
-        confidential: true
+        confidential: true,
       },
       caseResearch: {
         name: 'Legal Research Report',
         description: 'Case law analysis and precedent research',
         sections: ['summary', 'precedents', 'analysis', 'strategy', 'citations'],
         clientFacing: true,
-        confidential: false
+        confidential: false,
       },
       claimAnalysis: {
         name: 'VA Claim Analysis Report',
         description: 'Detailed claim analysis with recommendations',
         sections: ['claimSummary', 'evidence', 'analysis', 'recommendations', 'timeline'],
         clientFacing: true,
-        confidential: true
+        confidential: true,
       },
       conditionReport: {
         name: 'Condition Success Rate Report',
         description: 'Success rates and strategies by condition type',
         sections: ['conditions', 'statistics', 'evidence', 'precedents', 'strategies'],
         clientFacing: false,
-        confidential: true
+        confidential: true,
       },
       clientSummary: {
         name: 'Client Case Summary',
         description: 'Client-friendly case status and next steps',
         sections: ['status', 'progress', 'nextSteps', 'timeline', 'contact'],
         clientFacing: true,
-        confidential: false
-      }
+        confidential: false,
+      },
     }
   }
 
@@ -82,7 +82,7 @@ export class ReportingEngine {
       timeRange = '30d',
       includeFinancials = true,
       includeRegionalData = true,
-      format = 'json'
+      format = 'json',
     } = options
 
     const analytics = analyticsDataEngine.getOverviewMetrics()
@@ -95,9 +95,9 @@ export class ReportingEngine {
       metadata: {
         title: 'VeteranLawAI Practice Analytics Report',
         generatedAt: new Date().toISOString(),
-        timeRange: timeRange,
+        timeRange,
         reportId: this.generateReportId(),
-        confidential: true
+        confidential: true,
       },
       executiveSummary: {
         totalCases: analytics.totalCases,
@@ -108,26 +108,26 @@ export class ReportingEngine {
         keyInsights: insights.slice(0, 3).map(insight => ({
           type: insight.type,
           title: insight.title,
-          impact: insight.impact || 'medium'
-        }))
+          impact: insight.impact || 'medium',
+        })),
       },
       performanceMetrics: {
         caseMetrics: {
           totalFiled: analytics.totalCases,
           successRate: analytics.successRate,
           averageCaseValue: this.formatCurrency(performance.avgCaseValue),
-          processingTime: analytics.avgProcessingTime
+          processingTime: analytics.avgProcessingTime,
         },
         clientSatisfaction: {
           satisfactionRate: `${performance.clientSatisfaction}%`,
           referralRate: `${performance.referralRate}%`,
-          retainerConversion: `${performance.retainerConversion}%`
+          retainerConversion: `${performance.retainerConversion}%`,
         },
         appeals: {
           pendingAppeals: analytics.pendingAppeals,
           appealWinRate: `${performance.appealWinRate}%`,
-          avgAppealTime: '8.2 months'
-        }
+          avgAppealTime: '8.2 months',
+        },
       },
       conditionAnalysis: conditions.map(condition => ({
         name: condition.name,
@@ -138,15 +138,17 @@ export class ReportingEngine {
         difficulty: condition.difficulty,
         trend: condition.trendDirection,
         keyEvidence: condition.commonEvidence,
-        precedents: condition.keyPrecedents
+        precedents: condition.keyPrecedents,
       })),
-      regionalPerformance: includeRegionalData ? regions.map(region => ({
-        office: region.region,
-        cases: region.cases,
-        successRate: `${region.success}%`,
-        avgProcessingTime: `${region.avgTime} months`,
-        trend: region.trends || { speed: 0, approval: 0 }
-      })) : null,
+      regionalPerformance: includeRegionalData
+        ? regions.map(region => ({
+            office: region.region,
+            cases: region.cases,
+            successRate: `${region.success}%`,
+            avgProcessingTime: `${region.avgTime} months`,
+            trend: region.trends || { speed: 0, approval: 0 },
+          }))
+        : null,
       insights: insights.map(insight => ({
         type: insight.type,
         priority: insight.priority || 'medium',
@@ -155,15 +157,15 @@ export class ReportingEngine {
         recommendation: insight.recommendation,
         actionable: insight.actionable,
         impact: insight.impact || 'medium',
-        timeframe: insight.timeframe || 'Unknown'
+        timeframe: insight.timeframe || 'Unknown',
       })),
       recommendations: this.generatePracticeRecommendations(analytics, conditions, insights),
       appendix: {
         methodology: 'Data aggregated from case management system and VA databases',
         dataQuality: 'High - based on actual case outcomes and VA statistics',
         limitations: 'Report based on available data within specified time range',
-        lastUpdated: new Date().toISOString()
-      }
+        lastUpdated: new Date().toISOString(),
+      },
     }
 
     return this.formatReport(report, format)
@@ -185,14 +187,14 @@ export class ReportingEngine {
         generatedAt: new Date().toISOString(),
         clientName: clientName || 'Confidential Client',
         reportId: this.generateReportId(),
-        confidential: true
+        confidential: true,
       },
       executiveSummary: {
         issueDescription: issueDescription || 'Legal research analysis',
         casesAnalyzed: cases.length,
         primaryPrecedents: cases.filter(c => c.precedentStrength === 'high').length,
         overallAssessment: this.assessOverallStrength(analysis),
-        keyFindings: this.extractKeyFindings(cases, analysis)
+        keyFindings: this.extractKeyFindings(cases, analysis),
       },
       caseAnalysis: cases.map(caseItem => ({
         title: caseItem.title,
@@ -205,22 +207,24 @@ export class ReportingEngine {
         factPattern: caseItem.factPattern,
         practicalApplication: caseItem.practicalApplication,
         strengths: this.analyzeCaseStrengths(caseItem),
-        limitations: this.analyzeCaseLimitations(caseItem)
+        limitations: this.analyzeCaseLimitations(caseItem),
       })),
       legalStrategy: {
-        recommendedApproach: analysis?.recommendedStrategy || 'Develop comprehensive legal strategy based on identified precedents',
+        recommendedApproach:
+          analysis?.recommendedStrategy ||
+          'Develop comprehensive legal strategy based on identified precedents',
         primaryAuthority: cases.filter(c => c.precedentStrength === 'high').map(c => c.title),
         supportingAuthority: cases.filter(c => c.precedentStrength === 'medium').map(c => c.title),
         riskFactors: this.identifyRiskFactors(cases),
-        successProbability: this.calculateSuccessProbability(cases, analysis)
+        successProbability: this.calculateSuccessProbability(cases, analysis),
       },
       citationStrategy: this.generateCitationStrategy(cases),
       nextSteps: this.generateNextSteps(cases, analysis),
       appendix: {
         searchMethodology: 'Comprehensive search of VA case law database and federal precedents',
         databasesCovered: ['VA Case Law Database', 'Federal Circuit Decisions', 'CAVC Opinions'],
-        lastUpdated: new Date().toISOString()
-      }
+        lastUpdated: new Date().toISOString(),
+      },
     }
 
     return this.formatReport(report, format)
@@ -243,14 +247,14 @@ export class ReportingEngine {
         veteranName: veteranName || 'Veteran',
         reportId: this.generateReportId(),
         confidential: true,
-        clientFacing: clientFacing
+        clientFacing,
       },
       claimSummary: {
         conditions: claimData.conditions?.map(c => c.name) || [],
         overallSuccessProbability: `${analysis.overallSuccessProbability || 75}%`,
         estimatedTimeline: analysis.estimatedTimeline?.description || '4-6 months',
         potentialRating: analysis.potentialRating?.description || 'To be determined',
-        estimatedValue: this.calculateEstimatedClaimValue(claimData, analysis)
+        estimatedValue: this.calculateEstimatedClaimValue(claimData, analysis),
       },
       conditionAnalysis: (analysis.conditionAnalysis || []).map(condition => ({
         condition: condition.conditionName,
@@ -258,7 +262,7 @@ export class ReportingEngine {
         strengths: condition.strengths,
         weaknesses: condition.weaknesses,
         criticalActions: condition.criticalActions,
-        evidenceNeeded: this.getEvidenceRequirements(condition.conditionId)
+        evidenceNeeded: this.getEvidenceRequirements(condition.conditionId),
       })),
       evidenceGaps: (analysis.evidenceGaps || []).map(gap => ({
         condition: gap.condition,
@@ -266,7 +270,7 @@ export class ReportingEngine {
         severity: gap.severity,
         description: gap.description,
         action: gap.action,
-        priority: gap.severity === 'critical' ? 'High' : gap.severity === 'high' ? 'Medium' : 'Low'
+        priority: gap.severity === 'critical' ? 'High' : gap.severity === 'high' ? 'Medium' : 'Low',
       })),
       recommendations: (analysis.recommendations || []).map(rec => ({
         priority: rec.priority,
@@ -274,25 +278,25 @@ export class ReportingEngine {
         recommendation: rec.recommendation,
         details: rec.details,
         timeframe: rec.timeframe,
-        actionable: true
+        actionable: true,
       })),
       secondaryConditions: (analysis.secondaryConditions || []).map(secondary => ({
         condition: secondary.condition,
         primaryConnection: secondary.primaryConnection,
         probability: `${Math.round(secondary.probability * 100)}%`,
         reason: secondary.reason,
-        recommendation: secondary.recommendation
+        recommendation: secondary.recommendation,
       })),
       strategicAdvice: (analysis.strategicAdvice || []).map(advice => ({
         type: advice.type,
         title: advice.title,
         description: advice.description,
         impact: advice.impact,
-        timeframe: advice.timeframe || 'Ongoing'
+        timeframe: advice.timeframe || 'Ongoing',
       })),
       nextSteps: this.generateClaimNextSteps(analysis),
       timeline: this.generateClaimTimeline(analysis),
-      resources: this.getVeteranResources()
+      resources: this.getVeteranResources(),
     }
 
     return this.formatReport(report, format)
@@ -330,12 +334,12 @@ export class ReportingEngine {
     const jsonData = JSON.stringify(data, null, 2)
     const blob = new Blob([jsonData], { type: 'application/json' })
     this.downloadFile(blob, filename)
-    
+
     return {
       success: true,
       format: 'json',
-      filename: filename,
-      size: blob.size
+      filename,
+      size: blob.size,
     }
   }
 
@@ -344,13 +348,13 @@ export class ReportingEngine {
    */
   exportCSV(data, filename) {
     let csvContent = ''
-    
+
     if (Array.isArray(data)) {
       // Handle array of objects
       if (data.length > 0) {
         const headers = Object.keys(data[0])
         csvContent = headers.join(',') + '\n'
-        
+
         data.forEach(row => {
           const values = headers.map(header => {
             let value = row[header]
@@ -375,15 +379,15 @@ export class ReportingEngine {
         }
       })
     }
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' })
     this.downloadFile(blob, filename)
-    
+
     return {
       success: true,
       format: 'csv',
-      filename: filename,
-      size: blob.size
+      filename,
+      size: blob.size,
     }
   }
 
@@ -395,15 +399,15 @@ export class ReportingEngine {
     let pdfContent = `VeteranLawAI Report\n\n`
     pdfContent += `Generated: ${new Date().toLocaleString()}\n\n`
     pdfContent += JSON.stringify(data, null, 2)
-    
+
     const blob = new Blob([pdfContent], { type: 'application/pdf' })
     this.downloadFile(blob, filename)
-    
+
     return {
       success: true,
       format: 'pdf',
-      filename: filename,
-      size: blob.size
+      filename,
+      size: blob.size,
     }
   }
 
@@ -429,7 +433,7 @@ export class ReportingEngine {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(amount)
   }
 
@@ -461,7 +465,7 @@ export class ReportingEngine {
    */
   generatePracticeRecommendations(analytics, conditions, insights) {
     const recommendations = []
-    
+
     // High-success conditions
     const highSuccessConditions = conditions.filter(c => c.success > 90)
     if (highSuccessConditions.length > 0) {
@@ -470,10 +474,10 @@ export class ReportingEngine {
         priority: 'medium',
         title: 'Focus on High-Success Conditions',
         description: `Conditions with >90% success rate: ${highSuccessConditions.map(c => c.name).join(', ')}`,
-        action: 'Increase marketing and capacity for these condition types'
+        action: 'Increase marketing and capacity for these condition types',
       })
     }
-    
+
     // Processing time improvements
     if (analytics.trends.time < -10) {
       recommendations.push({
@@ -481,16 +485,16 @@ export class ReportingEngine {
         priority: 'high',
         title: 'Processing Time Improvement',
         description: `Processing times improved by ${Math.abs(analytics.trends.time)}%`,
-        action: 'Document and replicate successful process improvements'
+        action: 'Document and replicate successful process improvements',
       })
     }
-    
+
     return recommendations
   }
 
   assessOverallStrength(analysis) {
     if (!analysis) return 'Analysis pending'
-    
+
     const strengthScore = analysis.strengthAssessment?.overall || 0.5
     if (strengthScore > 0.8) return 'Strong case with favorable precedents'
     if (strengthScore > 0.6) return 'Moderate case with some supporting authority'
@@ -500,8 +504,8 @@ export class ReportingEngine {
   extractKeyFindings(cases, analysis) {
     return [
       `${cases.filter(c => c.precedentStrength === 'high').length} high-value precedents identified`,
-      `Average relevance score: ${Math.round(cases.reduce((sum, c) => sum + (c.relevanceScore || 0.5), 0) / cases.length * 100)}%`,
-      `Primary jurisdiction: ${cases[0]?.court || 'Federal courts'}`
+      `Average relevance score: ${Math.round((cases.reduce((sum, c) => sum + (c.relevanceScore || 0.5), 0) / cases.length) * 100)}%`,
+      `Primary jurisdiction: ${cases[0]?.court || 'Federal courts'}`,
     ]
   }
 
@@ -522,7 +526,9 @@ export class ReportingEngine {
 
   identifyRiskFactors(cases) {
     const risks = []
-    const oldCases = cases.filter(c => new Date().getFullYear() - new Date(c.date).getFullYear() > 10)
+    const oldCases = cases.filter(
+      c => new Date().getFullYear() - new Date(c.date).getFullYear() > 10
+    )
     if (oldCases.length > cases.length * 0.5) {
       risks.push('Many precedents are over 10 years old - verify current applicability')
     }
@@ -539,7 +545,7 @@ export class ReportingEngine {
     return {
       primary: cases.filter(c => c.precedentStrength === 'high').map(c => c.citation),
       supporting: cases.filter(c => c.precedentStrength === 'medium').map(c => c.citation),
-      order: 'Lead with strongest precedent, use supporting cases to build comprehensive argument'
+      order: 'Lead with strongest precedent, use supporting cases to build comprehensive argument',
     }
   }
 
@@ -548,7 +554,7 @@ export class ReportingEngine {
       'Review complete case holdings and factual patterns',
       'Develop legal argument structure based on precedent hierarchy',
       'Identify and address potential counterarguments',
-      'Draft legal brief incorporating identified precedents'
+      'Draft legal brief incorporating identified precedents',
     ]
   }
 
@@ -557,14 +563,22 @@ export class ReportingEngine {
     const monthlyRate = this.getRateForRating(potentialRating)
     const annualValue = monthlyRate * 12
     const retroactiveMonths = 12 // Assume 12 months retroactive
-    const total = annualValue + (monthlyRate * retroactiveMonths)
+    const total = annualValue + monthlyRate * retroactiveMonths
     return this.formatCurrency(total)
   }
 
   getRateForRating(rating) {
     const rates = {
-      10: 171, 20: 338, 30: 524, 40: 755, 50: 1075,
-      60: 1362, 70: 1716, 80: 1995, 90: 2242, 100: 3738
+      10: 171,
+      20: 338,
+      30: 524,
+      40: 755,
+      50: 1075,
+      60: 1362,
+      70: 1716,
+      80: 1995,
+      90: 2242,
+      100: 3738,
     }
     const roundedRating = Math.round(rating / 10) * 10
     return rates[roundedRating] || rates[50]
@@ -577,17 +591,17 @@ export class ReportingEngine {
 
   generateClaimNextSteps(analysis) {
     const steps = []
-    
+
     if (analysis.evidenceGaps?.some(gap => gap.severity === 'critical')) {
       steps.push('Address critical evidence gaps before filing')
     }
-    
+
     steps.push('Gather all required medical evidence')
     steps.push('Obtain nexus letter from treating physician')
     steps.push('File VA disability compensation claim')
     steps.push('Attend C&P examination if scheduled')
     steps.push('Monitor claim status and respond to VA requests')
-    
+
     return steps
   }
 
@@ -598,7 +612,7 @@ export class ReportingEngine {
       initialReview: '2-4 weeks',
       examination: '1-3 months',
       decision: `${timeline.months} months`,
-      appeal: 'If needed: +6-12 months'
+      appeal: 'If needed: +6-12 months',
     }
   }
 
@@ -608,7 +622,7 @@ export class ReportingEngine {
       'VA Regional Office locator',
       'Veterans Service Organizations (VSOs)',
       'VA disability compensation rates',
-      'Appeal process information'
+      'Appeal process information',
     ]
   }
 
@@ -623,7 +637,7 @@ export class ReportingEngine {
     Object.keys(obj).forEach(key => {
       const value = obj[key]
       const newKey = prefix ? `${prefix}.${key}` : key
-      
+
       if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
         this.flattenObject(value, newKey, result)
       } else {
@@ -637,7 +651,7 @@ export class ReportingEngine {
     return {
       title: report.metadata?.title || 'VeteranLawAI Report',
       content: JSON.stringify(report, null, 2),
-      generated: new Date().toISOString()
+      generated: new Date().toISOString(),
     }
   }
 }
@@ -646,7 +660,11 @@ export class ReportingEngine {
 export const reportingEngine = new ReportingEngine()
 
 // Export convenience functions
-export const generatePracticeReport = (options) => reportingEngine.generatePracticeAnalyticsReport(options)
-export const generateCaseReport = (cases, analysis, options) => reportingEngine.generateCaseResearchReport(cases, analysis, options)
-export const generateClaimReport = (claimData, analysis, options) => reportingEngine.generateClaimAnalysisReport(claimData, analysis, options)
-export const exportData = (data, format, filename) => reportingEngine.exportData(data, format, filename)
+export const generatePracticeReport = options =>
+  reportingEngine.generatePracticeAnalyticsReport(options)
+export const generateCaseReport = (cases, analysis, options) =>
+  reportingEngine.generateCaseResearchReport(cases, analysis, options)
+export const generateClaimReport = (claimData, analysis, options) =>
+  reportingEngine.generateClaimAnalysisReport(claimData, analysis, options)
+export const exportData = (data, format, filename) =>
+  reportingEngine.exportData(data, format, filename)

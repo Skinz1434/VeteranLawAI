@@ -2,7 +2,7 @@
  * @fileoverview Case Analysis Engine for Legal Research
  * @author VeteranLawAI Platform
  * @version 1.0.0
- * 
+ *
  * Provides intelligent analysis of case law relevance, precedential value,
  * and strategic application for VA disability claims.
  */
@@ -19,20 +19,20 @@ export class CaseAnalysisEngine {
         exactIssueMatch: 0.4,
         categoryMatch: 0.25,
         factualSimilarity: 0.2,
-        legalPrincipleMatch: 0.15
+        legalPrincipleMatch: 0.15,
       },
       precedentialWeights: {
         'Federal Circuit': 1.0,
         'Court of Appeals for Veterans Claims': 0.9,
         'Board of Veterans Appeals': 0.3,
-        'Regional Office': 0.1
+        'Regional Office': 0.1,
       },
       temporalWeights: {
-        current: 1.0,    // Last 5 years
-        recent: 0.8,     // 5-10 years
-        dated: 0.6,      // 10-20 years
-        old: 0.4         // 20+ years
-      }
+        current: 1.0, // Last 5 years
+        recent: 0.8, // 5-10 years
+        dated: 0.6, // 10-20 years
+        old: 0.4, // 20+ years
+      },
     }
   }
 
@@ -41,18 +41,18 @@ export class CaseAnalysisEngine {
       'Federal Circuit': {
         level: 1,
         binding: ['Court of Appeals for Veterans Claims', 'Board of Veterans Appeals'],
-        description: 'Highest authority for VA law'
+        description: 'Highest authority for VA law',
       },
       'Court of Appeals for Veterans Claims': {
         level: 2,
         binding: ['Board of Veterans Appeals'],
-        description: 'Primary VA appellate court'
+        description: 'Primary VA appellate court',
       },
       'Board of Veterans Appeals': {
         level: 3,
         binding: [],
-        description: 'Administrative tribunal'
-      }
+        description: 'Administrative tribunal',
+      },
     }
   }
 
@@ -71,28 +71,28 @@ export class CaseAnalysisEngine {
       practicalApplication: '',
       strengths: [],
       limitations: [],
-      recommendedUse: ''
+      recommendedUse: '',
     }
 
     // Calculate relevance factors
-    analysis.relevanceFactors.exactIssueMatch = this.calculateExactIssueMatch(
-      targetCase, userIssue
-    )
-    analysis.relevanceFactors.categoryMatch = this.calculateCategoryMatch(
-      targetCase, userIssue
-    )
+    analysis.relevanceFactors.exactIssueMatch = this.calculateExactIssueMatch(targetCase, userIssue)
+    analysis.relevanceFactors.categoryMatch = this.calculateCategoryMatch(targetCase, userIssue)
     analysis.relevanceFactors.factualSimilarity = this.calculateFactualSimilarity(
-      targetCase, userIssue
+      targetCase,
+      userIssue
     )
     analysis.relevanceFactors.legalPrincipleMatch = this.calculateLegalPrincipleMatch(
-      targetCase, userIssue
+      targetCase,
+      userIssue
     )
 
     // Calculate overall relevance
-    analysis.overallRelevance = Object.entries(analysis.relevanceFactors)
-      .reduce((sum, [factor, score]) => {
-        return sum + (score * this.analysisFactors.relevanceFactors[factor])
-      }, 0)
+    analysis.overallRelevance = Object.entries(analysis.relevanceFactors).reduce(
+      (sum, [factor, score]) => {
+        return sum + score * this.analysisFactors.relevanceFactors[factor]
+      },
+      0
+    )
 
     // Calculate precedential value
     analysis.precedentialValue = this.calculatePrecedentialValue(targetCase)
@@ -102,7 +102,9 @@ export class CaseAnalysisEngine {
 
     // Generate practical application guidance
     analysis.practicalApplication = this.generatePracticalApplication(
-      targetCase, userIssue, analysis
+      targetCase,
+      userIssue,
+      analysis
     )
 
     // Identify strengths and limitations
@@ -124,10 +126,8 @@ export class CaseAnalysisEngine {
     let maxMatch = 0
     userIssues.forEach(issue => {
       const commonWords = this.getCommonWords(targetIssue, issue)
-      const matchScore = commonWords.length / Math.max(
-        targetIssue.split(' ').length,
-        issue.split(' ').length
-      )
+      const matchScore =
+        commonWords.length / Math.max(targetIssue.split(' ').length, issue.split(' ').length)
       maxMatch = Math.max(maxMatch, matchScore)
     })
 
@@ -145,10 +145,10 @@ export class CaseAnalysisEngine {
 
     // Check for related categories
     const relatedCategories = {
-      'ptsd': ['mental health', 'depression', 'anxiety'],
+      ptsd: ['mental health', 'depression', 'anxiety'],
       'mental health': ['ptsd', 'depression', 'anxiety'],
-      'musculoskeletal': ['back pain', 'knee', 'shoulder'],
-      'tbi': ['neurological', 'cognitive', 'headaches']
+      musculoskeletal: ['back pain', 'knee', 'shoulder'],
+      tbi: ['neurological', 'cognitive', 'headaches'],
     }
 
     const related = relatedCategories[userCategory] || []
@@ -166,10 +166,7 @@ export class CaseAnalysisEngine {
     if (!targetFacts || !userFacts) return 0
 
     const commonWords = this.getCommonWords(targetFacts, userFacts)
-    const totalWords = new Set([
-      ...targetFacts.split(' '),
-      ...userFacts.split(' ')
-    ]).size
+    const totalWords = new Set([...targetFacts.split(' '), ...userFacts.split(' ')]).size
 
     return Math.min(commonWords.length / totalWords, 1.0)
   }
@@ -192,11 +189,12 @@ export class CaseAnalysisEngine {
 
   calculatePrecedentialValue(targetCase) {
     const courtWeight = this.analysisFactors.precedentialWeights[targetCase.court] || 0.1
-    const precedenceScore = {
-      'high': 1.0,
-      'medium': 0.7,
-      'low': 0.4
-    }[targetCase.precedentialValue] || 0.4
+    const precedenceScore =
+      {
+        high: 1.0,
+        medium: 0.7,
+        low: 0.4,
+      }[targetCase.precedentialValue] || 0.4
 
     let bonuses = 0
     if (targetCase.stillGoodLaw) bonuses += 0.2
@@ -246,7 +244,9 @@ export class CaseAnalysisEngine {
     }
 
     if (targetCase.winRate > 0.8) {
-      strengths.push(`High success rate (${Math.round(targetCase.winRate * 100)}%) in similar cases`)
+      strengths.push(
+        `High success rate (${Math.round(targetCase.winRate * 100)}%) in similar cases`
+      )
     }
 
     if (analysis.temporalRelevance > 0.8) {
@@ -314,13 +314,13 @@ export class CaseAnalysisEngine {
   performComparativeAnalysis(cases, userIssue) {
     const analyses = cases.map(caseItem => ({
       case: caseItem,
-      analysis: this.analyzeCaseRelevance(caseItem, userIssue)
+      analysis: this.analyzeCaseRelevance(caseItem, userIssue),
     }))
 
     // Sort by overall utility (relevance + precedential value)
     analyses.sort((a, b) => {
-      const scoreA = (a.analysis.overallRelevance * 0.6) + (a.analysis.precedentialValue * 0.4)
-      const scoreB = (b.analysis.overallRelevance * 0.6) + (b.analysis.precedentialValue * 0.4)
+      const scoreA = a.analysis.overallRelevance * 0.6 + a.analysis.precedentialValue * 0.4
+      const scoreB = b.analysis.overallRelevance * 0.6 + b.analysis.precedentialValue * 0.4
       return scoreB - scoreA
     })
 
@@ -328,7 +328,7 @@ export class CaseAnalysisEngine {
       rankedCases: analyses,
       bestCase: analyses[0],
       recommendedCitation: this.generateCitationStrategy(analyses.slice(0, 5)),
-      argumentStructure: this.generateArgumentStructure(analyses.slice(0, 3))
+      argumentStructure: this.generateArgumentStructure(analyses.slice(0, 3)),
     }
   }
 
@@ -336,29 +336,29 @@ export class CaseAnalysisEngine {
     const strategy = {
       primaryAuthority: [],
       supportingAuthority: [],
-      backgroundAuthority: []
+      backgroundAuthority: [],
     }
 
     topCases.forEach(({ case: caseItem, analysis }) => {
       const useType = analysis.recommendedUse
-      
+
       switch (useType) {
         case 'PRIMARY_AUTHORITY':
           strategy.primaryAuthority.push({
             case: caseItem,
-            reason: 'Direct precedent with high relevance and authority'
+            reason: 'Direct precedent with high relevance and authority',
           })
           break
         case 'SUPPORTING_AUTHORITY':
           strategy.supportingAuthority.push({
             case: caseItem,
-            reason: 'Supporting precedent reinforcing legal principles'
+            reason: 'Supporting precedent reinforcing legal principles',
           })
           break
         case 'BACKGROUND_AUTHORITY':
           strategy.backgroundAuthority.push({
             case: caseItem,
-            reason: 'Background authority for legal context'
+            reason: 'Background authority for legal context',
           })
           break
       }
@@ -378,20 +378,20 @@ export class CaseAnalysisEngine {
       primaryArgument: {
         case: primaryCase.case,
         application: primaryCase.analysis.practicalApplication,
-        keyQuote: primaryCase.case.holding
+        keyQuote: primaryCase.case.holding,
       },
       supportingArguments: supportingCases.map(({ case: caseItem, analysis }) => ({
         case: caseItem,
         application: analysis.practicalApplication,
-        supportiveRole: 'Reinforces the principle that...'
+        supportiveRole: 'Reinforces the principle that...',
       })),
-      conclusion: this.generateArgumentConclusion(topCases)
+      conclusion: this.generateArgumentConclusion(topCases),
     }
   }
 
   generateArgumentConclusion(cases) {
-    const primaryAuthorities = cases.filter(c => 
-      c.analysis.recommendedUse === 'PRIMARY_AUTHORITY'
+    const primaryAuthorities = cases.filter(
+      c => c.analysis.recommendedUse === 'PRIMARY_AUTHORITY'
     ).length
 
     if (primaryAuthorities > 1) {
@@ -404,9 +404,19 @@ export class CaseAnalysisEngine {
   }
 
   getCommonWords(text1, text2) {
-    const words1 = new Set(text1.toLowerCase().split(' ').filter(w => w.length > 3))
-    const words2 = new Set(text2.toLowerCase().split(' ').filter(w => w.length > 3))
-    
+    const words1 = new Set(
+      text1
+        .toLowerCase()
+        .split(' ')
+        .filter(w => w.length > 3)
+    )
+    const words2 = new Set(
+      text2
+        .toLowerCase()
+        .split(' ')
+        .filter(w => w.length > 3)
+    )
+
     return Array.from(words1).filter(word => words2.has(word))
   }
 
@@ -418,13 +428,13 @@ export class CaseAnalysisEngine {
    */
   generateStrategicAdvice(cases, userIssue) {
     const comparative = this.performComparativeAnalysis(cases, userIssue)
-    
+
     const advice = {
       litigationStrategy: '',
       keyRisks: [],
       strengthAreas: [],
       recommendedApproach: '',
-      alternativeTheories: []
+      alternativeTheories: [],
     }
 
     // Analyze win rates and success factors
@@ -432,13 +442,16 @@ export class CaseAnalysisEngine {
     const highValueCases = cases.filter(c => c.precedentialValue === 'high')
 
     if (averageWinRate > 0.7 && highValueCases.length > 0) {
-      advice.litigationStrategy = 'AGGRESSIVE - Strong precedential support with high success probability'
+      advice.litigationStrategy =
+        'AGGRESSIVE - Strong precedential support with high success probability'
       advice.recommendedApproach = 'Lead with strongest precedents and build comprehensive argument'
     } else if (averageWinRate > 0.5) {
-      advice.litigationStrategy = 'MODERATE - Reasonable precedential support requiring careful argument construction'
+      advice.litigationStrategy =
+        'MODERATE - Reasonable precedential support requiring careful argument construction'
       advice.recommendedApproach = 'Focus on best cases and distinguish adverse precedent'
     } else {
-      advice.litigationStrategy = 'CONSERVATIVE - Limited precedential support, consider alternative approaches'
+      advice.litigationStrategy =
+        'CONSERVATIVE - Limited precedential support, consider alternative approaches'
       advice.recommendedApproach = 'Emphasize unique facts and policy arguments'
     }
 
@@ -448,7 +461,7 @@ export class CaseAnalysisEngine {
       advice.keyRisks.push('Some similar cases have low success rates')
     }
 
-    const oldCases = cases.filter(c => (new Date().getFullYear() - c.year) > 15)
+    const oldCases = cases.filter(c => new Date().getFullYear() - c.year > 15)
     if (oldCases.length > cases.length * 0.6) {
       advice.keyRisks.push('Precedent may be dated - verify current applicability')
     }

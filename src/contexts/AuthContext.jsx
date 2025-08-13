@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { auth, signInWithGoogle, signOutUser, db } from '../config/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 const AuthContext = createContext({})
 
@@ -14,62 +17,94 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userProfile, setUserProfile] = useState(null)
 
-  // Mock user data - in production, this would come from your auth service
-  const mockUser = {
-    id: '1',
-    name: 'Sarah Mitchell',
-    email: 'sarah.mitchell@lawfirm.com',
-    role: 'attorney',
-    plan: 'enterprise',
-    avatar: null,
-    firm: 'Mitchell & Associates',
-    barNumber: 'NY123456',
-    specialties: ['VA Disability Claims', 'Veterans Law', 'Appeals'],
-    joinedDate: '2023-01-15',
-    casesHandled: 247,
-    successRate: 89
-  }
-
-  // Check for existing session on mount
+  // Listen for Firebase auth state changes
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // In production, check for valid JWT token or session
-        const savedAuth = localStorage.getItem('veteranlawai_auth')
-        if (savedAuth) {
-          const authData = JSON.parse(savedAuth)
-          setUser(authData.user)
+    const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
+      if (firebaseUser) {
+        try {
+          // Get or create user profile in Firestore
+          const userRef = doc(db, 'users', firebaseUser.uid)
+          const userSnap = await getDoc(userRef)
+
+          if (userSnap.exists()) {
+            // Update existing profile with latest Firebase data
+            const profileData = userSnap.data()
+            const updatedProfile = {
+              ...profileData,
+              email: firebaseUser.email,
+              photoURL: firebaseUser.photoURL,
+              lastSignIn: new Date().toISOString(),
+            }
+
+            await updateDoc(userRef, {
+              lastSignIn: updatedProfile.lastSignIn,
+              photoURL: firebaseUser.photoURL,
+            })
+
+            setUserProfile(updatedProfile)
+          } else {
+            // Create new user profile
+            const newProfile = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
+              role: 'attorney',
+              plan: 'enterprise',
+              firm: '',
+              barNumber: '',
+              specialties: ['VA Disability Claims', 'Veterans Law'],
+              joinedDate: new Date().toISOString(),
+              lastSignIn: new Date().toISOString(),
+              casesHandled: 0,
+              successRate: 0,
+              totalAwarded: 0,
+              preferences: {
+                theme: 'dark',
+                notifications: true,
+                autoSave: true,
+              },
+              googleDrive: {
+                connected: true,
+                folderId: null,
+                permissions: ['read', 'write'],
+              },
+            }
+
+            await setDoc(userRef, newProfile)
+            setUserProfile(newProfile)
+          }
+
+          setUser(firebaseUser)
+          setIsAuthenticated(true)
+        } catch (error) {
+          console.error('Error managing user profile:', error)
+          // Still set basic user info even if profile creation fails
+          setUser(firebaseUser)
           setIsAuthenticated(true)
         }
-      } catch (error) {
-        console.error('Auth check failed:', error)
-        localStorage.removeItem('veteranlawai_auth')
-      } finally {
-        setLoading(false)
+      } else {
+        setUser(null)
+        setUserProfile(null)
+        setIsAuthenticated(false)
       }
-    }
+      setLoading(false)
+    })
 
-    checkAuth()
+    return () => unsubscribe()
   }, [])
 
-  const login = async (email, password) => {
+  const login = async () => {
     setLoading(true)
     try {
-      // Mock authentication - in production, call your auth API
-      if (email && password) {
-        const authData = {
-          user: mockUser,
-          token: 'mock_jwt_token_here',
-          expiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
-        }
-        
-        localStorage.setItem('veteranlawai_auth', JSON.stringify(authData))
-        setUser(mockUser)
-        setIsAuthenticated(true)
+      const result = await signInWithGoogle()
+      if (result.success) {
+        // Auth state change will be handled by the listener above
         return { success: true }
       } else {
-        throw new Error('Invalid credentials')
+        return { success: false, error: result.error }
       }
     } catch (error) {
       return { success: false, error: error.message }
@@ -78,39 +113,56 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = () => {
-    localStorage.removeItem('veteranlawai_auth')
-    setUser(null)
-    setIsAuthenticated(false)
+  const logout = async () => {
+    setLoading(true)
+    try {
+      await signOutUser()
+      // Auth state change will be handled by the listener above
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const updateUser = (userData) => {
-    const updatedUser = { ...user, ...userData }
-    setUser(updatedUser)
-    
-    // Update stored auth data
-    const savedAuth = localStorage.getItem('veteranlawai_auth')
-    if (savedAuth) {
-      const authData = JSON.parse(savedAuth)
-      authData.user = updatedUser
-      localStorage.setItem('veteranlawai_auth', JSON.stringify(authData))
+  const updateUserProfile = async updates => {
+    if (!user?.uid) return false
+
+    try {
+      const userRef = doc(db, 'users', user.uid)
+      await updateDoc(userRef, updates)
+
+      setUserProfile(prev => ({ ...prev, ...updates }))
+      return true
+    } catch (error) {
+      console.error('Failed to update user profile:', error)
+      return false
     }
+  }
+
+  const updatePreferences = async preferences => {
+    return await updateUserProfile({ preferences })
+  }
+
+  const updateGoogleDriveSettings = async driveSettings => {
+    return await updateUserProfile({
+      googleDrive: { ...userProfile?.googleDrive, ...driveSettings },
+    })
   }
 
   const value = {
     user,
+    userProfile,
     loading,
     isAuthenticated,
     login,
     logout,
-    updateUser
+    updateUserProfile,
+    updatePreferences,
+    updateGoogleDriveSettings,
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export default AuthProvider

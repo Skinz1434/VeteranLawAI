@@ -7,12 +7,11 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended'
   ],
-  ignorePatterns: ['dist', '.eslintrc.js'],
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -21,20 +20,14 @@ module.exports = {
       jsx: true
     }
   },
-  plugins: ['react-refresh', '@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y'],
+  plugins: ['react', 'react-hooks', 'jsx-a11y'],
   settings: {
     react: {
       version: 'detect'
     }
   },
   rules: {
-    // TypeScript specific rules
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/prefer-const': 'error',
-    '@typescript-eslint/no-inferrable-types': 'error',
+    // TypeScript specific rules removed for now
     
     // React specific rules
     'react/react-in-jsx-scope': 'off', // Not needed in React 17+
@@ -62,17 +55,13 @@ module.exports = {
     'no-console': 'warn',
     'no-debugger': 'error',
     'no-duplicate-imports': 'error',
-    'no-unused-vars': 'off', // Using @typescript-eslint/no-unused-vars instead
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'prefer-const': 'error',
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-arrow-callback': 'error',
     
     // Performance rules
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true }
-    ]
   },
   
   // Override rules for specific file patterns
@@ -80,26 +69,23 @@ module.exports = {
     {
       files: ['**/*.test.{js,jsx,ts,tsx}', '**/*.spec.{js,jsx,ts,tsx}'],
       env: {
-        jest: true,
-        'vitest-globals/env': true
+        jest: true
       },
       extends: ['plugin:testing-library/react'],
       rules: {
-        'no-console': 'off',
-        '@typescript-eslint/no-explicit-any': 'off'
+        'no-console': 'off'
       }
     },
     {
       files: ['src/types/**/*.ts'],
       rules: {
-        '@typescript-eslint/no-explicit-any': 'off' // Allow any in type definitions
+        // TypeScript rules disabled
       }
     },
     {
       files: ['*.config.{js,ts}', '*.setup.{js,ts}'],
       rules: {
-        'no-console': 'off',
-        '@typescript-eslint/no-var-requires': 'off'
+        'no-console': 'off'
       }
     }
   ]
