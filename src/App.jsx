@@ -14,13 +14,13 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-// Contexts
-import AuthProvider, { useAuth } from './contexts/AuthContext'
+// Contexts - Using SimpleAuth for immediate functionality
+import AuthProvider, { useAuth } from './contexts/SimpleAuthContext'
 
 // Components
 import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui'
 import WelcomeModal from './components/modals/WelcomeModal'
-import LoginModal from './components/modals/LoginModal'
+import LoginModal from './components/modals/SimpleLoginModal'
 import Layout from './components/layout/Layout'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SkipLinks from './components/ui/SkipLinks'

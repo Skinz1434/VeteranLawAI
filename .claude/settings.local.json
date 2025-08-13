@@ -6,7 +6,11 @@
       "Bash(npm install:*)",
       "Bash(npm run format:*)",
       "Bash(npm run build:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel:*)",
+      "WebFetch(domain:veteranlawai-platform.vercel.app)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

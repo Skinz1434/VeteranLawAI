@@ -31,10 +31,8 @@ googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email')
 
 // Check if Firebase is properly configured
 const isFirebaseConfigured = () => {
-  return firebaseConfig.apiKey && 
-         !firebaseConfig.apiKey.includes('XXXXX') &&
-         firebaseConfig.authDomain &&
-         firebaseConfig.projectId
+  // Always return false to force demo mode
+  return false
 }
 
 // Authentication functions

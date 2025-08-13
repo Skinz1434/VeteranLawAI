@@ -21,6 +21,12 @@ export const AuthProvider = ({ children }) => {
 
   // Listen for Firebase auth state changes
   useEffect(() => {
+    // Skip Firebase listener in demo mode
+    if (import.meta.env.VITE_DEMO_MODE === 'true') {
+      setLoading(false)
+      return () => {}
+    }
+    
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
       if (firebaseUser) {
         try {
