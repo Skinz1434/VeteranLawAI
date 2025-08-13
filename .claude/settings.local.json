@@ -10,7 +10,8 @@
       "Bash(vercel env add:*)",
       "Bash(vercel:*)",
       "WebFetch(domain:veteranlawai-platform.vercel.app)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

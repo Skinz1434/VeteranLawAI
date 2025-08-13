@@ -15,7 +15,7 @@ import {
 import { motion } from 'framer-motion'
 
 // Contexts - Using SimpleAuth for immediate functionality
-import AuthProvider, { useAuth } from './contexts/SimpleAuthContext'
+import { SimpleAuthProvider as AuthProvider, useAuth } from './contexts/SimpleAuthContext'
 
 // Components
 import { Button, Tooltip, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui'
