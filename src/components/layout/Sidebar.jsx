@@ -158,24 +158,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     const isHovered = hoveredItem === item.id
 
     return (
-      <motion.div
-        onHoverStart={() => setHoveredItem(item.id)}
-        onHoverEnd={() => setHoveredItem(null)}
+      <div
+        onMouseEnter={() => setHoveredItem(item.id)}
+        onMouseLeave={() => setHoveredItem(null)}
         className="relative group"
       >
         <Link to={item.path} className="block focus-ring">
-          <motion.div
-            className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-700 ease-out cursor-pointer ${
+          <div
+            className={`relative flex items-center px-4 py-4 mx-3 mb-3 rounded-2xl transition-all duration-300 cursor-pointer ${
               active
                 ? `bg-gradient-to-r from-white/15 to-white/5 border border-white/20 ${item.glow} shadow-2xl backdrop-blur-xl`
                 : 'hover:bg-gradient-to-r hover:from-white/6 hover:to-white/2 hover:border hover:border-white/8 hover:shadow-lg hover:backdrop-blur-lg'
             }`}
-            whileHover={{
-              scale: 1.01,
-              transition: { duration: 0.2, ease: 'easeOut' },
-            }}
-            whileTap={{ scale: 0.99 }}
-            layout
           >
             {/* Active indicator */}
             {active && (
@@ -198,28 +192,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               >
                 <Icon className="w-full h-full text-white drop-shadow-lg" />
 
-                {/* Enhanced glow effect */}
-                <motion.div
-                  className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg`}
-                  animate={{
-                    opacity: isHovered ? 0.15 : 0,
-                    scale: isHovered ? 1.05 : 1,
-                  }}
-                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                {/* Subtle glow effect */}
+                <div
+                  className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.gradient} blur-lg transition-opacity duration-300 ${
+                    isHovered ? 'opacity-15' : 'opacity-0'
+                  }`}
                 />
 
                 {/* Premium badge */}
                 {item.badge && (
-                  <motion.div
-                    className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-slate-600 to-slate-700 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
-                    animate={{
-                      scale: isHovered ? 1.08 : 1,
-                      rotate: isHovered ? 3 : 0,
-                    }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                  >
+                  <div className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-slate-600 to-slate-700 text-white text-xs font-bold rounded-full shadow-lg border border-white/20">
                     {item.badge}
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </Tooltip>
@@ -227,14 +211,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             {/* Text content */}
             <AnimatePresence mode="wait">
               {!isCollapsed && (
-                <motion.div
-                  key="expanded"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className="flex-1 min-w-0"
-                >
+                <div className="flex-1 min-w-0">
                   <div
                     className={`font-semibold text-base transition-colors duration-500 ${
                       active ? 'text-white' : 'text-slate-300 group-hover:text-white'
@@ -249,24 +226,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   >
                     {item.description}
                   </div>
-                </motion.div>
+                </div>
               )}
             </AnimatePresence>
 
-            {/* Enhanced hover glow effect */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 via-white/3 to-transparent pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ zIndex: 0 }}
-                />
-              )}
-            </AnimatePresence>
-          </motion.div>
+            {/* Hover glow effect */}
+            {isHovered && (
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 via-white/3 to-transparent pointer-events-none" style={{ zIndex: 0 }} />
+            )}
+          </div>
         </Link>
 
         {/* Enhanced tooltip for collapsed state */}
@@ -294,7 +262,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     )
   }
 
@@ -330,11 +298,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               >
                 {/* Enhanced Premium Logo */}
                 <div className="relative group">
-                  <motion.div
-                    className="w-14 h-14 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl shadow-slate-700/30"
-                    whileHover={{ scale: 1.03, rotate: 2 }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                  >
+                  <div className="w-14 h-14 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl shadow-slate-700/30 transition-transform duration-300 hover:scale-105">
                     <Scale className="h-8 w-8 text-white drop-shadow-lg" />
                     <motion.div
                       className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400 to-purple-600 blur-xl transition-opacity duration-500"
@@ -344,14 +308,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   </motion.div>
 
                   {/* Premium crown badge */}
-                  <motion.div
-                    className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-slate-600 to-slate-700 rounded-full flex items-center justify-center shadow-lg border border-white/20"
-                    animate={{
-                      scale: hoveredItem ? 1.08 : 1,
-                      rotate: hoveredItem ? 8 : 0,
-                    }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                  >
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-slate-600 to-slate-700 rounded-full flex items-center justify-center shadow-lg border border-white/20">
                     <Crown className="h-3.5 w-3.5 text-white" />
                   </motion.div>
                 </div>
@@ -371,17 +328,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           </AnimatePresence>
 
           {/* Enhanced collapse toggle */}
-          <motion.button
+          <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="w-10 h-10 bg-gradient-to-r from-slate-700/80 to-slate-600/80 hover:from-slate-600/90 hover:to-slate-500/90 backdrop-blur-lg rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg hover:shadow-xl border border-white/10"
-            whileHover={{ scale: 1.1, rotate: isCollapsed ? 180 : 0 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.4 }}
+            className="w-10 h-10 bg-gradient-to-r from-slate-700/80 to-slate-600/80 hover:from-slate-600/90 hover:to-slate-500/90 backdrop-blur-lg rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl border border-white/10 hover:scale-105"
           >
-            <motion.div animate={{ rotate: isCollapsed ? 180 : 0 }} transition={{ duration: 0.4 }}>
+            <div className={`transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`}>
               <ChevronLeft className="h-5 w-5 text-white" />
-            </motion.div>
-          </motion.button>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -397,10 +351,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           >
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <motion.div
-                  className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg"
-                  whileHover={{ scale: 1.05 }}
-                >
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105">
                   <User className="h-6 w-6 text-white" />
                 </motion.div>
                 <motion.div
@@ -425,11 +376,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               </div>
 
               <div className="relative">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="cursor-pointer"
-                >
+                <div className="cursor-pointer transition-transform duration-300 hover:scale-110">
                   <Bell className="h-5 w-5 text-slate-400 hover:text-white transition-colors" />
                   <motion.div
                     className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"
@@ -444,25 +391,17 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       </AnimatePresence>
 
       {/* Navigation Items */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-hidden relative">
         <div
-          className="h-full py-4 px-1"
+          className="absolute inset-0 overflow-y-auto py-4 px-1"
           style={{
-            overflowY: 'auto',
             scrollbarWidth: 'thin',
             scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
           }}
         >
           <nav className="space-y-1">
-            {navigationItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-              >
-                <NavItem item={item} />
-              </motion.div>
+            {navigationItems.map((item) => (
+              <NavItem key={item.id} item={item} />
             ))}
           </nav>
 
@@ -478,15 +417,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
           {/* Bottom Items */}
           <nav className="space-y-1">
-            {bottomItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.05 }}
-              >
-                <NavItem item={item} isBottom />
-              </motion.div>
+            {bottomItems.map((item) => (
+              <NavItem key={item.id} item={item} isBottom />
             ))}
           </nav>
         </div>
@@ -529,14 +461,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 ].map((stat, index) => {
                   const StatIcon = stat.icon
                   return (
-                    <motion.div
+                    <div
                       key={stat.label}
-                      className={`bg-gradient-to-r ${stat.color}/20 rounded-xl p-3 border border-white/10 backdrop-blur-lg shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer group`}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className={`bg-gradient-to-r ${stat.color}/20 rounded-xl p-3 border border-white/10 backdrop-blur-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-105 hover:-translate-y-0.5`}
                     >
                       <StatIcon
                         className={`h-4 w-4 mx-auto mb-1 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-110 transition-transform`}
@@ -547,21 +474,19 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                         {stat.value}
                       </div>
                       <div className="text-xs text-slate-400">{stat.label}</div>
-                    </motion.div>
+                    </div>
                   )
                 })}
               </div>
 
               {/* Enhanced Logout Button */}
-              <motion.button
+              <button
                 onClick={logout}
-                className="w-full flex items-center justify-center space-x-3 py-4 bg-gradient-to-r from-red-600/20 to-red-700/20 hover:from-red-600/30 hover:to-red-700/30 border border-red-600/30 rounded-2xl text-red-400 hover:text-red-300 transition-all duration-500 shadow-lg hover:shadow-xl backdrop-blur-lg group"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
+                className="w-full flex items-center justify-center space-x-3 py-4 bg-gradient-to-r from-red-600/20 to-red-700/20 hover:from-red-600/30 hover:to-red-700/30 border border-red-600/30 rounded-2xl text-red-400 hover:text-red-300 transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-lg group hover:scale-[1.01]"
               >
                 <LogOut className="h-5 w-5 group-hover:rotate-12 transition-transform duration-500" />
                 <span className="font-medium">Sign Out</span>
-              </motion.button>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
