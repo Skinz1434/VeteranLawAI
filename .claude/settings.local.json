@@ -12,7 +12,9 @@
       "WebFetch(domain:veteranlawai-platform.vercel.app)",
       "Bash(git commit:*)",
       "Bash(npm run dev:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

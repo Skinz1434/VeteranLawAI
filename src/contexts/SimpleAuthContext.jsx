@@ -12,7 +12,7 @@ export const useAuth = () => {
 
 export const SimpleAuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true) // Start with loading true
+  const [loading, setLoading] = useState(false) // Changed to false - we're not loading anything on mount
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
 
@@ -93,7 +93,6 @@ export const SimpleAuthProvider = ({ children }) => {
         localStorage.removeItem('veteranlawai_profile')
       }
     }
-    setLoading(false) // Important: set loading to false after checking
   }, [])
 
   // Update profile
