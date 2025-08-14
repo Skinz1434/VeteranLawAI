@@ -27,7 +27,7 @@ import SkipLinks from './components/ui/SkipLinks'
 // LoadingSpinner re-exported from shared UI
 
 // Tools (lazy-loaded for faster initial paint)
-const CameraOCR = lazy(() => import('./components/tools/DocumentScannerPro'))
+const CameraOCR = lazy(() => import('./components/tools/DocumentScannerProV2'))
 const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase'))
 const ClaimGuidance = lazy(() => import('./components/tools/ClaimGuidance'))
 const AudioTranscription = lazy(
