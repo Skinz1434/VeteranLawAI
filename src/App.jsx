@@ -40,15 +40,34 @@ const Analytics = lazy(() => import('./components/tools/Analytics'))
 // import { announceToScreenReader } from './utils/accessibility'
 
 function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-          <AppContent />
+  try {
+    return (
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <AppContent />
+          </div>
+        </Router>
+      </AuthProvider>
+    )
+  } catch (error) {
+    console.error('App render error:', error)
+    // Fallback UI if there's an error
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white mb-4">VeteranLawAI</h1>
+          <p className="text-slate-400 mb-6">There was an error loading the application.</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
+          >
+            Reload Page
+          </button>
         </div>
-      </Router>
-    </AuthProvider>
-  )
+      </div>
+    )
+  }
 }
 
 function AppContent() {
