@@ -12,7 +12,7 @@ export const useAuth = () => {
 
 export const SimpleAuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true) // Start with loading true
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
 
@@ -83,10 +83,17 @@ export const SimpleAuthProvider = ({ children }) => {
     const storedProfile = localStorage.getItem('veteranlawai_profile')
     
     if (storedUser && storedProfile) {
-      setUser(JSON.parse(storedUser))
-      setUserProfile(JSON.parse(storedProfile))
-      setIsAuthenticated(true)
+      try {
+        setUser(JSON.parse(storedUser))
+        setUserProfile(JSON.parse(storedProfile))
+        setIsAuthenticated(true)
+      } catch (e) {
+        // Clear invalid data
+        localStorage.removeItem('veteranlawai_user')
+        localStorage.removeItem('veteranlawai_profile')
+      }
     }
+    setLoading(false) // Important: set loading to false after checking
   }, [])
 
   // Update profile
