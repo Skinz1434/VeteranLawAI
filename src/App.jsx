@@ -35,6 +35,8 @@ const AudioTranscription = lazy(
 )
 const CaseResearch = lazy(() => import('./components/tools/CaseResearch'))
 const Analytics = lazy(() => import('./components/tools/Analytics'))
+const Settings = lazy(() => import('./pages/Settings'))
+const Help = lazy(() => import('./pages/Help'))
 
 // Accessibility utilities
 // import { announceToScreenReader } from './utils/accessibility'
@@ -237,6 +239,46 @@ function AppContent() {
                     }
                   >
                     <Analytics />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="settings" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Settings" />
+                      </div>
+                    }
+                  >
+                    <Settings />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ErrorBoundary errorType="help" supportEmail="support@veteranlawai.com">
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center p-8">
+                        <LoadingSpinner size="large" label="Loading Help Center" />
+                      </div>
+                    }
+                  >
+                    <Help />
                   </Suspense>
                 </ErrorBoundary>
               </Layout>
