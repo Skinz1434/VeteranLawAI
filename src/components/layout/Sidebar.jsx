@@ -305,12 +305,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                       animate={{ opacity: hoveredItem ? 0.4 : 0.2 }}
                       transition={{ duration: 0.8, ease: 'easeOut' }}
                     />
-                  </motion.div>
+                  </div>
 
                   {/* Premium crown badge */}
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-slate-600 to-slate-700 rounded-full flex items-center justify-center shadow-lg border border-white/20">
                     <Crown className="h-3.5 w-3.5 text-white" />
-                  </motion.div>
+                  </div>
                 </div>
 
                 <div>
@@ -353,7 +353,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               <div className="relative">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105">
                   <User className="h-6 w-6 text-white" />
-                </motion.div>
+                </div>
                 <motion.div
                   className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800 shadow-lg"
                   animate={{ scale: [1, 1.2, 1] }}
@@ -383,7 +383,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   />
-                </motion.div>
+                </div>
               </div>
             </div>
           </motion.div>
