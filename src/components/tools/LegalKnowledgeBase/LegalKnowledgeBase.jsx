@@ -187,7 +187,7 @@ const LegalKnowledgeBase = () => {
               <span>Advanced VA Legal Research Database & AI Search Platform</span>
               <div className="flex items-center space-x-1 ml-4">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-400 text-sm font-medium">{legalDatabase.documents.length.toLocaleString()}+ Documents</span>
+                <span className="text-green-400 text-sm font-medium">{legalDatabase.getDocumentCount().toLocaleString()}+ Documents</span>
               </div>
             </p>
           }

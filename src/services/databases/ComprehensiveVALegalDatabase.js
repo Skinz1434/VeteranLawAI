@@ -7,8 +7,36 @@
  * for VA disability attorneys and legal professionals
  */
 
-// Import utilities for document management
-import { generateDocumentId, calculateRelevanceScore } from '../../utils/documentUtils'
+// Helper functions
+function generateDocumentId(prefix = 'doc') {
+  const timestamp = Date.now()
+  const random = Math.random().toString(36).substr(2, 9)
+  return `${prefix}-${timestamp}-${random}`
+}
+
+function calculateRelevanceScore(document, searchTerms) {
+  let score = 0
+  const maxScore = searchTerms.length * 3
+
+  searchTerms.forEach(term => {
+    const termLower = term.toLowerCase()
+    
+    if (document.title?.toLowerCase().includes(termLower)) {
+      score += 3
+    }
+    if (document.summary?.toLowerCase().includes(termLower)) {
+      score += 2
+    }
+    if (document.content?.toLowerCase().includes(termLower)) {
+      score += 1
+    }
+    if (document.keywords?.some(k => k.toLowerCase() === termLower)) {
+      score += 3
+    }
+  })
+
+  return Math.min(score / maxScore, 1)
+}
 
 /**
  * Comprehensive VA Legal Database
@@ -1453,6 +1481,13 @@ The evidence shows the Veteran's PTSD causes difficulty concentrating, irritabil
 
   getBookmarks() {
     return this.documents.filter(d => this.bookmarks.has(d.id))
+  }
+
+  /**
+   * Get total document count
+   */
+  getDocumentCount() {
+    return this.documents.length
   }
 
   /**
