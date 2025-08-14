@@ -53,70 +53,70 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       title: 'Command Center',
       path: '/',
       icon: Target,
-      gradient: 'from-cyan-500 via-blue-500 to-purple-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: 'AI-powered insights & analytics',
       badge: null,
-      glow: 'shadow-cyan-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'camera-ocr',
       title: 'Document Scanner',
       path: '/camera-ocr',
       icon: Camera,
-      gradient: 'from-emerald-500 via-teal-500 to-cyan-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: '99.7% VA form accuracy',
       badge: 'AI',
-      glow: 'shadow-emerald-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'legal-knowledge',
       title: 'Legal Database',
       path: '/legal-knowledge',
       icon: Database,
-      gradient: 'from-amber-500 via-yellow-500 to-orange-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: '18,500+ regulations & precedents',
       badge: null,
-      glow: 'shadow-amber-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'claim-guidance',
       title: 'Claim Assistant',
       path: '/claim-guidance',
       icon: FileText,
-      gradient: 'from-rose-500 via-pink-500 to-purple-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: 'Step-by-step AI guidance',
       badge: 'PRO',
-      glow: 'shadow-rose-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'audio-transcription',
       title: 'Audio Intelligence',
       path: '/audio-transcription',
       icon: Mic,
-      gradient: 'from-green-500 via-emerald-500 to-teal-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: 'Legal transcription & analysis',
       badge: 'NEW',
-      glow: 'shadow-green-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'case-research',
       title: 'Case Research',
       path: '/case-research',
       icon: Search,
-      gradient: 'from-indigo-500 via-purple-500 to-blue-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: '15,000+ case precedents',
       badge: null,
-      glow: 'shadow-indigo-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'analytics',
       title: 'Success Analytics',
       path: '/analytics',
       icon: BarChart3,
-      gradient: 'from-violet-500 via-purple-500 to-indigo-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: 'Performance metrics & trends',
       badge: null,
-      glow: 'shadow-violet-500/20',
+      glow: 'shadow-slate-400/10',
     },
   ]
 
@@ -126,18 +126,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       title: 'Platform Settings',
       path: '/settings',
       icon: Settings,
-      gradient: 'from-slate-500 via-gray-500 to-zinc-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: 'Configuration & preferences',
-      glow: 'shadow-slate-500/20',
+      glow: 'shadow-slate-400/10',
     },
     {
       id: 'help',
       title: 'Help Center',
       path: '/help',
       icon: HelpCircle,
-      gradient: 'from-blue-500 via-cyan-500 to-teal-600',
+      gradient: 'from-slate-600 via-slate-700 to-slate-800',
       description: '24/7 expert assistance',
-      glow: 'shadow-blue-500/20',
+      glow: 'shadow-slate-400/10',
     },
   ]
 
@@ -171,23 +171,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 : 'hover:bg-gradient-to-r hover:from-white/6 hover:to-white/2 hover:border hover:border-white/8 hover:shadow-lg hover:backdrop-blur-lg'
             }`}
             whileHover={{
-              scale: 1.02,
-              x: 2,
-              transition: { duration: 0.3, ease: 'easeOut' },
+              scale: 1.01,
+              transition: { duration: 0.2, ease: 'easeOut' },
             }}
-            whileTap={{ scale: 0.98 }}
-            transition={{
-              type: 'spring',
-              stiffness: 200,
-              damping: 25,
-              duration: 0.6,
-            }}
+            whileTap={{ scale: 0.99 }}
             layout
           >
             {/* Active indicator */}
             {active && (
               <motion.div
-                className="absolute left-0 top-1/2 w-1.5 h-10 bg-gradient-to-b from-cyan-400 via-blue-500 to-purple-600 rounded-r-full shadow-lg shadow-cyan-500/50"
+                className="absolute left-0 top-1/2 w-1.5 h-10 bg-gradient-to-b from-slate-400 via-slate-500 to-slate-600 rounded-r-full shadow-lg shadow-slate-500/30"
                 layoutId="activeIndicator"
                 initial={false}
                 style={{ y: '-50%' }}
@@ -218,7 +211,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 {/* Premium badge */}
                 {item.badge && (
                   <motion.div
-                    className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
+                    className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-slate-600 to-slate-700 text-white text-xs font-bold rounded-full shadow-lg border border-white/20"
                     animate={{
                       scale: isHovered ? 1.08 : 1,
                       rotate: isHovered ? 3 : 0,
@@ -251,7 +244,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   </div>
                   <div
                     className={`text-xs mt-1 transition-colors duration-500 ${
-                      active ? 'text-cyan-200' : 'text-slate-400 group-hover:text-slate-300'
+                      active ? 'text-slate-300' : 'text-slate-500 group-hover:text-slate-400'
                     }`}
                   >
                     {item.description}
@@ -289,7 +282,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               <div className="font-semibold text-white text-sm mb-1">{item.title}</div>
               <div className="text-xs text-slate-300">{item.description}</div>
               {item.badge && (
-                <div className="inline-block mt-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
+                <div className="inline-block mt-2 px-2 py-1 bg-gradient-to-r from-slate-600 to-slate-700 text-white text-xs font-bold rounded-full">
                   {item.badge}
                 </div>
               )}
@@ -338,7 +331,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 {/* Enhanced Premium Logo */}
                 <div className="relative group">
                   <motion.div
-                    className="w-14 h-14 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/30"
+                    className="w-14 h-14 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl shadow-slate-700/30"
                     whileHover={{ scale: 1.03, rotate: 2 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                   >
@@ -352,7 +345,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
                   {/* Premium crown badge */}
                   <motion.div
-                    className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg border border-white/20"
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-slate-600 to-slate-700 rounded-full flex items-center justify-center shadow-lg border border-white/20"
                     animate={{
                       scale: hoveredItem ? 1.08 : 1,
                       rotate: hoveredItem ? 8 : 0,
@@ -364,10 +357,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 </div>
 
                 <div>
-                  <div className="text-xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-300 bg-clip-text text-transparent">
+                  <div className="text-xl font-bold text-white">
                     VeteranLawAI
                   </div>
-                  <div className="text-xs text-cyan-400 font-medium flex items-center space-x-1.5">
+                  <div className="text-xs text-slate-400 font-medium flex items-center space-x-1.5">
                     <Sparkles className="h-3 w-3 animate-pulse" />
                     <span>Enterprise Suite</span>
                     <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse" />
@@ -421,7 +414,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <div className="font-semibold text-white text-sm truncate">
                   {userProfile?.displayName || user?.displayName || 'Attorney'}
                 </div>
-                <div className="text-xs text-emerald-400 flex items-center space-x-1.5">
+                <div className="text-xs text-slate-400 flex items-center space-x-1.5">
                   <motion.div
                     className="w-2 h-2 bg-green-400 rounded-full"
                     animate={{ opacity: [0.5, 1, 0.5] }}
@@ -450,13 +443,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         )}
       </AnimatePresence>
 
-      {/* Enhanced Navigation Items with perfect scrolling */}
-      <div className="flex-1 overflow-hidden">
+      {/* Navigation Items */}
+      <div className="flex-1 overflow-y-auto">
         <div
-          className="h-full overflow-y-auto py-4 px-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
+          className="h-full py-4 px-1"
           style={{
+            overflowY: 'auto',
             scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(255, 255, 255, 0.1) transparent',
+            scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
           }}
         >
           <nav className="space-y-1">
@@ -515,13 +509,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   {
                     label: 'Success',
                     value: userProfile?.successRate || '94%',
-                    color: 'from-green-500 to-emerald-500',
+                    color: 'from-slate-600 to-slate-700',
                     icon: TrendingUp,
                   },
                   {
                     label: 'Cases',
                     value: userProfile?.casesHandled || '247',
-                    color: 'from-blue-500 to-cyan-500',
+                    color: 'from-slate-600 to-slate-700',
                     icon: Award,
                   },
                   {
@@ -529,7 +523,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                     value: userProfile?.totalAwarded
                       ? `$${(userProfile.totalAwarded / 1000000).toFixed(1)}M`
                       : '$4.2M',
-                    color: 'from-purple-500 to-pink-500',
+                    color: 'from-slate-600 to-slate-700',
                     icon: Star,
                   },
                 ].map((stat, index) => {
@@ -573,27 +567,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         </AnimatePresence>
       </div>
 
-      {/* Enhanced floating glow effects */}
+      {/* Subtle floating glow effects */}
       <motion.div
-        className="absolute top-1/4 left-4 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl"
+        className="absolute top-1/4 left-4 w-32 h-32 bg-slate-500/5 rounded-full blur-3xl"
         animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.5, 0.8, 0.5],
+          scale: [1, 1.1, 1],
+          opacity: [0.2, 0.3, 0.2],
         }}
         transition={{
-          duration: 6,
+          duration: 8,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
       <motion.div
-        className="absolute bottom-1/4 right-4 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl"
+        className="absolute bottom-1/4 right-4 w-24 h-24 bg-slate-600/5 rounded-full blur-2xl"
         animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.6, 0.3],
+          scale: [1, 1.15, 1],
+          opacity: [0.15, 0.25, 0.15],
         }}
         transition={{
-          duration: 5,
+          duration: 7,
           repeat: Infinity,
           ease: 'easeInOut',
           delay: 1,
