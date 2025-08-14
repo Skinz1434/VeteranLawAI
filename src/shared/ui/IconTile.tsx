@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 type IconTileProps = {
   icon: React.ComponentType<any>
   gradient?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
   glossy?: boolean
 }
@@ -16,11 +16,15 @@ export default function IconTile({
   className = '',
   glossy = true,
 }: IconTileProps) {
-  const dimensions = {
+  const sizeMap = {
     sm: { box: 'w-10 h-10 rounded-xl', icon: 'h-5 w-5', radius: 'rounded-xl' },
     md: { box: 'w-16 h-16 rounded-2xl', icon: 'h-8 w-8', radius: 'rounded-2xl' },
     lg: { box: 'w-20 h-20 rounded-2xl', icon: 'h-10 w-10', radius: 'rounded-2xl' },
-  }[size]
+    xl: { box: 'w-24 h-24 rounded-3xl', icon: 'h-12 w-12', radius: 'rounded-3xl' },
+  }
+  
+  // Fallback to 'md' if size is invalid
+  const dimensions = sizeMap[size] || sizeMap.md
 
   return (
     <div
