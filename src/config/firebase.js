@@ -6,13 +6,13 @@ import { getStorage } from 'firebase/storage'
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'veteranlawai-platform.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'veteranlawai-platform',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'veteranlawai-platform.appspot.com',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '123456789012',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:123456789012:web:abcdefghijklmnop',
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || 'G-XXXXXXXXXX',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
 // Initialize Firebase
@@ -29,22 +29,9 @@ googleProvider.addScope('https://www.googleapis.com/auth/drive.file')
 googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile')
 googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email')
 
-// Check if Firebase is properly configured
-const isFirebaseConfigured = () => {
-  // Always return false to force demo mode
-  return false
-}
-
 // Authentication functions
 export const signInWithGoogle = async () => {
   try {
-    if (!isFirebaseConfigured()) {
-      console.error('Firebase is not properly configured. Please set up environment variables.')
-      return { 
-        success: false, 
-        error: 'Authentication service is not configured. Please contact support.' 
-      }
-    }
     const result = await signInWithPopup(auth, googleProvider)
     return { success: true, user: result.user }
   } catch (error) {
