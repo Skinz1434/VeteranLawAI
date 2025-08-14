@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { documentDatabase } from '../../../services/databases/DocumentDatabase'
+import { legalDatabase } from '../../../services/databases/ComprehensiveVALegalDatabase'
 import {
   Search,
   BookOpen,
@@ -86,12 +86,12 @@ import {
 const LegalKnowledgeBase = () => {
   // State management
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState(documentDatabase.getAllDocuments())
+  const [searchResults, setSearchResults] = useState(legalDatabase.getAllDocuments())
   const [isSearching, setIsSearching] = useState(false)
   const [selectedResult, setSelectedResult] = useState(null)
   const [activeFilter, setActiveFilter] = useState('all')
   const [recentSearches, setRecentSearches] = useState([])
-  const [bookmarks, setBookmarks] = useState(documentDatabase.getBookmarks())
+  const [bookmarks, setBookmarks] = useState(legalDatabase.getBookmarks())
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
 
   // Update search results when query or filter changes
@@ -99,7 +99,7 @@ const LegalKnowledgeBase = () => {
     if (searchQuery.trim()) {
       performSearch(searchQuery)
     } else {
-      setSearchResults(documentDatabase.getAllDocuments({ type: activeFilter }))
+      setSearchResults(legalDatabase.getAllDocuments({ type: activeFilter }))
     }
   }, [searchQuery, activeFilter])
 
@@ -125,7 +125,7 @@ const LegalKnowledgeBase = () => {
       await new Promise(resolve => setTimeout(resolve, 300))
 
       // Perform real search using database
-      const results = documentDatabase.search(query, { type: filter })
+      const results = legalDatabase.search(query, { type: filter })
       setSearchResults(results)
       setIsSearching(false)
     },
@@ -147,18 +147,18 @@ const LegalKnowledgeBase = () => {
    * Toggles bookmark status for a result
    */
   const toggleBookmark = useCallback(resultId => {
-    if (documentDatabase.isBookmarked(resultId)) {
-      documentDatabase.removeBookmark(resultId)
+    if (legalDatabase.isBookmarked(resultId)) {
+      legalDatabase.removeBookmark(resultId)
     } else {
-      documentDatabase.addBookmark(resultId)
+      legalDatabase.addBookmark(resultId)
     }
-    setBookmarks(documentDatabase.getBookmarks())
+    setBookmarks(legalDatabase.getBookmarks())
 
     // Update search results to reflect bookmark changes
     setSearchResults(prev =>
       prev.map(result => ({
         ...result,
-        bookmarked: documentDatabase.isBookmarked(result.id),
+        bookmarked: legalDatabase.isBookmarked(result.id),
       }))
     )
   }, [])
@@ -187,7 +187,7 @@ const LegalKnowledgeBase = () => {
               <span>Advanced VA Legal Research Database & AI Search Platform</span>
               <div className="flex items-center space-x-1 ml-4">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-400 text-sm font-medium">18,500+ Documents</span>
+                <span className="text-green-400 text-sm font-medium">{legalDatabase.documents.length.toLocaleString()}+ Documents</span>
               </div>
             </p>
           }
@@ -252,27 +252,27 @@ const LegalKnowledgeBase = () => {
           {/* Filter Tabs */}
           <div className="flex flex-wrap gap-2 mb-4">
             {[
-              { id: 'all', label: 'All Results', count: documentDatabase.getAllDocuments().length },
+              { id: 'all', label: 'All Results', count: legalDatabase.getAllDocuments().length },
               {
                 id: 'regulation',
                 label: 'Regulations',
-                count: documentDatabase.getAllDocuments().filter(d => d.type === 'regulation')
+                count: legalDatabase.getAllDocuments().filter(d => d.type === 'regulation')
                   .length,
               },
               {
                 id: 'case_law',
                 label: 'Case Law',
-                count: documentDatabase.getAllDocuments().filter(d => d.type === 'case_law').length,
+                count: legalDatabase.getAllDocuments().filter(d => d.type === 'case_law').length,
               },
               {
                 id: 'manual',
                 label: 'Manuals',
-                count: documentDatabase.getAllDocuments().filter(d => d.type === 'manual').length,
+                count: legalDatabase.getAllDocuments().filter(d => d.type === 'manual').length,
               },
               {
                 id: 'guidance',
                 label: 'Guidance',
-                count: documentDatabase.getAllDocuments().filter(d => d.type === 'guidance').length,
+                count: legalDatabase.getAllDocuments().filter(d => d.type === 'guidance').length,
               },
             ].map(filter => (
               <button
@@ -394,7 +394,7 @@ const LegalKnowledgeBase = () => {
                           onClick={() => toggleBookmark(result.id)}
                         >
                           <Bookmark
-                            className={`h-4 w-4 ${documentDatabase.isBookmarked(result.id) ? 'fill-current text-yellow-400' : ''}`}
+                            className={`h-4 w-4 ${legalDatabase.isBookmarked(result.id) ? 'fill-current text-yellow-400' : ''}`}
                           />
                         </Button>
                         <Button
@@ -507,7 +507,7 @@ const LegalKnowledgeBase = () => {
               </div>
               <Button variant="outline" onClick={() => toggleBookmark(selectedResult.id)}>
                 <Bookmark
-                  className={`h-4 w-4 ${documentDatabase.isBookmarked(selectedResult.id) ? 'fill-current text-yellow-400' : ''}`}
+                  className={`h-4 w-4 ${legalDatabase.isBookmarked(selectedResult.id) ? 'fill-current text-yellow-400' : ''}`}
                 />
               </Button>
             </div>
