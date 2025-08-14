@@ -173,11 +173,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           >
             {/* Active indicator */}
             {active && (
-              <motion.div
+              <div
                 className="absolute left-0 top-1/2 w-1.5 h-10 bg-gradient-to-b from-slate-400 via-slate-500 to-slate-600 rounded-r-full shadow-lg shadow-slate-500/30"
-                layoutId="activeIndicator"
-                initial={false}
-                style={{ y: '-50%' }}
+                style={{ transform: 'translateY(-50%)' }}
               />
             )}
 

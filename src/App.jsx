@@ -78,13 +78,19 @@ function AppContent() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [autoDemo, setAutoDemo] = useState(false)
 
-  // Show welcome modal until completed, regardless of auth
+  // Show welcome modal for new authenticated users
   useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
-    if (!hasSeenWelcome) {
-      setShowWelcomeModal(true)
+    if (isAuthenticated) {
+      const hasSeenWelcome = localStorage.getItem('veteranlawai_welcome_completed')
+      if (!hasSeenWelcome) {
+        // Delay for smooth transition after login
+        const timer = setTimeout(() => {
+          setShowWelcomeModal(true)
+        }, 1000)
+        return () => clearTimeout(timer)
+      }
     }
-  }, [])
+  }, [isAuthenticated])
 
   if (loading) {
     return <LoadingScreen />
@@ -293,9 +299,9 @@ function AppContent() {
         isOpen={showWelcomeModal}
         onClose={() => {
           setShowWelcomeModal(false)
-          setShowLoginModal(true)
+          localStorage.setItem('veteranlawai_welcome_completed', 'true')
         }}
-        userName={user?.name}
+        userName={user?.displayName || user?.name || 'Attorney'}
       />
     </>
   )
