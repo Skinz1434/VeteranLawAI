@@ -267,13 +267,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   }
 
   return (
-    <motion.div
-      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-700 ease-in-out gradient-outline ${
+    <div
+      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-40 transition-all duration-300 flex flex-col ${
         isCollapsed ? 'w-20' : 'w-80'
       }`}
-      initial={false}
-      animate={{ width: isCollapsed ? 80 : 320 }}
-      transition={{ duration: 0.7, ease: 'easeInOut' }}
     >
       {/* Enhanced texture overlay */}
       <div
@@ -391,29 +388,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       </AnimatePresence>
 
       {/* Navigation Items */}
-      <div className="flex-1 overflow-hidden relative">
-        <div
-          className="absolute inset-0 overflow-y-auto py-4 px-1"
-          style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
-          }}
-        >
+      <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="py-4 px-1">
           <nav className="space-y-1">
             {navigationItems.map((item) => (
               <NavItem key={item.id} item={item} />
             ))}
           </nav>
 
-          {/* Enhanced Divider */}
-          <motion.div
-            className="mx-6 my-6 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent relative"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-white/20 to-purple-500/20 blur-sm" />
-          </motion.div>
+          {/* Divider */}
+          <div className="mx-6 my-6 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
           {/* Bottom Items */}
           <nav className="space-y-1">
@@ -518,7 +502,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           delay: 1,
         }}
       />
-    </motion.div>
+    </div>
   )
 }
 
