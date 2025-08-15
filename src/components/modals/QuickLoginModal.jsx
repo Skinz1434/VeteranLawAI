@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-// CORRECTED IMPORT PATH
-import { useAuth } from '../../contexts/SimpleAuthContext';
-import { Button } from '../../shared/ui';
+import { useAuth } from '../contexts/SimpleAuthContext.jsx';
+import { Button } from '../shared/ui';
 
 const QuickLoginModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -17,7 +16,20 @@ const QuickLoginModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    // ... (rest of the component remains the same)
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-slate-800 p-8 rounded-lg max-w-sm w-full text-center">
+        <h2 className="text-white text-3xl font-bold mb-4">Demo Access</h2>
+        <p className="text-slate-300 mb-8">
+          This will sign you into a simulated demo environment.
+        </p>
+        <Button onClick={handleLogin} disabled={loading} className="w-full text-lg py-3">
+          {loading ? 'Initializing...' : 'Enter Demo'}
+        </Button>
+        <Button onClick={onClose} variant="secondary" className="w-full mt-3">
+          Cancel
+        </Button>
+      </div>
+    </div>
   );
 };
 

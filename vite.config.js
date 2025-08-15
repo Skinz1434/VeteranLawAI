@@ -1,19 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
+// Standard, clean Vite configuration. No aliases.
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,
-    port: 5174
+    host: '0.0.0.0',
+    port: 5175,
   },
-  preview: {
-    port: 4173
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom']
-  },
-  build: {
-    outDir: 'dist'
-  }
-})
+});
