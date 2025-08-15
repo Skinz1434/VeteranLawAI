@@ -58,11 +58,15 @@ Professional AI-powered legal platform for VA disability claims attorneys. Built
    - Enable Storage
 
 2. **Configure Environment Variables**
-   ```bash
-   # Copy the example environment file
-   cp .env.local.example .env.local
-   
-   # Add your Firebase configuration to .env.local
+   ```env
+   # .env.local
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   VITE_DEMO_MODE=false
    ```
 
 3. **Get Firebase Configuration**
@@ -87,21 +91,7 @@ npm install
 
 ### 3. Environment Setup
 
-Create a `.env.local` file in the root directory:
-
-```env
-# Firebase Configuration
-REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-REACT_APP_FIREBASE_APP_ID=your_app_id
-
-# Google API Configuration
-REACT_APP_GOOGLE_API_KEY=your_google_api_key
-REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
-```
+Create a `.env.local` file in the root directory with your Firebase web app config as shown above.
 
 ### 4. Firebase Setup
 
@@ -111,8 +101,8 @@ REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
    - Enable Authentication, Firestore, and Storage
 
 2. **Configure Authentication**
-   - Enable Google Sign-in provider
-   - Add your domain to authorized domains
+   - Enable Google provider in Authentication > Sign-in method
+   - Add your local dev origin (http://localhost:5173) and Vercel domain(s) to Authorized domains
 
 3. **Setup Firestore Database**
    - Create database in test mode

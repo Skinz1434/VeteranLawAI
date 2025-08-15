@@ -2,10 +2,10 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import { SimpleAuthProvider as AuthProvider, useAuth } from './contexts/SimpleAuthContext.jsx';
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import { Button, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui';
 import WelcomeModal from './components/modals/WelcomeModal';
-import LoginModal from './components/modals/QuickLoginModal';
+import LoginModal from './components/modals/LoginModal.jsx';
 import Layout from './components/layout/Layout';
 import { Camera, BookOpen } from 'lucide-react';
 
@@ -25,7 +25,7 @@ function App() {
 }
 
 function AppContent() {
-  const { user, loading } = useAuth();
+  const { currentUser, loading } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   if (loading) return <LoadingScreen />;
@@ -34,19 +34,19 @@ function AppContent() {
     <>
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       <Routes>
-        <Route path="/" element={!user ? <LandingPage onLogin={() => setShowLoginModal(true)} /> : <Navigate to="/dashboard" />} />
+        <Route path="/" element={!currentUser ? <LandingPage onLogin={() => setShowLoginModal(true)} /> : <Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
         <Route path="/document-scanner" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><DocumentScanner /></Suspense></Layout></ProtectedRoute>} />
         <Route path="/legal-knowledge" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><LegalKnowledgeBase /></Suspense></Layout></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
+        <Route path="*" element={<Navigate to={currentUser ? "/dashboard" : "/"} />} />
       </Routes>
     </>
   );
 }
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" replace />;
+  const { currentUser } = useAuth();
+  if (!currentUser) return <Navigate to="/" replace />;
   return children;
 }
 
@@ -69,7 +69,7 @@ function LandingPage({ onLogin }) {
 }
 
 function Dashboard() {
-  const { user, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const tools = [
     { title: 'Document Scanner', href: '/document-scanner', icon: Camera, description: 'Digitize VA forms and records.' },
     { title: 'Legal Knowledge', href: '/legal-knowledge', icon: BookOpen, description: 'Access 14,500+ VA regulations.' }
@@ -80,7 +80,7 @@ function Dashboard() {
         header={
           <SectionHeader
             title="Command Center"
-            subtitle={`Welcome to the Demo, ${user.name || 'Attorney'}`}
+            subtitle={`Welcome, ${currentUser?.displayName || currentUser?.email || 'Attorney'}`}
             actions={<Button onClick={logout} variant="outline">Sign Out</Button>}
           />
         }

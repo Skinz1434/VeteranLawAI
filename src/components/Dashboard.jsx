@@ -1,13 +1,13 @@
 import React from 'react';
-import { useAuth } from './contexts/SimpleAuthContext';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { Button } from './shared/ui';
 
 const Dashboard = () => {
-    const { user, logout } = useAuth();
+    const { currentUser, logout } = useAuth();
     return (
         <div style={{ color: 'white', padding: '2rem' }}>
-            <h1>Welcome, {user.name}</h1>
-            <p>You are now in the functional demo environment.</p>
+            <h1>Welcome, {currentUser?.displayName || currentUser?.email}</h1>
+            <p>You are now signed in.</p>
             <Button onClick={logout}>Sign Out</Button>
         </div>
     );
