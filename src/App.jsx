@@ -1,16 +1,20 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import React, { useState, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import { Button, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui';
-import WelcomeModal from './components/modals/WelcomeModal';
 import LoginModal from './components/modals/LoginModal.jsx';
 import Layout from './components/layout/Layout';
-import { Camera, BookOpen } from 'lucide-react';
+import { Camera, BookOpen, Mic, FileText, Search, BarChart3 } from 'lucide-react';
 
 const DocumentScanner = lazy(() => import('./components/tools/DocumentScannerProV2'));
 const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase/LegalKnowledgeBase'));
+const AudioTranscription = lazy(() => import('./components/tools/AudioTranscription/AudioTranscription'));
+const CaseResearch = lazy(() => import('./components/tools/CaseResearch/CaseResearch'));
+const ClaimGuidance = lazy(() => import('./components/tools/ClaimGuidance/ClaimGuidance'));
+const Analytics = lazy(() => import('./components/tools/Analytics/Analytics'));
+
 
 function App() {
   return (
@@ -38,6 +42,11 @@ function AppContent() {
         <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
         <Route path="/document-scanner" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><DocumentScanner /></Suspense></Layout></ProtectedRoute>} />
         <Route path="/legal-knowledge" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><LegalKnowledgeBase /></Suspense></Layout></ProtectedRoute>} />
+        <Route path="/audio-transcription" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><AudioTranscription /></Suspense></Layout></ProtectedRoute>} />
+        <Route path="/case-research" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><CaseResearch /></Suspense></Layout></ProtectedRoute>} />
+        <Route path="/claim-guidance" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><ClaimGuidance /></Suspense></Layout></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><Analytics /></Suspense></Layout></ProtectedRoute>} />
+
         <Route path="*" element={<Navigate to={currentUser ? "/dashboard" : "/"} />} />
       </Routes>
     </>
@@ -61,7 +70,7 @@ function LandingPage({ onLogin }) {
           </motion.p>
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.4 }}>
             <Button onClick={onLogin} size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500">
-              Access Demo Environment
+              Continue with Google
             </Button>
           </motion.div>
         </div>
@@ -71,8 +80,13 @@ function LandingPage({ onLogin }) {
 function Dashboard() {
   const { currentUser, logout } = useAuth();
   const tools = [
-    { title: 'Document Scanner', href: '/document-scanner', icon: Camera, description: 'Digitize VA forms and records.' },
-    { title: 'Legal Knowledge', href: '/legal-knowledge', icon: BookOpen, description: 'Access 14,500+ VA regulations.' }
+    { title: 'Document Scanner', href: '/document-scanner', icon: Camera, description: 'Digitize VA forms and records with 99.7% accuracy.' },
+    { title: 'Legal Knowledge Base', href: '/legal-knowledge', icon: BookOpen, description: 'Access 14,500+ VA regulations and precedents.' },
+    { title: 'Audio Transcription', href: '/audio-transcription', icon: Mic, description: 'Professional legal transcription services.' },
+    { title: 'Case Research', href: '/case-research', icon: Search, description: 'Find relevant case precedents and legal rulings.' },
+    { title: 'Claim Guidance', href: '/claim-guidance', icon: FileText, description: 'Step-by-step assistance for disability claims.' },
+    { title: 'Analytics Dashboard', href: '/analytics', icon: BarChart3, description: 'Track performance and success metrics.' },
+    
   ];
 
   return (

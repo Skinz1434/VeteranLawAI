@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import Button from './Button'
+// Use a plain button for the close control to avoid any event conflicts
 
 const Modal = ({
   isOpen,
@@ -49,14 +49,14 @@ const Modal = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-0 z-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 z-0 bg-black/70 backdrop-blur-sm pointer-events-none"
             onClick={e => {
               if (closeOnOverlayClick && e.target === e.currentTarget) {
                 onClose()
@@ -73,11 +73,12 @@ const Modal = ({
             className={`
               relative z-10 w-full ${sizes[size]} mx-4
               bg-gradient-to-br from-slate-800/90 to-slate-900/90 glass-card gradient-outline
-              rounded-3xl max-h-[90vh] overflow-hidden motion-normal
+              rounded-3xl max-h-[92vh] overflow-hidden motion-normal pointer-events-auto
               ${className}
             `.trim()}
             role="dialog"
             aria-modal="true"
+            aria-label={title || 'Dialog'}
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
@@ -85,14 +86,14 @@ const Modal = ({
               <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
                 {title && <h2 className="text-2xl font-bold text-white">{title}</h2>}
                 {showCloseButton && (
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
-                    size="sm"
                     onClick={onClose}
-                    className="ml-auto"
-                    icon={X}
-                  />
+                    aria-label="Close"
+                    className="ml-auto inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 focus-ring"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 )}
               </div>
             )}
@@ -100,7 +101,8 @@ const Modal = ({
             {/* Content */}
             <div
               className="p-6 overflow-y-auto custom-scrollbar"
-              style={{ maxHeight: 'calc(90vh - 8rem)' }}
+              style={{ maxHeight: 'calc(92vh - 6rem)' }}
+              tabIndex={0}
             >
               {children}
             </div>

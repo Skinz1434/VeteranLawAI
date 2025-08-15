@@ -30,19 +30,23 @@ const LoginModal = ({ isOpen, onClose, autoDemo = false }) => {
   const { login } = useAuth()
 
   const handleGoogleLogin = async () => {
+    console.log('Modal Google login clicked')
     setLoading(true)
     setError('')
 
     try {
       const result = await login()
-      if (result.success) {
+      console.log('Modal login result:', result)
+      if (result?.success) {
+        console.log('Modal login successful, closing modal')
         onClose()
-      } else {
-        setError(result.error || 'Login failed. Please try again.')
+      } else if (result && result.error) {
+        console.error('Modal login failed:', result.error)
+        setError(result.error)
       }
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.')
-      console.error('Login error:', error)
+      console.error('Modal login error:', error)
+      setError(`Login error: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -123,6 +127,7 @@ const LoginModal = ({ isOpen, onClose, autoDemo = false }) => {
               size="lg"
               fullWidth
               className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+              data-testid="google-login"
             >
               {loading ? (
                 <div className="flex items-center space-x-3">

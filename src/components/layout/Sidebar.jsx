@@ -1,11 +1,16 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Target, Camera, Database, FileText, Mic, Search, BarChart3 } from 'lucide-react'
+import { Target, Camera, Database, FileText, Mic, Search, BarChart3, Zap } from 'lucide-react'
 
 const navigationItems = [
   { id: 'dashboard', title: 'Command Center', path: '/dashboard', icon: Target },
   { id: 'document-scanner', title: 'Document Scanner', path: '/document-scanner', icon: Camera },
   { id: 'legal-knowledge', title: 'Legal Database', path: '/legal-knowledge', icon: Database },
+  { id: 'audio-transcription', title: 'Audio Transcription', path: '/audio-transcription', icon: Mic },
+  { id: 'case-research', title: 'Case Research', path: '/case-research', icon: Search },
+  { id: 'claim-guidance', title: 'Claim Guidance', path: '/claim-guidance', icon: FileText },
+  { id: 'analytics', title: 'Analytics', path: '/analytics', icon: BarChart3 },
+  { id: 'camera-ocr', title: 'Camera OCR', path: '/camera-ocr', icon: Zap },
 ]
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {

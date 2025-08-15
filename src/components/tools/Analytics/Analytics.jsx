@@ -1,7 +1,7 @@
 /**
- * @fileoverview Premium Analytics Dashboard - Advanced VA Legal Intelligence
+ * @fileoverview Analytics Dashboard - VA Legal Intelligence
  * @author VeteranLawAI Platform
- * @version 4.0.0
+ * @version 3.0.0
  */
 
 import React, { useState, useCallback, useEffect } from 'react'
@@ -30,14 +30,15 @@ import {
   Activity,
   Briefcase,
   Scale,
+  X,
 } from 'lucide-react'
-import { Button, LoadingOverlay, SectionHeader, PageShell } from '../../../shared/ui'
-import { analyticsDataEngine } from '../../../services/engines/AnalyticsDataEngine'
-import { reportingEngine, generatePracticeReport } from '../../../utils/reporting'
+import Button from '../../ui/Button'
+import Card from '../../ui/Card'
+import { announceToScreenReader } from '../../../utils/accessibility'
 
 /**
- * Premium Analytics Dashboard Component
- * Advanced VA Legal Intelligence with Real-time Insights and Predictive Analytics
+ * Analytics Dashboard Component
+ * VA Legal Intelligence with Real-time Insights and Predictive Analytics
  */
 const Analytics = () => {
   const [timeRange, setTimeRange] = useState('30d')
@@ -45,6 +46,64 @@ const Analytics = () => {
   const [selectedView, setSelectedView] = useState('dashboard')
   const [hoveredCard, setHoveredCard] = useState(null)
   const [metrics, setMetrics] = useState(null)
+
+  // Mock analytics data
+  const mockMetrics = {
+    overview: {
+      totalCases: 1247,
+      successRate: 89.3,
+      averageRating: 67.8,
+      totalCompensation: 2847500,
+      activeClaims: 156,
+      pendingDecisions: 89,
+    },
+    performance: {
+      monthlyCases: [45, 52, 48, 61, 58, 67, 72, 69, 78, 85, 82, 91],
+      successTrend: [82, 85, 87, 86, 88, 89, 91, 90, 92, 93, 91, 94],
+      averageRating: [62, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74],
+      processingTime: [180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125],
+    },
+    cases: {
+      byCondition: [
+        { condition: 'PTSD', count: 342, successRate: 92.1 },
+        { condition: 'Back Pain', count: 289, successRate: 87.3 },
+        { condition: 'Hearing Loss', count: 156, successRate: 94.2 },
+        { condition: 'Knee Problems', count: 134, successRate: 85.7 },
+        { condition: 'Depression', count: 98, successRate: 89.8 },
+        { condition: 'Sleep Apnea', count: 87, successRate: 91.2 },
+      ],
+      byRegion: [
+        { region: 'Northeast', count: 234, successRate: 88.5 },
+        { region: 'Southeast', count: 198, successRate: 90.2 },
+        { region: 'Midwest', count: 167, successRate: 87.8 },
+        { region: 'Southwest', count: 145, successRate: 89.1 },
+        { region: 'West', count: 123, successRate: 91.7 },
+      ],
+    },
+    insights: [
+      {
+        type: 'success',
+        title: 'PTSD Claims Success Rate Increased',
+        description: 'PTSD claims success rate improved by 8.2% this quarter',
+        impact: '+8.2%',
+        trend: 'up',
+      },
+      {
+        type: 'warning',
+        title: 'Processing Time Alert',
+        description: 'Average processing time increased by 12 days',
+        impact: '+12 days',
+        trend: 'down',
+      },
+      {
+        type: 'info',
+        title: 'New Evidence Strategy',
+        description: 'Implementing new evidence gathering strategy',
+        impact: 'New',
+        trend: 'neutral',
+      },
+    ],
+  }
 
   const formatCurrency = amount => {
     return new Intl.NumberFormat('en-US', {
@@ -79,673 +138,417 @@ const Analytics = () => {
 
   const refreshData = useCallback(() => {
     setIsLoading(true)
-
-    // Clear cache and reload fresh data
-    analyticsDataEngine.clearCache()
+    announceToScreenReader('Refreshing analytics data')
 
     setTimeout(() => {
-      const data = {
-        overview: analyticsDataEngine.getOverviewMetrics(),
-        performance: analyticsDataEngine.getPerformanceMetrics(),
-        cases: analyticsDataEngine.getCasesData(),
-        conditions: analyticsDataEngine.getConditionsData(),
-        vaRegions: analyticsDataEngine.getVARegionsData(),
-        insights: analyticsDataEngine.getInsights(),
-      }
-
-      setMetrics(data)
+      setMetrics(mockMetrics)
       setIsLoading(false)
+      announceToScreenReader('Analytics data refreshed')
     }, 1200)
   }, [])
 
-  /**
-   * Handle export functionality
-   */
-  const handleExportReport = useCallback(
-    async (format = 'pdf') => {
-      if (!metrics) return
-
-      setIsLoading(true)
-
-      try {
-        // Generate comprehensive practice analytics report
-        const report = generatePracticeReport({
-          timeRange,
-          includeFinancials: true,
-          includeRegionalData: true,
-          format: 'json',
-        })
-
-        // Export in requested format
-        reportingEngine.exportData(report, format, `practice_analytics_${timeRange}`)
-
-        // Export completed successfully
-      } catch (error) {
-        // Export failed, handle error silently
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [metrics, timeRange]
-  )
-
-  // Load real analytics data on component mount and when timeRange changes
+  // Initialize component
   useEffect(() => {
-    const loadAnalyticsData = () => {
-      setIsLoading(true)
+    setMetrics(mockMetrics)
+    announceToScreenReader('Analytics dashboard loaded')
+  }, [])
 
-      // Simulate realistic data loading time
-      setTimeout(() => {
-        const data = {
-          overview: analyticsDataEngine.getOverviewMetrics(),
-          performance: analyticsDataEngine.getPerformanceMetrics(),
-          cases: analyticsDataEngine.getCasesData(),
-          conditions: analyticsDataEngine.getConditionsData(),
-          vaRegions: analyticsDataEngine.getVARegionsData(),
-          insights: analyticsDataEngine.getInsights(),
-        }
-
-        setMetrics(data)
-        setIsLoading(false)
-      }, 800)
+  // Copy to clipboard
+  const copyToClipboard = useCallback(async (text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      announceToScreenReader('Copied to clipboard')
+    } catch (error) {
+      console.error('Failed to copy:', error)
     }
+  }, [])
 
-    loadAnalyticsData()
-  }, [timeRange])
+  // Export data
+  const exportData = useCallback((format = 'json') => {
+    try {
+      let content = JSON.stringify(metrics, null, 2)
+      let mimeType = 'application/json'
+      let filename = `analytics_report_${new Date().toISOString().split('T')[0]}.${format}`
 
-  // Show loading state while data is being fetched
-  if (!metrics) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        <div className="text-center">
-          <div className="relative w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto overflow-hidden">
-            <div className="absolute inset-0 rounded-2xl border border-white/15" />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-25" />
-            <BarChart3 className="h-8 w-8 text-white animate-pulse drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
-          <p className="text-slate-400">Processing practice data and generating insights...</p>
-        </div>
-      </div>
-    )
-  }
+      const blob = new Blob([content], { type: mimeType })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      announceToScreenReader(`Exported ${filename}`)
+    } catch (error) {
+      console.error('Export failed:', error)
+      announceToScreenReader('Export failed')
+    }
+  }, [metrics])
+
+  const timeRanges = [
+    { value: '7d', label: '7 Days' },
+    { value: '30d', label: '30 Days' },
+    { value: '90d', label: '90 Days' },
+    { value: '1y', label: '1 Year' },
+  ]
+
+  const views = [
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+    { id: 'performance', label: 'Performance', icon: TrendingUp },
+    { id: 'cases', label: 'Cases', icon: FileText },
+    { id: 'insights', label: 'Insights', icon: Brain },
+  ]
 
   return (
-    <PageShell
-      header={
-        <SectionHeader
-          title="Analytics Intelligence"
-          subtitle={
-            <p className="text-slate-300 text-lg flex items-center space-x-2">
-              <Brain className="h-5 w-5 text-cyan-400" />
-              <span>Advanced VA Legal Performance &amp; Predictive Insights</span>
-              <div className="flex items-center space-x-1 ml-4">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-400 text-sm font-medium">Live Data</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Header */}
+      <div className="bg-slate-900/50 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                <BarChart3 className="h-6 w-6 text-white" />
               </div>
-            </p>
-          }
-          icon={BarChart3}
-          gradient="from-cyan-500 via-blue-500 to-purple-600"
-          badge={
-            <div className="w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-              <Crown className="h-3 w-3 text-white" />
-            </div>
-          }
-          actions={
-            <>
-              <div className="flex bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/10 p-1">
-                {['dashboard', 'trends', 'insights'].map(view => (
-                  <button
-                    key={view}
-                    onClick={() => setSelectedView(view)}
-                    aria-label={`Switch to ${view} view`}
-                    aria-pressed={selectedView === view}
-                    className={`px-4 py-2 rounded-xl transition-all duration-300 capitalize font-medium ${
-                      selectedView === view
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    {view}
-                  </button>
-                ))}
-              </div>
-
-              <select
-                value={timeRange}
-                onChange={e => setTimeRange(e.target.value)}
-                aria-label="Select time range for analytics data"
-                className="px-4 py-3 bg-slate-800/50 backdrop-blur-sm border border-white/20 rounded-2xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
-              >
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="90d">Last 90 days</option>
-                <option value="1y">Last year</option>
-              </select>
-
-              <motion.button
-                onClick={refreshData}
-                disabled={isLoading}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Refresh analytics data"
-                aria-describedby="refresh-help"
-                className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-2xl text-white font-medium shadow-lg flex items-center space-x-2 disabled:opacity-50"
-              >
-                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
-              </motion.button>
-              <div id="refresh-help" className="sr-only">
-                Reload analytics data from the server to get the latest information
-              </div>
-
-              <div className="relative group">
-                <Button
-                  className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500"
-                  onClick={() => handleExportReport('pdf')}
-                  disabled={isLoading}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Report
-                </Button>
-
-                {/* Export Format Dropdown */}
-                <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  <div className="p-2">
-                    <button
-                      onClick={() => handleExportReport('pdf')}
-                      disabled={isLoading}
-                      aria-label="Export analytics report as PDF document"
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                    >
-                      <FileText className="h-4 w-4" />
-                      <span>Export as PDF</span>
-                    </button>
-                    <button
-                      onClick={() => handleExportReport('xlsx')}
-                      disabled={isLoading}
-                      aria-label="Export analytics report as Excel spreadsheet"
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                    >
-                      <BarChart3 className="h-4 w-4" />
-                      <span>Export as Excel</span>
-                    </button>
-                    <button
-                      onClick={() => handleExportReport('csv')}
-                      disabled={isLoading}
-                      aria-label="Export analytics report as CSV data file"
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                    >
-                      <Database className="h-4 w-4" />
-                      <span>Export as CSV</span>
-                    </button>
-                    <button
-                      onClick={() => handleExportReport('json')}
-                      disabled={isLoading}
-                      aria-label="Export analytics report as JSON data file"
-                      className="w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 disabled:opacity-50"
-                    >
-                      <Globe className="h-4 w-4" />
-                      <span>Export as JSON</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          }
-          className="mb-8"
-        />
-      }
-    >
-      {/* Enhanced Key Metrics Grid */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 mb-8"
-      >
-        {[
-          {
-            title: 'Total Cases',
-            value: formatNumber(metrics.overview.totalCases),
-            trend: metrics.overview.trends.cases,
-            icon: Briefcase,
-            color: 'from-cyan-500 via-blue-500 to-purple-600',
-            description: 'All time filed',
-          },
-          {
-            title: 'Success Rate',
-            value: `${metrics.overview.successRate}%`,
-            trend: metrics.overview.trends.success,
-            icon: Target,
-            color: 'from-green-500 via-emerald-500 to-teal-600',
-            description: 'Win percentage',
-          },
-          {
-            title: 'Processing Time',
-            value: `${metrics.overview.avgProcessingTime}mo`,
-            trend: metrics.overview.trends.time,
-            icon: Clock,
-            color: 'from-purple-500 via-violet-500 to-indigo-600',
-            description: 'Average duration',
-          },
-          {
-            title: 'Total Awarded',
-            value: formatCurrency(metrics.overview.totalAwarded),
-            trend: metrics.overview.trends.awarded,
-            icon: DollarSign,
-            color: 'from-yellow-500 via-amber-500 to-orange-600',
-            description: 'Compensation won',
-          },
-          {
-            title: 'Active Claims',
-            value: formatNumber(metrics.overview.activeClaims),
-            trend: metrics.overview.trends.active,
-            icon: Activity,
-            color: 'from-rose-500 via-pink-500 to-purple-600',
-            description: 'Currently pending',
-          },
-          {
-            title: 'Appeals',
-            value: formatNumber(metrics.overview.pendingAppeals),
-            trend: metrics.overview.trends.appeals,
-            icon: Scale,
-            color: 'from-indigo-500 via-blue-500 to-cyan-600',
-            description: 'Under review',
-          },
-        ].map((metric, index) => {
-          const Icon = metric.icon
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              onHoverStart={() => setHoveredCard(index)}
-              onHoverEnd={() => setHoveredCard(null)}
-              className="group relative"
-            >
-              <div
-                className={`relative glass-card gradient-outline bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl p-6 border transition-all duration-500 ${
-                  hoveredCard === index
-                    ? 'border-cyan-500/50 shadow-2xl shadow-cyan-500/20 scale-105'
-                    : 'border-white/10 hover:border-white/20'
-                }`}
-              >
-                {/* Glow effect */}
-                {hoveredCard === index && (
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 blur-xl" />
-                )}
-
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-4">
-                    <div
-                      className={`relative w-14 h-14 bg-gradient-to-br ${metric.color} rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 overflow-hidden`}
-                    >
-                      <div className="absolute inset-0 rounded-2xl border border-white/15" />
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/35 via-white/0 to-transparent opacity-20" />
-                      <Icon className="h-7 w-7 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]" />
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <TrendIcon value={metric.trend} />
-                      <span
-                        className={`text-sm font-bold ${
-                          metric.trend > 0
-                            ? 'text-green-400'
-                            : metric.trend < 0
-                              ? 'text-red-400'
-                              : 'text-slate-400'
-                        }`}
-                      >
-                        {Math.abs(metric.trend)}%
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="text-3xl font-bold text-white mb-1 group-hover:text-cyan-200 transition-colors">
-                    {metric.value}
-                  </div>
-                  <div className="text-slate-400 text-sm font-medium mb-1">{metric.title}</div>
-                  <div className="text-slate-500 text-xs">{metric.description}</div>
-                </div>
-              </div>
-            </motion.div>
-          )
-        })}
-      </motion.div>
-
-      {/* Advanced Charts and Analytics Section */}
-      <section>
-        <h2 className="sr-only">Performance Charts and Analytics</h2>
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-          {/* Enhanced Case Activity Timeline */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="xl:col-span-2"
-          >
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <LineChart className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">Case Performance Timeline</h2>
-                    <p className="text-slate-400">Monthly filing and success metrics</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-2 bg-slate-700/50 rounded-xl px-3 py-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                    <span className="text-slate-300 text-sm">Filed</span>
-                  </div>
-                  <div className="flex items-center space-x-2 bg-slate-700/50 rounded-xl px-3 py-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    <span className="text-slate-300 text-sm">Won</span>
-                  </div>
-                  <div className="flex items-center space-x-2 bg-slate-700/50 rounded-xl px-3 py-2">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full" />
-                    <span className="text-slate-300 text-sm">Appeals</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                {metrics.cases.map((month, index) => (
-                  <motion.div
-                    key={month.month}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    className="group"
-                  >
-                    <div className="flex items-center space-x-6">
-                      <div className="w-16 text-slate-300 font-medium">{month.month}</div>
-
-                      {/* Progress bars with 3D effect */}
-                      <div className="flex-1 space-y-3">
-                        <div className="relative">
-                          <div className="h-3 bg-slate-700/50 rounded-full overflow-hidden shadow-inner">
-                            <motion.div
-                              className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-lg"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${(month.filed / 160) * 100}%` }}
-                              transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
-                            />
-                          </div>
-                          <div className="absolute -top-8 right-0 text-blue-400 text-sm font-medium">
-                            {month.filed} filed
-                          </div>
-                        </div>
-
-                        <div className="relative">
-                          <div className="h-3 bg-slate-700/50 rounded-full overflow-hidden shadow-inner">
-                            <motion.div
-                              className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${(month.won / 160) * 100}%` }}
-                              transition={{ delay: 0.7 + index * 0.1, duration: 0.8 }}
-                            />
-                          </div>
-                          <div className="absolute -top-8 right-0 text-green-400 text-sm font-medium">
-                            {month.won} won
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-right min-w-[100px]">
-                        <div className="text-white font-bold text-lg">
-                          {((month.won / month.filed) * 100).toFixed(1)}%
-                        </div>
-                        <div className="text-slate-400 text-sm">success rate</div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+              <div>
+                <h1 className="text-2xl font-bold text-white">Analytics Dashboard</h1>
+                <p className="text-slate-400">VA Legal Intelligence & Performance Metrics</p>
               </div>
             </div>
-          </motion.div>
-
-          {/* Premium Insights Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl h-full">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
-                  <Brain className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-white">AI Insights</h2>
-                  <p className="text-slate-400 text-sm">Predictive analytics</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                {metrics.insights.map((insight, index) => {
-                  const icons = {
-                    trend: TrendingUp,
-                    alert: AlertCircle,
-                    opportunity: Star,
-                  }
-                  const colors = {
-                    trend: 'from-blue-500/20 to-cyan-500/20 border-blue-500/30',
-                    alert: 'from-yellow-500/20 to-orange-500/20 border-yellow-500/30',
-                    opportunity: 'from-green-500/20 to-emerald-500/20 border-green-500/30',
-                  }
-                  const Icon = icons[insight.type]
-
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                      className={`p-4 rounded-2xl border bg-gradient-to-br ${colors[insight.type]} group hover:scale-105 transition-all duration-300 cursor-pointer`}
-                    >
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0">
-                          <Icon className="h-5 w-5 text-white mt-1" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-white font-semibold text-sm mb-1">
-                            {insight.title}
-                          </div>
-                          <div className="text-slate-300 text-xs mb-2">{insight.description}</div>
-                          {insight.actionable && (
-                            <div className="text-cyan-400 text-xs font-medium flex items-center space-x-1">
-                              <Zap className="h-3 w-3" />
-                              <span>Action Required</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
-                })}
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+                <span className="text-purple-400 text-sm font-medium">Live Data</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Enhanced Conditions Analysis */}
-      <section>
-        <h2 className="sr-only">Condition Performance Analysis</h2>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mb-8"
-        >
-          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center">
-                  <Database className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Condition Performance Analysis</h2>
-                  <p className="text-slate-400">
-                    Success rates, precedents, and strategic insights
-                  </p>
-                </div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 mb-8">
+          <div className="flex space-x-2">
+            {views.map(view => {
+              const Icon = view.icon
+              return (
+                <button
+                  key={view.id}
+                  onClick={() => setSelectedView(view.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                    selectedView === view.id
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg'
+                      : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 border border-slate-700'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{view.label}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              {timeRanges.map(range => (
+                <option key={range.value} value={range.value}>{range.label}</option>
+              ))}
+            </select>
+            <Button
+              onClick={refreshData}
+              disabled={isLoading}
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </Button>
+            <Button
+              onClick={() => exportData('json')}
+              className="bg-gradient-to-r from-purple-500 to-pink-600"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+          </div>
+        </div>
+
+        {/* Loading Overlay */}
+        {isLoading && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-slate-800 rounded-xl p-8 max-w-md w-full mx-4">
+              <div className="text-center">
+                <RefreshCw className="h-12 w-12 text-purple-500 mx-auto mb-4 animate-spin" />
+                <h3 className="text-xl font-bold text-white mb-2">Loading Analytics</h3>
+                <p className="text-slate-400">Refreshing data and generating insights...</p>
               </div>
-              <Button className="bg-gradient-to-r from-blue-500 to-purple-600">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                View Full Report
-              </Button>
             </div>
+          </div>
+        )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {metrics.conditions.map((condition, index) => {
-                const TrendArrow =
-                  condition.trendDirection === 'up'
-                    ? TrendingUp
-                    : condition.trendDirection === 'down'
-                      ? TrendingDown
-                      : Activity
-                const trendColor =
-                  condition.trendDirection === 'up'
-                    ? 'text-green-400'
-                    : condition.trendDirection === 'down'
-                      ? 'text-red-400'
-                      : 'text-slate-400'
-
+        {/* Dashboard View */}
+        {selectedView === 'dashboard' && metrics && (
+          <div className="space-y-8">
+            {/* Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  title: 'Total Cases',
+                  value: formatNumber(metrics.overview.totalCases),
+                  change: '+12.5%',
+                  trend: 'up',
+                  icon: FileText,
+                  color: 'text-blue-400',
+                },
+                {
+                  title: 'Success Rate',
+                  value: `${metrics.overview.successRate}%`,
+                  change: '+2.1%',
+                  trend: 'up',
+                  icon: Target,
+                  color: 'text-green-400',
+                },
+                {
+                  title: 'Average Rating',
+                  value: `${metrics.overview.averageRating}%`,
+                  change: '+1.8%',
+                  trend: 'up',
+                  icon: Star,
+                  color: 'text-yellow-400',
+                },
+                {
+                  title: 'Total Compensation',
+                  value: formatCurrency(metrics.overview.totalCompensation),
+                  change: '+15.3%',
+                  trend: 'up',
+                  icon: DollarSign,
+                  color: 'text-emerald-400',
+                },
+                {
+                  title: 'Active Claims',
+                  value: formatNumber(metrics.overview.activeClaims),
+                  change: '-5.2%',
+                  trend: 'down',
+                  icon: Activity,
+                  color: 'text-purple-400',
+                },
+                {
+                  title: 'Processing Time',
+                  value: '145 days',
+                  change: '-8.1%',
+                  trend: 'up',
+                  icon: Clock,
+                  color: 'text-cyan-400',
+                },
+              ].map((metric, index) => {
+                const Icon = metric.icon
                 return (
-                  <motion.div
-                    key={condition.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    className="group bg-gradient-to-br from-slate-700/30 to-slate-800/30 rounded-2xl p-6 border border-white/10 hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 cursor-pointer"
-                  >
+                  <Card key={index} className="p-6 hover:border-purple-500/30 transition-all duration-300">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold">
-                          #{index + 1}
-                        </div>
-                        <div>
-                          <div className="text-white font-bold">{condition.name}</div>
-                          <div className="text-slate-400 text-sm">
-                            {condition.cases} cases handled
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <TrendArrow className={`h-4 w-4 ${trendColor}`} />
-                        <DifficultyBadge difficulty={condition.difficulty} />
-                      </div>
+                      <Icon className={`h-8 w-8 ${metric.color}`} />
+                      <TrendIcon value={metric.trend === 'up' ? 1 : -1} />
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-green-400">
-                          {condition.success}%
-                        </div>
-                        <div className="text-slate-400 text-xs">Success Rate</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-yellow-400">
-                          {condition.avgRating}%
-                        </div>
-                        <div className="text-slate-400 text-xs">Avg Rating</div>
-                      </div>
+                    <div className="mb-2">
+                      <div className="text-2xl font-bold text-white">{metric.value}</div>
+                      <div className="text-slate-400 text-sm">{metric.title}</div>
                     </div>
-
-                    <div className="mb-4">
-                      <div className="text-cyan-400 font-semibold text-lg">
-                        {formatCurrency(condition.avgValue)}
-                      </div>
-                      <div className="text-slate-400 text-xs">Average Case Value</div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`text-sm font-medium ${
+                        metric.trend === 'up' ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {metric.change}
+                      </span>
+                      <span className="text-slate-400 text-sm">vs last period</span>
                     </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <div className="text-slate-300 text-sm font-medium mb-1">Key Evidence:</div>
-                        <div className="flex flex-wrap gap-1">
-                          {condition.commonEvidence.map((evidence, i) => (
-                            <span
-                              key={i}
-                              className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-lg border border-blue-500/30"
-                            >
-                              {evidence}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="text-slate-300 text-sm font-medium mb-1">
-                          Key Precedents:
-                        </div>
-                        <div className="space-y-1">
-                          {condition.keyPrecedents.map((precedent, i) => (
-                            <div
-                              key={i}
-                              className="text-slate-400 text-xs flex items-center space-x-1"
-                            >
-                              <Scale className="h-3 w-3 text-cyan-400" />
-                              <span>{precedent}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                  </Card>
                 )
               })}
             </div>
-          </div>
-        </motion.div>
-      </section>
 
-      {/* VA Regional Office Performance */}
-      <section>
-        <h2 className="sr-only">Regional Office Performance</h2>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <Globe className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white">VA Regional Office Performance</h2>
-                <p className="text-slate-400">Strategic insights by jurisdiction</p>
-              </div>
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Monthly Cases</h3>
+                <div className="h-64 flex items-end justify-between space-x-1">
+                  {metrics.performance.monthlyCases.map((value, index) => (
+                    <div key={index} className="flex-1 bg-gradient-to-t from-purple-500 to-pink-600 rounded-t"
+                         style={{ height: `${(value / 100) * 100}%` }}>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 text-center text-slate-400 text-sm">
+                  Cases processed per month
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Success Rate Trend</h3>
+                <div className="h-64 flex items-end justify-between space-x-1">
+                  {metrics.performance.successTrend.map((value, index) => (
+                    <div key={index} className="flex-1 bg-gradient-to-t from-green-500 to-emerald-600 rounded-t"
+                         style={{ height: `${value}%` }}>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 text-center text-slate-400 text-sm">
+                  Success rate percentage
+                </div>
+              </Card>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              {metrics.vaRegions.map((region, index) => (
-                <motion.div
-                  key={region.region}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  className="text-center p-6 bg-gradient-to-br from-slate-700/30 to-slate-800/30 rounded-2xl border border-white/10 hover:border-cyan-500/30 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="text-xl font-bold text-white mb-2">{region.region}</div>
-                  <div className="text-3xl font-bold text-cyan-400 mb-1">{region.cases}</div>
-                  <div className="text-slate-400 text-sm mb-3">cases</div>
-                  <div className="text-green-400 font-semibold">{region.success}% success</div>
-                  <div className="text-slate-400 text-sm">{region.avgTime}mo avg</div>
-                </motion.div>
-              ))}
+            {/* Insights */}
+            <Card className="p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Key Insights</h3>
+              <div className="space-y-4">
+                {metrics.insights.map((insight, index) => (
+                  <div key={index} className="flex items-start space-x-3 p-4 bg-slate-800/50 rounded-lg">
+                    <div className={`p-2 rounded-lg ${
+                      insight.type === 'success' ? 'bg-green-500/20' :
+                      insight.type === 'warning' ? 'bg-yellow-500/20' :
+                      'bg-blue-500/20'
+                    }`}>
+                      {insight.type === 'success' ? (
+                        <TrendingUp className="h-4 w-4 text-green-400" />
+                      ) : insight.type === 'warning' ? (
+                        <AlertCircle className="h-4 w-4 text-yellow-400" />
+                      ) : (
+                        <Brain className="h-4 w-4 text-blue-400" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-white">{insight.title}</h4>
+                      <p className="text-slate-400 text-sm">{insight.description}</p>
+                    </div>
+                    <div className={`text-sm font-medium ${
+                      insight.trend === 'up' ? 'text-green-400' : 
+                      insight.trend === 'down' ? 'text-red-400' : 
+                      'text-blue-400'
+                    }`}>
+                      {insight.impact}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Performance View */}
+        {selectedView === 'performance' && metrics && (
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Performance Metrics</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { label: 'Cases This Month', value: metrics.performance.monthlyCases[11] },
+                  { label: 'Success Rate', value: `${metrics.performance.successTrend[11]}%` },
+                  { label: 'Avg Rating', value: `${metrics.performance.averageRating[11]}%` },
+                  { label: 'Processing Days', value: metrics.performance.processingTime[11] },
+                ].map((metric, index) => (
+                  <div key={index} className="text-center p-4 bg-slate-800/50 rounded-lg">
+                    <div className="text-2xl font-bold text-white mb-1">{metric.value}</div>
+                    <div className="text-slate-400 text-sm">{metric.label}</div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Cases View */}
+        {selectedView === 'cases' && metrics && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Cases by Condition</h3>
+                <div className="space-y-3">
+                  {metrics.cases.byCondition.map((condition, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                      <div>
+                        <div className="font-medium text-white">{condition.condition}</div>
+                        <div className="text-slate-400 text-sm">{condition.count} cases</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-green-400 font-medium">{condition.successRate}%</div>
+                        <div className="text-slate-400 text-sm">success rate</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Cases by Region</h3>
+                <div className="space-y-3">
+                  {metrics.cases.byRegion.map((region, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                      <div>
+                        <div className="font-medium text-white">{region.region}</div>
+                        <div className="text-slate-400 text-sm">{region.count} cases</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-green-400 font-medium">{region.successRate}%</div>
+                        <div className="text-slate-400 text-sm">success rate</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
             </div>
           </div>
-        </motion.div>
-      </section>
-      <LoadingOverlay isVisible={isLoading} tool="analytics" message="Refreshing analytics…" />
-    </PageShell>
+        )}
+
+        {/* Insights View */}
+        {selectedView === 'insights' && metrics && (
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-bold text-white mb-4">AI-Generated Insights</h3>
+              <div className="space-y-4">
+                {metrics.insights.map((insight, index) => (
+                  <div key={index} className="p-4 bg-slate-800/50 rounded-lg">
+                    <div className="flex items-start space-x-3">
+                      <div className={`p-2 rounded-lg ${
+                        insight.type === 'success' ? 'bg-green-500/20' :
+                        insight.type === 'warning' ? 'bg-yellow-500/20' :
+                        'bg-blue-500/20'
+                      }`}>
+                        {insight.type === 'success' ? (
+                          <TrendingUp className="h-4 w-4 text-green-400" />
+                        ) : insight.type === 'warning' ? (
+                          <AlertCircle className="h-4 w-4 text-yellow-400" />
+                        ) : (
+                          <Brain className="h-4 w-4 text-blue-400" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-white mb-2">{insight.title}</h4>
+                        <p className="text-slate-400 text-sm mb-3">{insight.description}</p>
+                        <div className="flex items-center space-x-4">
+                          <span className={`text-sm font-medium ${
+                            insight.trend === 'up' ? 'text-green-400' : 
+                            insight.trend === 'down' ? 'text-red-400' : 
+                            'text-blue-400'
+                          }`}>
+                            Impact: {insight.impact}
+                          </span>
+                          <DifficultyBadge difficulty="moderate" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

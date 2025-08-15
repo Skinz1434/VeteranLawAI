@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import Sidebar from './Sidebar'
 import QBitChat from '../chat/QBitChat'
+import { useAuth } from '../../contexts/AuthContext'
 import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation'
 
 /**
@@ -16,6 +17,7 @@ import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation'
  */
 const Layout = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const { currentUser, logout } = useAuth()
 
   // Enable keyboard navigation for the layout
   useKeyboardNavigation({
@@ -58,8 +60,28 @@ const Layout = ({ children }) => {
       >
         {/* Content wrapper with enhanced styling */}
         <div className="relative">
-          {/* Top gradient bar */}
-          <div className="h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 shadow-lg shadow-cyan-500/20" />
+          {/* Top bar with user info */}
+          <div className="flex items-center justify-between h-14 px-4 bg-gradient-to-r from-slate-900/70 to-slate-800/70 border-b border-slate-800">
+            <div className="h-1 w-40 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full" />
+            <div className="flex items-center gap-3">
+              {currentUser && (
+                <>
+                  {currentUser.photoURL ? (
+                    <img src={currentUser.photoURL} alt="avatar" className="h-8 w-8 rounded-full" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-slate-700 flex items-center justify-center text-xs">
+                      {(currentUser.displayName || currentUser.email || 'U').slice(0,1).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="text-sm text-slate-200">
+                    <div className="font-medium leading-4">{currentUser.displayName || 'User'}</div>
+                    <div className="text-slate-400 text-xs">{currentUser.email}</div>
+                  </div>
+                </>
+              )}
+              <button onClick={logout} className="ml-2 text-sm px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-600 text-slate-200">Sign out</button>
+            </div>
+          </div>
 
           {/* Main content area */}
           <main className="relative min-h-screen">{children}</main>
