@@ -55,7 +55,6 @@
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.310.0",
     "pdf-lib": "^1.17.1",
-    "pdf2pic": "^3.2.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.2.0",
