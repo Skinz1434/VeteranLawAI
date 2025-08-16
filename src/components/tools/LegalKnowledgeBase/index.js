@@ -3,4 +3,4 @@
  * @author VeteranLawAI Platform
  */
 
-export { default } from './LegalKnowledgeBase'
+export { default } from './LegalKnowledgeBaseProfessional'

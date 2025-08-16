@@ -3,28 +3,32 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-ro
 import { motion } from 'framer-motion';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
-import { Button, LoadingSpinner, PageShell, SectionHeader, IconTile } from './shared/ui';
+import { Button, LoadingSpinner, PageShell, SectionHeader, IconTile, Tooltip } from './shared/ui';
 import LoginModal from './components/modals/LoginModal.jsx';
 import Layout from './components/layout/Layout';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.jsx';
 import { Camera, BookOpen, Mic, FileText, Search, BarChart3 } from 'lucide-react';
 
 const DocumentScanner = lazy(() => import('./components/tools/DocumentScannerProV2'));
-const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase/LegalKnowledgeBase'));
+const LegalKnowledgeBase = lazy(() => import('./components/tools/LegalKnowledgeBase'));
 const AudioTranscription = lazy(() => import('./components/tools/AudioTranscription/AudioTranscription'));
 const CaseResearch = lazy(() => import('./components/tools/CaseResearch/CaseResearch'));
 const ClaimGuidance = lazy(() => import('./components/tools/ClaimGuidance/ClaimGuidance'));
 const Analytics = lazy(() => import('./components/tools/Analytics/Analytics'));
+const CameraOCR = lazy(() => import('./components/tools/OcrTool'));
 
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
-          <AppContent />
-        </div>
-      </AuthProvider>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AuthProvider>
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+            <AppContent />
+          </div>
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
@@ -46,6 +50,7 @@ function AppContent() {
         <Route path="/case-research" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><CaseResearch /></Suspense></Layout></ProtectedRoute>} />
         <Route path="/claim-guidance" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><ClaimGuidance /></Suspense></Layout></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><Analytics /></Suspense></Layout></ProtectedRoute>} />
+        <Route path="/camera-ocr" element={<ProtectedRoute><Layout><Suspense fallback={<ToolLoading />}><CameraOCR /></Suspense></Layout></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to={currentUser ? "/dashboard" : "/"} />} />
       </Routes>
@@ -101,13 +106,15 @@ function Dashboard() {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {tools.map((tool) => (
-            <Link to={tool.href} key={tool.title} className="focus-ring rounded-lg">
-              <motion.div className="bg-slate-800/50 p-6 rounded-lg h-full hover:bg-slate-800" whileHover={{ scale: 1.03 }}>
-                <IconTile icon={tool.icon} size="md" className="mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">{tool.title}</h3>
-                <p className="text-slate-300">{tool.description}</p>
-              </motion.div>
-            </Link>
+            <Tooltip key={tool.title} content={`Click to open ${tool.title}`} side="top">
+              <Link to={tool.href} className="focus-ring rounded-lg block">
+                <motion.div className="bg-slate-800/50 p-6 rounded-lg h-full hover:bg-slate-800" whileHover={{ scale: 1.03 }}>
+                  <IconTile icon={tool.icon} size="md" className="mb-4" />
+                  <h3 className="text-xl font-bold text-white mb-2">{tool.title}</h3>
+                  <p className="text-slate-300">{tool.description}</p>
+                </motion.div>
+              </Link>
+            </Tooltip>
           ))}
         </div>
       </PageShell>
